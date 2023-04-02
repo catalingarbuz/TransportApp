@@ -9,9 +9,9 @@ namespace MobyLabWebProgramming.Infrastructure.EntityConfigurations;
 /// for some specifics such as unique keys, indexes and foreign keys it is better to explicitly specify them.
 /// Note that the EntityTypeBuilder implements a Fluent interface, meaning it is a highly declarative interface using method-chaining.
 /// </summary>
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class DriverConfiguration : IEntityTypeConfiguration<Driver>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Driver> builder)
     {
         builder.Property(e => e.Id) // This specifies which property is configured.
             .IsRequired(); // Here it is specified if the property is required, meaning it cannot be null in the database.
