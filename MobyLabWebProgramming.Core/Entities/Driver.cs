@@ -5,7 +5,7 @@ namespace MobyLabWebProgramming.Core.Entities;
 /// <summary>
 /// This is an example for a user entity, it will be mapped to a single table and each property will have it's own column except for entity object references also known as navigation properties.
 /// </summary>
-public class User : BaseEntity
+public class Driver : BaseEntity
 {
     public string Name { get; set; } = default!;
     public string Email { get; set; } = default!;
@@ -18,6 +18,6 @@ public class User : BaseEntity
     /// Collection such as this can be used for Many-To-One or Many-To-Many relations.
     /// Note that this field will be null if not explicitly requested via a Include query, also note that the property is used by the ORM, in the database this collection doesn't exist. 
     /// </summary>
-    public ICollection<UserFile> UserFiles { get; set; } = default!;
     public ICollection<Booking> Bookings { get; set; } = default!;
+    public DriverInfo DriverInfo { get; set; } = default!;
 }

@@ -9,27 +9,18 @@ namespace MobyLabWebProgramming.Infrastructure.EntityConfigurations;
 /// for some specifics such as unique keys, indexes and foreign keys it is better to explicitly specify them.
 /// Note that the EntityTypeBuilder implements a Fluent interface, meaning it is a highly declarative interface using method-chaining.
 /// </summary>
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class RouteConfiguration : IEntityTypeConfiguration<Route>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Route> builder)
     {
         builder.Property(e => e.Id) // This specifies which property is configured.
             .IsRequired(); // Here it is specified if the property is required, meaning it cannot be null in the database.
         builder.HasKey(x => x.Id); // Here it is specifies that the property Id is the primary key.
-        builder.Property(e => e.Name)
+        builder.Property(e => e.RouteName)
             .HasMaxLength(255) // This specifies the maximum length for varchar type in the database.
             .IsRequired();
-        builder.Property(e => e.Email)
-            .HasMaxLength(255)
-            .IsRequired();
-        builder.HasAlternateKey(e => e.Email); // Here it is specifies that the property Email is a unique key.
-        builder.Property(e => e.Password)
-            .HasMaxLength(255)
-            .IsRequired();
-        builder.Property(e => e.PhoneNumber)
-            .HasMaxLength(255);
-        builder.Property(e => e.Role)
-            .HasMaxLength(255)
+        builder.Property(e => e.Description)
+            .HasMaxLength(2000)
             .IsRequired();
         builder.Property(e => e.CreatedAt)
             .IsRequired();
