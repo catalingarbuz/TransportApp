@@ -47,7 +47,8 @@ public class InitializerWorker : BackgroundService
                     Email = "admin@default.com",
                     Name = "Admin",
                     Role = UserRoleEnum.Admin,
-                    Password = PasswordUtils.HashPassword("default")
+                    Password = PasswordUtils.HashPassword("default"),
+                    PhoneNumber = "+40 111 111"
                 }, cancellationToken: cancellationToken);
             }
         }

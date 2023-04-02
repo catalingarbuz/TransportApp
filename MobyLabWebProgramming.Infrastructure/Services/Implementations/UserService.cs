@@ -96,7 +96,8 @@ public class UserService : IUserService
             Email = user.Email,
             Name = user.Name,
             Role = user.Role,
-            Password = user.Password
+            Password = user.Password,
+            PhoneNumber = user.PhoneNumber
         }, cancellationToken); // A new entity is created and persisted in the database.
 
         await _mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "My App", cancellationToken); // You can send a notification on the user email. Change the email if you want.
