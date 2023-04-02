@@ -31,8 +31,7 @@ public class DriverInfoConfiguration : IEntityTypeConfiguration<DriverInfo>
 
         builder.HasOne(e => e.Driver)
            .WithOne(e => e.DriverInfo) // This provides the reverse mapping for the one-to-many relation. 
-           .HasForeignKey<DriverInfo>(e => e.DriverId) // Here the foreign key column is specified.
-           .HasPrincipalKey<DriverInfo>(e => e.Id) // This specifies the referenced key in the referenced table.
+           .HasForeignKey<DriverInfo>(e => e.DriverId) // Here the foreign key column is specified. 
            .IsRequired()
            .OnDelete(DeleteBehavior.Cascade); // This specifies the delete behavior when the referenced entity is removed.
     }
