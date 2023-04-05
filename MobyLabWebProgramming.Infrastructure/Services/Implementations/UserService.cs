@@ -118,6 +118,7 @@ public class UserService : IUserService
         {
             entity.Name = user.Name ?? entity.Name;
             entity.Password = user.Password ?? entity.Password;
+            entity.PhoneNumber = user.PhoneNumber ?? entity.PhoneNumber;
 
             await _repository.UpdateAsync(entity, cancellationToken); // Update the entity and persist the changes.
         }
