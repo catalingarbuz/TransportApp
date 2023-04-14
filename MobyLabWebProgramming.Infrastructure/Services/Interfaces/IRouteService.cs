@@ -9,28 +9,28 @@ using System.Threading.Tasks;
 
 namespace MobyLabWebProgramming.Infrastructure.Services.Interfaces
 {
-    public interface IDriverService
+    public interface IRouteService
     {
-        public Task<ServiceResponse<PagedResponse<DriverDTO>>> GetDrivers(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default);
+        public Task<ServiceResponse<PagedResponse<RouteDTO>>> GetRoutes(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// GetDriver returns a driver given its id.
+        /// GetRoute returns a route given its id.
         /// </summary>
-        public Task<ServiceResponse<DriverDTO>> GetDriver(Guid id, CancellationToken cancellationToken = default);
+        public Task<ServiceResponse<RouteDTO>> GetRoute(Guid id, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// AddDriver adds a driver to the database.
+        /// AddRoute adds a route to the database.
         /// </summary>
-        public Task<ServiceResponse> AddDriver(DriverAddDTO driver, UserDTO? requestingUser, CancellationToken cancellationToken = default);
+        public Task<ServiceResponse> AddRoute(RouteAddDTO route, UserDTO? requestingUser, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// UpdateDriver updates a driver in the database.
+        /// UpdateRoute updates a route in the database.
         /// </summary>
-        public Task<ServiceResponse> UpdateDriver(DriverUpdateDTO driver, UserDTO? requestingUser, CancellationToken cancellationToken = default);
+        public Task<ServiceResponse> UpdateRoute(RouteUpdateDTO route, UserDTO? requestingUser, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// DeleteDriver deletes a driver from the database.
+        /// DeleteRoute deletes a route from the database.
         /// </summary>
-        public Task<ServiceResponse> DeleteDriver(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
+        public Task<ServiceResponse> DeleteRoute(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
     }
 }
