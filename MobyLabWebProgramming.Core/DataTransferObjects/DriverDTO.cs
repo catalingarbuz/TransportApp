@@ -1,4 +1,5 @@
-﻿using MobyLabWebProgramming.Core.Enums;
+﻿using MobyLabWebProgramming.Core.Entities;
+using MobyLabWebProgramming.Core.Enums;
 
 namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
@@ -12,4 +13,13 @@ public class DriverDTO
     public string Email { get; set; } = default!;
     public string PhoneNumber { get; set; } = default!;
     public UserRoleEnum Role { get; set; } = default!;
+
+    public DriverDTO(Driver driver)
+    {
+        Id = driver.Id;
+        Name = driver.Name;
+        Email = driver.Email;
+        PhoneNumber = driver.PhoneNumber;
+        Role = driver.Role;
+    }
 }

@@ -18,5 +18,6 @@ public enum ErrorCodes
     CannotUpdate,
     CannotDelete,
     MailSendFailed,
-    CarAlreadyExists
+    CarAlreadyExists,
+    DriverInfoAlreadyExists
 }

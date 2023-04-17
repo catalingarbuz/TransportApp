@@ -28,7 +28,7 @@ public class DriverService : IDriverService
     public async Task<ServiceResponse<DriverDTO>> GetDriver(Guid id, CancellationToken cancellationToken = default)
     {
         var result = await _repository.GetAsync(new DriverProjectionSpec(id), cancellationToken);
-        
+
         return result != null ?
             ServiceResponse<DriverDTO>.ForSuccess(result) :
             ServiceResponse<DriverDTO>.FromError(CommonErrors.DriverNotFound);
@@ -36,9 +36,9 @@ public class DriverService : IDriverService
 
     public async Task<ServiceResponse<PagedResponse<DriverDTO>>> GetDrivers(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.PageAsync(pagination, new DriverProjectionSpec(pagination.Search, false), cancellationToken);  
+        var result = await _repository.PageAsync(pagination, new DriverProjectionSpec(pagination.Search, false), cancellationToken);
 
-        return ServiceResponse<PagedResponse<DriverDTO>>.ForSuccess(result);     
+        return ServiceResponse<PagedResponse<DriverDTO>>.ForSuccess(result);
     }
 
     public async Task<ServiceResponse> AddDriver(DriverAddDTO driver, UserDTO? requestingUser, CancellationToken cancellationToken = default)
@@ -49,7 +49,7 @@ public class DriverService : IDriverService
         }
 
         var result = await _repository.GetAsync(new DriverProjectionSpec(driver.Email), cancellationToken);
-        
+
         if (result != null)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The driver already exists!", ErrorCodes.UserAlreadyExists));
@@ -69,7 +69,7 @@ public class DriverService : IDriverService
 
     public async Task<ServiceResponse> UpdateDriver(DriverUpdateDTO driver, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin && requestingUser.Id != driver.Id) // Verify who can add the user, you can change this however you se fit.
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the user, you can change this however you se fit.
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin or the own user can update the user!", ErrorCodes.CannotUpdate));
         }
@@ -90,9 +90,18 @@ public class DriverService : IDriverService
 
     public async Task<ServiceResponse> DeleteDriver(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) 
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin or the own driver can delete the driver!", ErrorCodes.CannotDelete));
+        }
+
+        var driver = await _repository.GetAsync(new DriverSpec(id), cancellationToken);
+        if (driver != null)
+        {
+            var userEntity = await _repository.GetAsync(new UserSpec(driver.Email), cancellationToken);
+
+            if (userEntity != null)
+                await _repository.DeleteAsync<User>(userEntity.Id, cancellationToken);
         }
 
         await _repository.DeleteAsync<Driver>(id, cancellationToken);

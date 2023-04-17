@@ -15,14 +15,7 @@ public sealed class DriverProjectionSpec : BaseSpec<DriverProjectionSpec, Driver
     /// <summary>
     /// This is the projection/mapping expression to be used by the base class to get UserDTO object from the database.
     /// </summary>
-    protected override Expression<Func<Driver, DriverDTO>> Spec => e => new()
-    {
-        Id = e.Id,
-        Email = e.Email,
-        Name = e.Name,
-        Role = e.Role,
-        PhoneNumber = e.PhoneNumber
-    };
+    protected override Expression<Func<Driver, DriverDTO>> Spec => e => new DriverDTO(e);
 
     public DriverProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)
     {
