@@ -17,5 +17,8 @@ public enum ErrorCodes
     CannotAdd,
     CannotUpdate,
     CannotDelete,
-    MailSendFailed
+    MailSendFailed,
+    CarAlreadyExists,
+    DriverInfoAlreadyExists,
+    NoAvailableSeats
 }
