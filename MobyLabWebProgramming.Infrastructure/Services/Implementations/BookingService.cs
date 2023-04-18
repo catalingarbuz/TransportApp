@@ -99,7 +99,7 @@ public class BookingService : IBookingService
 
     public async Task<ServiceResponse> UpdateBooking(BookingUpdateDTO booking, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null) // Verify who can add the user, you can change this however you se fit.
+        if (requestingUser == null) // Verify who can add the user, you can change this however you se fit.
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Error at updating booking!", ErrorCodes.CannotUpdate));
         }

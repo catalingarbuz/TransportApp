@@ -39,7 +39,7 @@ public class BookingsConfiguration : IEntityTypeConfiguration<Booking>
 
         builder.HasOne(e => e.User)
             .WithMany(e => e.Bookings)
-            .HasForeignKey(e => e.CarId)
+            .HasForeignKey(e => e.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Driver)
