@@ -178,7 +178,8 @@ public static class WebApplicationBuilderExtensions
             .AddTransient<ICarService, CarService>()
             .AddTransient<IRouteService, RouteService>()
             .AddTransient<IDriverInfoService, DriverInfoService>()
-            .AddTransient<IBookingService, BookingService>();
+            .AddTransient<IBookingService, BookingService>()
+            .AddTransient<ICarRouteService, CarRouteService>();
 
         return builder;
     }
