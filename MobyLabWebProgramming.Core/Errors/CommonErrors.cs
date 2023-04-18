@@ -14,5 +14,6 @@ public static class CommonErrors
     public static ErrorMessage RouteNotFound => new(HttpStatusCode.NotFound, "Route doesn't exist!", ErrorCodes.EntityNotFound);
     public static ErrorMessage FileNotFound => new(HttpStatusCode.NotFound, "File not found on disk!", ErrorCodes.PhysicalFileNotFound);
     public static ErrorMessage BookingNotFound => new(HttpStatusCode.NotFound, "Booking not found!", ErrorCodes.EntityNotFound);
+    public static ErrorMessage CarRouteNotFound => new(HttpStatusCode.NotFound, "Car Route association not found!", ErrorCodes.EntityNotFound);
     public static ErrorMessage TechnicalSupport => new(HttpStatusCode.InternalServerError, "An unknown error occurred, contact the technical support!", ErrorCodes.TechnicalError);
 }
