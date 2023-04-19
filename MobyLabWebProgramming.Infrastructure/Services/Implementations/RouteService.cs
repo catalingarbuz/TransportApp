@@ -43,7 +43,7 @@ public class RouteService : IRouteService
 
     public async Task<ServiceResponse> AddRoute(RouteAddDTO route, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the driver
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the route
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin can add routes !", ErrorCodes.CannotAdd));
         }
@@ -66,7 +66,7 @@ public class RouteService : IRouteService
 
     public async Task<ServiceResponse> UpdateRoute(RouteUpdateDTO route, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the user, you can change this however you se fit.
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can update the route, you can change this however you se fit.
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin can update the route!", ErrorCodes.CannotUpdate));
         }

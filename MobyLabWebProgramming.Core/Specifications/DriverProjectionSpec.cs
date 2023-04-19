@@ -7,13 +7,13 @@ using MobyLabWebProgramming.Core.Entities;
 namespace MobyLabWebProgramming.Core.Specifications;
 
 /// <summary>
-/// This is a specification to filter the user entities and map it to and UserDTO object via the constructors.
+/// This is a specification to filter the Driver entities and map it to and DriverDTO object via the constructors.
 /// Note how the constructors call the base class's constructors. Also, this is a sealed class, meaning it cannot be further derived.
 /// </summary>
 public sealed class DriverProjectionSpec : BaseSpec<DriverProjectionSpec, Driver, DriverDTO>
 {
     /// <summary>
-    /// This is the projection/mapping expression to be used by the base class to get UserDTO object from the database.
+    /// This is the projection/mapping expression to be used by the base class to get DriverDTO object from the database.
     /// </summary>
     protected override Expression<Func<Driver, DriverDTO>> Spec => e => new DriverDTO(e);
 

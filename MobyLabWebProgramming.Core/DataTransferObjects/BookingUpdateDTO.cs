@@ -2,9 +2,9 @@
 
 namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-/// <summary>
-/// </summary>
-/// 
+//<summary>
+//This DTO is used to transfer information about a booking within the application and to client application.
+//</summary>
 public record BookingUpdateDTO(Guid Id,
     DateTime? BookingDate = default,
     DateTime? DepartureDate = default,

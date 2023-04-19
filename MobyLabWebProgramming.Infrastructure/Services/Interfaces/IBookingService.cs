@@ -14,22 +14,22 @@ namespace MobyLabWebProgramming.Infrastructure.Services.Interfaces
         public Task<ServiceResponse<PagedResponse<BookingDTO>>> GetBookings(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// GetRoute returns a route given its id.
+        /// GetBooking returns a booking given its id.
         /// </summary>
         public Task<ServiceResponse<BookingDTO>> GetBooking(Guid id, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// AddRoute adds a route to the database.
+        /// AddBooking adds a booking to the database.
         /// </summary>
         public Task<ServiceResponse> AddBooking(BookingAddDTO booking, UserDTO? requestingUser, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// UpdateRoute updates a route in the database.
+        /// UpdateBooking updates a booking in the database.
         /// </summary>
         public Task<ServiceResponse> UpdateBooking(BookingUpdateDTO booking, UserDTO? requestingUser, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// DeleteRoute deletes a route from the database.
+        /// DeleteBooking deletes a booking from the database.
         /// </summary>
         public Task<ServiceResponse> DeleteBooking(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
     }

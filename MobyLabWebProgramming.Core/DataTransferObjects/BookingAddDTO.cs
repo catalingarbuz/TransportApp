@@ -4,7 +4,7 @@ using MobyLabWebProgramming.Core.Enums;
 namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
 /// <summary>
-/// This DTO is used to transfer information about a car within the application and to client application.
+/// This DTO is used to transfer information about a booking within the application and to client application.
 /// </summary>
 public class BookingAddDTO
 {

@@ -3,6 +3,7 @@
 namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
 /// <summary>
+/// This DTO is used for driver info
 /// </summary>
 public class DriverInfoDTO
 {

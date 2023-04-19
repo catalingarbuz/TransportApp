@@ -36,7 +36,7 @@ public class CarRouteService : ICarRouteService
 
     public async Task<ServiceResponse> AddCarRoute(CarRouteAddDTO carRoute, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the driver
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the car route
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin can add car routes !", ErrorCodes.CannotAdd));
         }
@@ -61,7 +61,7 @@ public class CarRouteService : ICarRouteService
 
     public async Task<ServiceResponse> UpdateCarRoute(CarRouteUpdateDTO carRoute, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the user, you can change this however you se fit.
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can update the car route, you can change this however you se fit.
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin can update the car routes !", ErrorCodes.CannotUpdate));
         }

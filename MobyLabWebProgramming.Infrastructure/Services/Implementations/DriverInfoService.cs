@@ -36,7 +36,7 @@ public class DriverInfoService : IDriverInfoService
 
     public async Task<ServiceResponse> AddDriverInfo(DriverInfoAddDTO driverInfo, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role == UserRoleEnum.Client) // Verify who can add the driver
+        if (requestingUser != null && requestingUser.Role == UserRoleEnum.Client) // Verify who can add the driver info
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin and driver can add driver info!", ErrorCodes.CannotAdd));
         }
@@ -65,7 +65,7 @@ public class DriverInfoService : IDriverInfoService
 
     public async Task<ServiceResponse> UpdateDriverInfo(DriverInfoUpdateDTO driverInfo, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the user, you can change this however you se fit.
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can update the driver info, you can change this however you se fit.
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin or the own user can update the driver info!", ErrorCodes.CannotUpdate));
         }
