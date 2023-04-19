@@ -43,7 +43,7 @@ public class CarService : ICarService
 
     public async Task<ServiceResponse> AddCar(CarAddDTO car, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role == UserRoleEnum.Client) // Verify who can add the driver
+        if (requestingUser != null && requestingUser.Role == UserRoleEnum.Client) // Verify who can add the car
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin and drivers can add cars!", ErrorCodes.CannotAdd));
         }
@@ -68,7 +68,7 @@ public class CarService : ICarService
 
     public async Task<ServiceResponse> UpdateCar(CarUpdateDTO car, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
-        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can add the user, you can change this however you se fit.
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Admin) // Verify who can update the car, you can change this however you se fit.
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin can update the car!", ErrorCodes.CannotUpdate));
         }

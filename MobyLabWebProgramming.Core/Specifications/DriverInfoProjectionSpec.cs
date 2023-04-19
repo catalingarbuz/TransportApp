@@ -7,7 +7,7 @@ using MobyLabWebProgramming.Core.Entities;
 namespace MobyLabWebProgramming.Core.Specifications;
 
 /// <summary>
-/// This is a specification to filter the user entities and map it to and UserDTO object via the constructors.
+/// This is a specification to filter the DriverInfo entities and map it to and DriverInfoDTO object via the constructors.
 /// Note how the constructors call the base class's constructors. Also, this is a sealed class, meaning it cannot be further derived.
 /// </summary>
 public sealed class DriverInfoProjectionSpec : BaseSpec<DriverInfoProjectionSpec, DriverInfo, DriverInfoDTO>

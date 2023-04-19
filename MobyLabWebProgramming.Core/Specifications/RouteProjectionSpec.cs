@@ -9,7 +9,7 @@ namespace MobyLabWebProgramming.Core.Specifications;
 public sealed class RouteProjectionSpec : BaseSpec<RouteProjectionSpec, Route, RouteDTO>
 {
     /// <summary>
-    /// This is the projection/mapping expression to be used by the base class to get carDTO object from the database.
+    /// This is the projection/mapping expression to be used by the base class to get RouteDTO object from the database.
     /// </summary>
     protected override Expression<Func<Route, RouteDTO>> Spec => e => new()
     {
