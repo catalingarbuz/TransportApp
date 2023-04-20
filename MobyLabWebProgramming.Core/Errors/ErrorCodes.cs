@@ -20,5 +20,6 @@ public enum ErrorCodes
     MailSendFailed,
     CarAlreadyExists,
     DriverInfoAlreadyExists,
-    NoAvailableSeats
+    NoAvailableSeats,
+    RouteAlreadyExists
 }
