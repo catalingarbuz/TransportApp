@@ -52,7 +52,7 @@ public class RouteService : IRouteService
         
         if (result != null)
         {
-            return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The route already exists!", ErrorCodes.CarAlreadyExists));
+            return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The route already exists!", ErrorCodes.RouteAlreadyExists));
         }
 
         await _repository.AddAsync(new Route
