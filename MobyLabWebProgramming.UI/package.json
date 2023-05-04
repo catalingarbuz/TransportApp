@@ -1,0 +1,48 @@
+{
+  "name": "mobylab-web-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "echo Starting the development server && npm run dev",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@emotion/react": "11.10.6",
+    "@emotion/styled": "11.10.6",
+    "@hookform/resolvers": "2.9.11",
+    "@mui/icons-material": "5.11.9",
+    "@mui/material": "5.11.10",
+    "@reduxjs/toolkit": "1.9.3",
+    "@tanstack/react-query": "4.24.10",
+    "date-fns": "2.29.3",
+    "date-fns-tz": "2.0.0",
+    "jwt-decode": "3.1.2",
+    "lodash": "4.17.21",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-helmet": "6.1.0",
+    "react-hook-form": "7.43.2",
+    "react-intl": "6.2.10",
+    "react-redux": "8.0.5",
+    "react-router-dom": "6.8.1",
+    "react-toastify": "9.1.1",
+    "sass": "1.58.3",
+    "vite-tsconfig-paths": "4.0.5",
+    "yup": "1.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.191",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "@types/react-helmet": "6.1.6",
+    "@vitejs/plugin-react": "3.1.0",
+    "babel-plugin-formatjs": "10.4.0",
+    "typescript": "4.9.3",
+    "vite": "4.1.0",
+    "vitest": "0.29.1"
+  }
+}
