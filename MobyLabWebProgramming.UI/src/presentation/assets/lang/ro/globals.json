@@ -3,6 +3,7 @@
     "globals.login": "Autentificare",
     "globals.logout": "Iesire",
     "globals.submit": "Trimite",
+    "globals.sign": "Înregistrare",
     "globals.email": "E-mail",
     "globals.password": "Parola",
     "globals.refresh": "Reincarca",
@@ -21,5 +22,7 @@
     "globals.file": "Fisier",
     "globals.placeholders.textInput": "Va rugam sa introduceti {fieldName}",
     "globals.placeholders.selectInput": "Va rugam sa selectati {fieldName}",
-    "globals.validations.requiredField": "{fieldName} este camp obligatoriu!"
+    "globals.validations.requiredField": "{fieldName} este camp obligatoriu!",
+    "globals.signup": "Înregistrare",
+    "globals.number": "Număr de telefon"
 }
