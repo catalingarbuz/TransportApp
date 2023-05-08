@@ -78,7 +78,7 @@ export const Navbar = () => {
           <Grid container item direction="column" xs={1}>
             <NavbarLanguageSelector />
           </Grid>
-          <Grid container item direction="column" xs={2}>
+          <Grid container item direction="column" xs={1}>
             {!loggedIn && <Button color="inherit">  {/* If the user is not logged in show a button that redirects to the login page. */}
               <Link style={{ color: 'white' }} to={AppRoute.Login}>
                 {formatMessage({ id: "globals.login" })}
@@ -86,6 +86,13 @@ export const Navbar = () => {
             </Button>}
             {loggedIn && <Button onClick={logout} color="inherit" > {/* Otherwise show the logout button. */}
               {formatMessage({ id: "globals.logout" })}
+            </Button>}
+          </Grid>
+          <Grid container item direction="column" xs={1}>
+            {!loggedIn && <Button color="inherit">
+             <Link style={{ color: 'white' }} to={AppRoute.Signup}>
+                {formatMessage({ id: "globals.signup"})}
+             </Link>
             </Button>}
           </Grid>
         </Grid>

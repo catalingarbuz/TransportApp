@@ -3,6 +3,7 @@
     "globals.login": "Login",
     "globals.logout": "Logout",
     "globals.submit": "Submit",
+    "globals.sign": "Sign-up",
     "globals.email": "E-mail",
     "globals.password": "Password",
     "globals.refresh": "Refresh",
@@ -21,5 +22,7 @@
     "globals.file": "File",
     "globals.placeholders.textInput": "Please enter {fieldName}",
     "globals.placeholders.selectInput": "Please select the {fieldName}",
-    "globals.validations.requiredField": "{fieldName} is a required field!"
+    "globals.validations.requiredField": "{fieldName} is a required field!",
+    "globals.signup": "Sign up",
+    "globals.number": "Phone Number"
 }

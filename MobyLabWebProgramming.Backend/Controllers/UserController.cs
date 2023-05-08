@@ -57,7 +57,6 @@ public class UserController : AuthorizedController // Here we use the Authorized
     /// <summary>
     /// This method implements the Create operation (C from CRUD) of a user. 
     /// </summary>
-    [Authorize]
     [HttpPost] // This attribute will make the controller respond to a HTTP POST request on the route /api/User/Add.
     public async Task<ActionResult<RequestResponse>> Add([FromBody] UserAddDTO user)
     {
