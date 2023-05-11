@@ -1,5 +1,5 @@
 {
-    "globals.welcome": "Bine ati venit!",
+    "globals.welcome": "Bine ati venit la MyTransApp !",
     "globals.login": "Autentificare",
     "globals.logout": "Iesire",
     "globals.submit": "Trimite",
@@ -24,5 +24,8 @@
     "globals.placeholders.selectInput": "Va rugam sa selectati {fieldName}",
     "globals.validations.requiredField": "{fieldName} este camp obligatoriu!",
     "globals.signup": "Înregistrare",
-    "globals.number": "Număr de telefon"
+    "globals.number": "Număr de telefon",
+    "globals.confirmPassword": "Confirmare parolă",
+    "globals.bookASeat": "Rezervă un loc",
+    "globals.appdescription": "Compania de transport pasageri MyTransApp este specializată în oferirea de servicii de transport persoane de înaltă calitate. Prin intermediul platformei noastre, utilizatorii pot rezerva și plăti pentru călătorii către orice destinație dintr-o varietate de opțiuni. Echipa noastră de șoferi profesioniști și bine instruiți oferă servicii de transport sigure și confortabile, asigurând că clienții noștri ajung la destinația lor la timp și în siguranță. Folosim cele mai recente tehnologii pentru a asigura o experiență de utilizare ușoară și convenabilă pentru clienții noștri, inclusiv opțiuni de plată online și rezervare online. Compania noastră se angajează să ofere un nivel ridicat de satisfacție a clienților, iar echipa noastră de asistență pentru clienți este disponibilă 24/7 pentru a oferi asistență și a răspunde la întrebările și nevoile clienților noștri. Suntem dedicați să oferim servicii de transport fiabile și accesibile pentru toți clienții noștri și ne străduim să ne îmbunătățim constant serviciile pentru a răspunde nevoilor în continuă schimbare ale pieței de transport pasageri." 
 }

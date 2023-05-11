@@ -29,10 +29,19 @@ export const useAppRouter = () => {
     [navigate]
   );
 
+  const redirectToLogin = useCallback(
+    () => 
+      navigate({
+        pathname: AppRoute.Login
+      }),
+    [navigate]
+  )
+
   return {
     redirectToHome,
     redirectToUsers,
     redirectToUsersFiles,
+    redirectToLogin,
     navigate
   };
 };

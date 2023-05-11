@@ -16,10 +16,10 @@ export const ContentCard = memo(
     );
 
     return (
-      <div id={id} className="content__card__container">
-        {showTitle && <h4 style={{ textAlign: 'center' }}>{title}</h4>}
+      <div id={id} className="content__card__container" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+        {showTitle && <h2 style={{ textAlign: 'center' }}>{title}</h2>}
         <div className="content__card__body">{children}</div>
       </div>
-    );
+    );    
   }
 );

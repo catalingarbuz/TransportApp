@@ -60,12 +60,9 @@ public class UserController : AuthorizedController // Here we use the Authorized
     [HttpPost] // This attribute will make the controller respond to a HTTP POST request on the route /api/User/Add.
     public async Task<ActionResult<RequestResponse>> Add([FromBody] UserAddDTO user)
     {
-        var currentUser = await GetCurrentUser();
         user.Password = PasswordUtils.HashPassword(user.Password);
 
-        return currentUser.Result != null ?
-            this.FromServiceResponse(await UserService.AddUser(user, currentUser.Result)) :
-            this.ErrorMessageResult(currentUser.Error);
+        return this.FromServiceResponse(await UserService.AddUser(user, null)); 
     }
 
     /// <summary>

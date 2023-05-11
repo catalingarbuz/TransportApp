@@ -12,5 +12,6 @@
     "notifications.errors.physicalFileNotFound": "The file was not found!",
     "notifications.errors.technicalError": "A technical error occurred, please contact the support!",
     "notifications.errors.userAlreadyExists": "The user already exists!",
-    "notifications.errors.wrongPassword": "You entered the wrong password!"
+    "notifications.errors.wrongPassword": "You entered the wrong password!",
+    "notifications.messages.signupSuccess": "You signed up successfully!"
 }

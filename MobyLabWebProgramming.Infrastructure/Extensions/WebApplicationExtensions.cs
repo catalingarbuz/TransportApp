@@ -14,7 +14,10 @@ public static class WebApplicationExtensions
         application.UseMiddleware<GlobalExceptionHandlerMiddleware>() // Adds the global exception handler middleware.
             .UseSwagger() // Adds the swagger.
             .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MobyLab Web App v1")) // Add the swagger UI with the application name.
-            .UseCors() // Sets to use the CORS configuration.
+            .UseCors(builder =>
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()) // Sets to use the CORS configuration.
             .UseRouting() // Adds routing.
             .UseAuthentication() // Adds authentication.
             .UseSerilogRequestLogging() // Adds advanced logging using the Serilog NuGets.
