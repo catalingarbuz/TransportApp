@@ -5,10 +5,14 @@ import { useIntl } from "react-intl";
 import { Box } from "@mui/system";
 import { Seo } from "@presentation/components/ui/Seo";
 import { ContentCard } from "@presentation/components/ui/ContentCard";
-import { Button } from "@mui/material"
+import { Button } from "@mui/material";
+import { useAppSelector } from '@application/store';
+import { Link } from 'react-router-dom';
+import { AppRoute } from 'routes';
 
 export const HomePage = memo(() => {
   const { formatMessage } = useIntl();
+  const { loggedIn } = useAppSelector(x => x.profileReducer);
 
   return <Fragment>
       <Seo title="MobyLab Web App | Home" />
@@ -27,7 +31,16 @@ export const HomePage = memo(() => {
             </ContentCard>
           </Box>
           <Box sx={{ padding: "25px 0px 0px 0px", display: "flex", justifyContent: "center" }}>
-              <Button variant="contained" sx={{ height: "40px", width: "200px", fontSize: "16px" }}>{formatMessage({ id: "globals.bookASeat" })}</Button>
+            {!loggedIn && <Button variant="contained" sx={{ height: "40px", width: "200px", fontSize: "16px" }}>  {/* If the user is not logged in show a button that redirects to the login page. */}
+              <Link style={{ color: 'white' }} to={AppRoute.Login}>
+                {formatMessage({ id: "globals.bookASeat" })}
+              </Link>
+            </Button>}
+            {loggedIn && <Button variant="contained" sx={{ height: "40px", width: "200px", fontSize: "16px" }}>  {/* If the user is not logged in show a button that redirects to the login page. */}
+              <Link style={{ color: 'white' }} to={AppRoute.Bookings}>
+                {formatMessage({ id: "globals.bookASeat" })}
+              </Link>
+            </Button>}
           </Box>
         </WebsiteLayout>
       </Box>

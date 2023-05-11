@@ -37,11 +37,38 @@ export const useAppRouter = () => {
     [navigate]
   )
 
+  const redirectToBookings = useCallback(
+    () => 
+      navigate({
+        pathname: AppRoute.Bookings
+      }),
+    [navigate]
+  )
+
+  const redirectToRoutes = useCallback(
+    () => 
+      navigate({
+        pathname: AppRoute.Routes
+      }),
+    [navigate]
+  )
+
+  const redirectToContact = useCallback(
+    () => 
+      navigate({
+        pathname: AppRoute.Contact
+      }),
+    [navigate]
+  )
+
   return {
     redirectToHome,
     redirectToUsers,
     redirectToUsersFiles,
     redirectToLogin,
+    redirectToBookings,
+    redirectToContact,
+    redirectToRoutes,
     navigate
   };
 };

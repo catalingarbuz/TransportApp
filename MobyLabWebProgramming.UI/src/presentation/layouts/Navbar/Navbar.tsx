@@ -23,6 +23,7 @@ export const Navbar = () => {
   const { formatMessage } = useIntl();
   const { loggedIn } = useAppSelector(x => x.profileReducer);
   const isAdmin = useOwnUserHasRole(UserRoleEnum.Admin);
+  const isClient = useOwnUserHasRole(UserRoleEnum.Client);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const { redirectToHome } = useAppRouter();
@@ -41,7 +42,7 @@ export const Navbar = () => {
           xs={12}
           alignItems="center"
           wrap="nowrap"
-          columnSpacing={2}
+          columnSpacing={1}
         >
           <Grid container item direction="column" xs={1}>
             <Link
@@ -49,7 +50,7 @@ export const Navbar = () => {
               <HomeIcon style={{ color: 'white' }} fontSize='large' />
             </Link>
           </Grid>
-          <Grid container item direction="column" xs={8}>
+          <Grid container item direction="column" xs={6}>
             {isAdmin && <Grid // If the user is logged in and it is an admin they can have new menu items shown.
               container
               item
@@ -57,9 +58,9 @@ export const Navbar = () => {
               xs={12}
               alignItems="center"
               wrap="nowrap"
-              columnSpacing={15}
+              columnSpacing={1}
             >
-              <Grid container item direction="column" xs={1}>
+              <Grid container item direction="column" xs={2}>
                 <Button color="inherit">
                   <Link style={{ color: 'white' }} to={AppRoute.Users}>
                     {formatMessage({ id: "globals.users" })}
@@ -71,6 +72,40 @@ export const Navbar = () => {
                   <Link style={{ color: 'white' }} to={AppRoute.UserFiles}>
                     {formatMessage({ id: "globals.files" })}
                   </Link>
+                </Button>
+              </Grid>
+            </Grid>}
+          </Grid>
+          <Grid container item direction="column" xs={7}>
+            {isClient && <Grid // If the user is logged in and it is an client they can have new menu items shown.
+              container
+              item
+              direction="row"
+              xs={6}
+              alignItems="space-evenly"
+              wrap="nowrap"
+              columnSpacing={12}
+              justifyContent="flex-start"
+            >
+              <Grid container item direction="column" xs={1}>
+                <Button color="inherit">
+                  <Link style={{ color: 'white' }} to={AppRoute.Bookings}>
+                    {formatMessage({ id: "globals.bookings" })}
+                  </Link>
+                </Button>
+              </Grid>
+              <Grid container item direction="column" xs={1} sx={{ marginLeft: "25px" }}>
+                <Button color="inherit">
+                  <Link style={{ color: 'white' }} to={AppRoute.Routes}>
+                    {formatMessage({ id: "globals.routes" })}
+                  </Link>
+                </Button>
+              </Grid>
+              <Grid container item direction="column" xs={1}>
+                <Button color="inherit">
+                  <Link style={{ color: 'white' }} to={AppRoute.Contact}>
+                    {formatMessage({ id: "globals.contacts" })}
+                  </Link> 
                 </Button>
               </Grid>
             </Grid>}

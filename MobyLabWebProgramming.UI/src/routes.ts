@@ -6,5 +6,8 @@ export enum AppRoute {
     Login = "/login",
     Users = "/users",
     UserFiles = "/user-files",
-    Signup = "/signup"
+    Signup = "/signup",
+    Bookings = "/bookings",
+    Routes = "/routes",
+    Contact = "/contact"
 }
