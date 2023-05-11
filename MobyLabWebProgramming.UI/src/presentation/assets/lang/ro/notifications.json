@@ -12,5 +12,6 @@
     "notifications.errors.physicalFileNotFound": "Fișierul nu a fost găsit!",
     "notifications.errors.technicalError": "A apărut o eroare tehnică, vă rugăm să contactați asistența!",
     "notifications.errors.userAlreadyExists": "Utilizatorul există deja!",
-    "notifications.errors.wrongPassword": "Ați introdus o parolă greșită!"
+    "notifications.errors.wrongPassword": "Ați introdus o parolă greșită!",
+    "notifications.messages.signupSuccess": "V-ati inregistrat cu succes!"
 }

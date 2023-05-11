@@ -13,6 +13,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useSignupFormController } from "./SignupForm.controller";
 import { ContentCard } from "@presentation/components/ui/ContentCard";
 import { isEmpty, isUndefined } from "lodash";
+import { useState } from "react";
 
 /**
  * Here we declare the login form component.
@@ -34,7 +35,7 @@ export const SignupForm = () => {
                                 <FormattedMessage id="globals.name" />
                             </FormLabel> {/* Add a form label to indicate what the input means. */}
                             <OutlinedInput
-                                {...actions.register("email")} // Bind the form variable to the UI input.
+                                {...actions.register("name")} // Bind the form variable to the UI input.
                                 placeholder={formatMessage(
                                     { id: "globals.placeholders.textInput" },
                                     {
@@ -110,10 +111,36 @@ export const SignupForm = () => {
                             error={!isUndefined(state.errors.password)}
                         >
                             <FormLabel required>
+                                <FormattedMessage id="globals.confirmPassword" />
+                            </FormLabel>
+                            <OutlinedInput
+                                type="password"
+                                placeholder={formatMessage(
+                                    { id: "globals.placeholders.textInput" },
+                                    {
+                                        fieldName: formatMessage({
+                                            id: "globals.confirmPassword",
+                                        }),
+                                    })}
+                                autoComplete="current-password"
+                            />
+                            <FormHelperText
+                                hidden={isUndefined(state.errors.password)}
+                            >
+                                {state.errors.password?.message}
+                            </FormHelperText>
+                        </FormControl>
+                    </Grid>
+                    <Grid container item direction="column" xs={6} md={6}>
+                        <FormControl
+                            fullWidth
+                            error={!isUndefined(state.errors.password)}
+                        >
+                            <FormLabel required>
                                 <FormattedMessage id="globals.number" />
                             </FormLabel>
                             <OutlinedInput
-                                {...actions.register("password")}
+                                {...actions.register("phoneNumber")}
                                 placeholder={formatMessage(
                                     { id: "globals.placeholders.textInput" },
                                     {

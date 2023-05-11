@@ -1,5 +1,5 @@
 {
-    "globals.welcome": "Welcome!",
+    "globals.welcome": "Welcome to MyTransApp!",
     "globals.login": "Login",
     "globals.logout": "Logout",
     "globals.submit": "Submit",
@@ -24,5 +24,8 @@
     "globals.placeholders.selectInput": "Please select the {fieldName}",
     "globals.validations.requiredField": "{fieldName} is a required field!",
     "globals.signup": "Sign up",
-    "globals.number": "Phone Number"
+    "globals.number": "Phone Number",
+    "globals.confirmPassword": "Confirm password",
+    "globals.bookASeat": "Book a seat",
+    "globals.appdescription": "The passenger transport company MyTransApp specialises in providing high quality passenger transport services. Through our platform, users can book and pay for travel to any destination from a variety of options. Our team of professional and well-trained drivers provide safe and comfortable transport services, ensuring that our customers reach their destination on time and safely. We use the latest technology to ensure an easy and convenient user experience for our customers, including online payment and online booking options. Our company is committed to providing a high level of customer satisfaction, and our customer service team is available 24/7 to assist and answer our customers' questions and needs. We are dedicated to providing reliable and affordable transportation services to all of our customers and strive to constantly improve our services to meet the ever-changing needs of the passenger transportation market." 
 }

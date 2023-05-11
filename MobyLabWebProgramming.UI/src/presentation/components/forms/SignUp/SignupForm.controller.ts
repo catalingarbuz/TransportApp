@@ -21,7 +21,8 @@ const getDefaultValues = (initialData?: { email: string }) => {
         email: "",
         password: "",
         phoneNumber: "",
-        name:""
+        name:"",
+        role:"Client"
     };
 
     if (!isUndefined(initialData)) {
@@ -37,7 +38,7 @@ const getDefaultValues = (initialData?: { email: string }) => {
 /**
  * Create a hook to get the validation schema.
  */
-const useInitLoginForm = () => {
+const useInitSignupForm = () => {
     const { formatMessage } = useIntl();
     const defaultValues = getDefaultValues();
 
@@ -61,6 +62,27 @@ const useInitLoginForm = () => {
                     }),
                 }))
             .default(defaultValues.password),
+        phoneNumber: yup.string() // This field should be a string.
+            .required(formatMessage( // Use formatMessage to get the translated error message.
+                { id: "globals.validations.requiredField" },
+                {
+                    fieldName: formatMessage({ // Format the message with other translated strings.
+                        id: "globals.number",
+                    }),
+                })) // The field is required and needs a error message when it is empty.
+            .default(defaultValues.phoneNumber), // Add a default value for the field.
+        name: yup.string() // This field should be a string.
+            .required(formatMessage( // Use formatMessage to get the translated error message.
+                { id: "globals.validations.requiredField" },
+                {
+                    fieldName: formatMessage({ // Format the message with other translated strings.
+                        id: "globals.name",
+                    }),
+                })) // The field is required and needs a error message when it is empty.
+            .default(defaultValues.name),
+        role: yup.string() // This field should be a string.
+            .required() // The field is required and needs a error message when it is empty.
+            .default(defaultValues.name),
     });
 
     const resolver = yupResolver(schema); // Get the resolver.
@@ -73,8 +95,8 @@ const useInitLoginForm = () => {
  */
 export const useSignupFormController = (): SignupFormController => {
     const { formatMessage } = useIntl();
-    const { defaultValues, resolver } = useInitLoginForm();
-    const { redirectToHome } = useAppRouter();
+    const { defaultValues, resolver } = useInitSignupForm();
+    const { redirectToLogin } = useAppRouter();
     const { registerMutation: { mutation, key: mutationKey } } = useRegistrationApi();
     const { mutateAsync: signup, status } = useMutation([mutationKey], mutation);
     const queryClient = useQueryClient();
@@ -82,9 +104,9 @@ export const useSignupFormController = (): SignupFormController => {
     const submit = useCallback((data: SignupFormModel) => // Create a submit callback to send the form data to the backend.
         signup(data).then(() => {
             //dispatch(setToken(result.response?.token ?? ''));
-            toast(formatMessage({ id: "notifications.messages.authenticationSuccess" }));
-            redirectToHome();
-        }), [signup, queryClient, redirectToHome, dispatch]);
+            toast(formatMessage({ id: "notifications.messages.signupSuccess" }));
+            redirectToLogin();
+        }), [signup, queryClient, redirectToLogin, dispatch]);
 
     const {
         register,
