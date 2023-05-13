@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface BookingDTO {
     /**
      * 
+     * @type {string}
+     * @memberof BookingDTO
+     */
+    id?: string;
+    /**
+     * 
      * @type {Date}
      * @memberof BookingDTO
      */
@@ -87,7 +93,7 @@ export function BookingDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         return json;
     }
     return {
-        
+        'id': !exists(json, 'id') ? undefined : json['id'],
         'bookingDate': !exists(json, 'bookingDate') ? undefined : (new Date(json['bookingDate'])),
         'departureDate': !exists(json, 'departureDate') ? undefined : (new Date(json['departureDate'])),
         'departurePlace': !exists(json, 'departurePlace') ? undefined : json['departurePlace'],
@@ -107,7 +113,7 @@ export function BookingDTOToJSON(value?: BookingDTO | null): any {
         return null;
     }
     return {
-        
+        'id': value.id,
         'bookingDate': value.bookingDate === undefined ? undefined : (value.bookingDate.toISOString()),
         'departureDate': value.departureDate === undefined ? undefined : (value.departureDate.toISOString()),
         'departurePlace': value.departurePlace,

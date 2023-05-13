@@ -131,7 +131,7 @@ export const UserAddForm = (props: { onSubmit?: () => void }) => {
                             <MenuItem value={UserRoleEnum.Client}>
                                 <FormattedMessage id="globals.client" />
                             </MenuItem>
-                            <MenuItem value={UserRoleEnum.Personnel}>
+                            <MenuItem value={UserRoleEnum.Driver}>
                                 <FormattedMessage id="globals.personnel" />
                             </MenuItem>
                             <MenuItem value={UserRoleEnum.Admin}>

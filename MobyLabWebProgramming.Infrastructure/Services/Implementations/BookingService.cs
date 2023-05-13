@@ -58,37 +58,46 @@ public class BookingService : IBookingService
         }
 
         var route = _repository.DbContext.Set<Route>()
-            .FirstOrDefault(d => d.Id == booking.RouteId);
+            .FirstOrDefault(d => d.RouteName == booking.RouteName);
 
         if (route == null)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "Route not found", ErrorCodes.EntityNotFound));
         }
 
-        var car = _repository.DbContext.Set<Car>()
-            .FirstOrDefault(c => c.Id == booking.CarId);
+        var carRoute = _repository.DbContext.Set<CarRoute>()
+            .Where(cr => cr.RouteId == route.Id).ToList();
 
-        if (car == null)
+        Guid carId = Guid.Empty;
+        foreach(var cr in carRoute)
         {
-            return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "Car not found", ErrorCodes.EntityNotFound));
-        } 
-        else
-        {
-            var bookedSeats = GetBookingsCountForCarAndRouteAndDepartureDate(booking.CarId, booking.RouteId, booking.DepartureDate, cancellationToken);
+            var car = _repository.DbContext.Set<Car>()
+                .FirstOrDefault(c => c.Id == cr.CarId);
 
-            if (car.NumberOfSeats - bookedSeats <= 0)
+            if (car == null)
+                continue;
+
+            var bookedSeats = GetBookingsCountForCarAndRouteAndDepartureDate(cr.CarId, route.Id, booking.DepartureDate, cancellationToken);
+
+            if (car.NumberOfSeats - bookedSeats > 0)
             {
-                return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "No available free seats for the current selection!", ErrorCodes.NoAvailableSeats));
-            }
-        } 
+                carId = car.Id;
+                break;
+            }            
+        }
+
+        if (carId == Guid.Empty)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "No available free seats for the current selection!", ErrorCodes.NoAvailableSeats));
+        }
 
         await _repository.AddAsync(new Booking
         {
-            UserId = booking.UserId,
+            UserId = requestingUser.Id,
             DriverId = booking.DriverId,
-            CarId = booking.CarId,
-            RouteId = booking.RouteId,
-            BookingDate = booking.BookingDate,
+            CarId = carId,
+            RouteId = route.Id,
+            BookingDate = DateTime.Now,
             DepartureDate = booking.DepartureDate,
             DeparturePlace = booking.DeparturePlace,
             ArrivalPlace = booking.ArrivalPlace     

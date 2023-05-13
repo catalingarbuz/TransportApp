@@ -6,5 +6,6 @@
     "labels.no": "No",
     "labels.actions": "Actions",
     "labels.addUser": "Add user",
-    "labels.addUserFile": "Add file"
+    "labels.addUserFile": "Add file",
+    "labels.addBooking": "Add booking"
 }

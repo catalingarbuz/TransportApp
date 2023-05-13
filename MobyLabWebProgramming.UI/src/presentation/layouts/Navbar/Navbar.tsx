@@ -23,7 +23,6 @@ export const Navbar = () => {
   const { formatMessage } = useIntl();
   const { loggedIn } = useAppSelector(x => x.profileReducer);
   const isAdmin = useOwnUserHasRole(UserRoleEnum.Admin);
-  const isClient = useOwnUserHasRole(UserRoleEnum.Client);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const { redirectToHome } = useAppRouter();
@@ -44,7 +43,7 @@ export const Navbar = () => {
           wrap="nowrap"
           columnSpacing={1}
         >
-          <Grid container item direction="column" xs={1}>
+          <Grid container item direction="column" xs={2}>
             <Link
               to={AppRoute.Index}> {/* Add a button to redirect to the home page. */}
               <HomeIcon style={{ color: 'white' }} fontSize='large' />
@@ -58,7 +57,7 @@ export const Navbar = () => {
               xs={12}
               alignItems="center"
               wrap="nowrap"
-              columnSpacing={1}
+              columnSpacing={15}
             >
               <Grid container item direction="column" xs={2}>
                 <Button color="inherit">
@@ -77,7 +76,7 @@ export const Navbar = () => {
             </Grid>}
           </Grid>
           <Grid container item direction="column" xs={7}>
-            {isClient && <Grid // If the user is logged in and it is an client they can have new menu items shown.
+            {loggedIn && <Grid // If the user is logged in and it is an client they can have new menu items shown.
               container
               item
               direction="row"

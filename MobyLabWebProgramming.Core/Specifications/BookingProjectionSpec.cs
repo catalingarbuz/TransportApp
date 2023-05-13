@@ -17,6 +17,7 @@ public sealed class BookingProjectionSpec : BaseSpec<BookingProjectionSpec, Book
     /// </summary>
     protected override Expression<Func<Booking, BookingDTO>> Spec => e => new()
     {
+        Id = e.Id,
         BookingDate = e.BookingDate,
         DeparturePlace = e.DeparturePlace,
         DepartureDate = e.DepartureDate,
