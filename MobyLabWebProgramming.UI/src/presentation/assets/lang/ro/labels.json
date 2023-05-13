@@ -6,5 +6,6 @@
     "labels.no": "Nu",
     "labels.actions": "Actiuni",
     "labels.addUser": "Adauga utilizator",
-    "labels.addUserFile": "Adauga fisier"
+    "labels.addUserFile": "Adauga fisier",
+    "labels.addBooking": "Adaugă rezervare"
 }

@@ -8,11 +8,9 @@ namespace MobyLabWebProgramming.Core.DataTransferObjects;
 /// </summary>
 public class BookingAddDTO
 {
-    public Guid UserId { get; set; }
     public Guid DriverId { get; set; }
-    public Guid CarId { get; set; }
-    public Guid RouteId { get; set; }
 
+    public string RouteName { get; set; } = default!;
     public DateTime BookingDate { get; set; } = default;
     public DateTime DepartureDate { get; set; } = default;
     public string DeparturePlace { get; set; } = default!;

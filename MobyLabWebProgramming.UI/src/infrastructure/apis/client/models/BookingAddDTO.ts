@@ -24,25 +24,13 @@ export interface BookingAddDTO {
      * @type {string}
      * @memberof BookingAddDTO
      */
-    userId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BookingAddDTO
-     */
     driverId?: string;
     /**
      * 
      * @type {string}
      * @memberof BookingAddDTO
      */
-    carId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BookingAddDTO
-     */
-    routeId?: string;
+    routeName?: string;
     /**
      * 
      * @type {Date}
@@ -87,11 +75,8 @@ export function BookingAddDTOFromJSONTyped(json: any, ignoreDiscriminator: boole
         return json;
     }
     return {
-        
-        'userId': !exists(json, 'userId') ? undefined : json['userId'],
         'driverId': !exists(json, 'driverId') ? undefined : json['driverId'],
-        'carId': !exists(json, 'carId') ? undefined : json['carId'],
-        'routeId': !exists(json, 'routeId') ? undefined : json['routeId'],
+        'routeName': !exists(json, 'routeName') ? undefined : json['routeName'],
         'bookingDate': !exists(json, 'bookingDate') ? undefined : (new Date(json['bookingDate'])),
         'departureDate': !exists(json, 'departureDate') ? undefined : (new Date(json['departureDate'])),
         'departurePlace': !exists(json, 'departurePlace') ? undefined : json['departurePlace'],
@@ -107,11 +92,8 @@ export function BookingAddDTOToJSON(value?: BookingAddDTO | null): any {
         return null;
     }
     return {
-        
-        'userId': value.userId,
         'driverId': value.driverId,
-        'carId': value.carId,
-        'routeId': value.routeId,
+        'routeName': value.routeName,
         'bookingDate': value.bookingDate === undefined ? undefined : (value.bookingDate.toISOString()),
         'departureDate': value.departureDate === undefined ? undefined : (value.departureDate.toISOString()),
         'departurePlace': value.departurePlace,
