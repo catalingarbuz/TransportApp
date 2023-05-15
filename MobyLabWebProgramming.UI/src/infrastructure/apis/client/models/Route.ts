@@ -74,6 +74,12 @@ export interface Route {
      * @memberof Route
      */
     bookings?: Array<Booking> | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Route
+     */
+    routeLength?: string | null;
 }
 
 /**

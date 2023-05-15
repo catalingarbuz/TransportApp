@@ -37,6 +37,12 @@ export interface RouteDTO {
      * @memberof RouteDTO
      */
     description?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RouteDTO
+     */
+    routeLength?: string | null;
 }
 
 /**
@@ -61,6 +67,7 @@ export function RouteDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'id': !exists(json, 'id') ? undefined : json['id'],
         'routeName': !exists(json, 'routeName') ? undefined : json['routeName'],
         'description': !exists(json, 'description') ? undefined : json['description'],
+        'routeLength': !exists(json, 'routeLength') ? undefined : json['routeLength']
     };
 }
 
@@ -76,6 +83,7 @@ export function RouteDTOToJSON(value?: RouteDTO | null): any {
         'id': value.id,
         'routeName': value.routeName,
         'description': value.description,
+        'routeLength': value.routeLength
     };
 }
 

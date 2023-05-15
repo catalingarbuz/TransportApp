@@ -37,6 +37,12 @@ export interface RouteUpdateDTO {
      * @memberof RouteUpdateDTO
      */
     description?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RouteUpdateDTO
+     */
+    routeLength?: string | null;
 }
 
 /**

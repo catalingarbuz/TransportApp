@@ -58,7 +58,8 @@ public class RouteService : IRouteService
         await _repository.AddAsync(new Route
         {
             RouteName = route.RouteName,
-            Description = route.Description
+            Description = route.Description,
+            RouteLength = route.RouteLength
         }, cancellationToken);
 
         return ServiceResponse.ForSuccess();
@@ -77,6 +78,7 @@ public class RouteService : IRouteService
         {
             entity.RouteName = route.RouteName ?? entity.RouteName;
             entity.Description = route.Description ?? entity.Description;
+            entity.RouteLength = route.RouteLength ?? entity.RouteLength;
 
             await _repository.UpdateAsync(entity, cancellationToken);
         } else

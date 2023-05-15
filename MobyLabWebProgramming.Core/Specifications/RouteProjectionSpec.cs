@@ -15,7 +15,8 @@ public sealed class RouteProjectionSpec : BaseSpec<RouteProjectionSpec, Route, R
     {
         Id = e.Id,
         Description = e.Description,
-        RouteName = e.RouteName
+        RouteName = e.RouteName,
+        RouteLength = e.RouteLength
     };
 
     public RouteProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)

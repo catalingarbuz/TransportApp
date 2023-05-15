@@ -7,5 +7,7 @@
     "labels.actions": "Actiuni",
     "labels.addUser": "Adauga utilizator",
     "labels.addUserFile": "Adauga fisier",
-    "labels.addBooking": "Adaugă rezervare"
+    "labels.addBooking": "Adaugă rezervare",
+    "labels.numberOfOrder": "Numarul rutei",
+    "labels.addRoute": "Adauga ruta"
 }
