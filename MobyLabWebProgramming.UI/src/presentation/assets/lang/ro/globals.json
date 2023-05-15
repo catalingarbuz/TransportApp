@@ -36,5 +36,6 @@
     "globals.departureDate": "Data pornirii",
     "globals.bookingDate": "Data rezervarii",
     "globals.routeName": "Numele rutei",
-    "globals.driverId": "Id sofer"
+    "globals.driverId": "Id sofer",
+    "globals.routeLength": "Lungimea rutei"
 }

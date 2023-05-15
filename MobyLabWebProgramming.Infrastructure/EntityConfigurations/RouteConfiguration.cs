@@ -19,6 +19,8 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
         builder.Property(e => e.RouteName)
             .HasMaxLength(255) // This specifies the maximum length for varchar type in the database.
             .IsRequired();
+        builder.Property(e => e.RouteLength)
+            .HasMaxLength(100);
         builder.Property(e => e.Description)
             .HasMaxLength(2000)
             .IsRequired();

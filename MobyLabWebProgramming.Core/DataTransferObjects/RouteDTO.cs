@@ -10,4 +10,5 @@ public class RouteDTO
     public Guid Id { get; set; }
     public string RouteName { get; set; } = default!;
     public string Description { get; set; } = default!;
+    public string? RouteLength { get; set; } = default!;
 }

@@ -8,4 +8,5 @@ namespace MobyLabWebProgramming.Core.DataTransferObjects;
 /// <param name="Id"></param>
 /// <param name="RouteName"></param>
 /// <param name="Description"></param>
-public record RouteUpdateDTO(Guid Id, string? RouteName = default, string? Description = default);
+/// <param name="RouteLength"></param>
+public record RouteUpdateDTO(Guid Id, string? RouteName = default, string? Description = default, string? RouteLength = default);

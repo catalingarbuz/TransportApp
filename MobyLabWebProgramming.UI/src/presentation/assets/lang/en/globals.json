@@ -36,5 +36,6 @@
     "globals.departureDate": "Departure date",
     "globals.bookingDate": "Booking date",
     "globals.routeName": "Route name",
-    "globals.driverId": "Driver ID"
+    "globals.driverId": "Driver ID",
+    "globals.routeLength": "Route length"
 }

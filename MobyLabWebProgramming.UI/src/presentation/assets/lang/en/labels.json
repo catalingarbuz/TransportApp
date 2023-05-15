@@ -7,5 +7,7 @@
     "labels.actions": "Actions",
     "labels.addUser": "Add user",
     "labels.addUserFile": "Add file",
-    "labels.addBooking": "Add booking"
+    "labels.addBooking": "Add booking",
+    "labels.numberOfOrder": "Number of route",
+    "labels.addRoute": "Add route"
 }

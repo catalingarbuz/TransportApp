@@ -31,6 +31,12 @@ export interface RouteAddDTO {
      * @memberof RouteAddDTO
      */
     description?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RouteAddDTO
+     */
+    routeLength?: string | null;
 }
 
 /**
@@ -54,6 +60,7 @@ export function RouteAddDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'routeName': !exists(json, 'routeName') ? undefined : json['routeName'],
         'description': !exists(json, 'description') ? undefined : json['description'],
+        'routeLength': !exists(json, 'routeLength') ? undefined : json['routeLength']
     };
 }
 
@@ -68,6 +75,7 @@ export function RouteAddDTOToJSON(value?: RouteAddDTO | null): any {
         
         'routeName': value.routeName,
         'description': value.description,
+        'routeLength': value.routeLength
     };
 }
 

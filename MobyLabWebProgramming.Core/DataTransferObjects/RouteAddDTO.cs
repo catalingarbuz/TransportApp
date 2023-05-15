@@ -9,4 +9,5 @@ public class RouteAddDTO
 {
     public string RouteName { get; set; } = default!;
     public string Description { get; set; } = default!;
+    public string? RouteLength { get; set; } = default!;
 }
