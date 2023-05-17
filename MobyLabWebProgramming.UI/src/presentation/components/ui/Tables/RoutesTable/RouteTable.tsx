@@ -1,5 +1,5 @@
 import { useIntl } from "react-intl";
-import { isUndefined } from "lodash";
+import { isUndefined, update } from "lodash";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import { DataLoadingContainer } from "../../LoadingDisplay";
 import { useRouteTableController } from "./RouteTable.controller";
@@ -8,6 +8,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { RouteAddDialog } from "../../Dialogs/RouteAddDialog/RouteAddDialog";
 import { useAppSelector } from "@application/store";
 import { useOwnUserHasRole } from "@infrastructure/hooks/useOwnUser";
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import { RouteEditDialog } from "../../Dialogs/RouteAddDialog/RouteEditDialog";
+
 
 /**
  * This hook returns a header for the table with translated columns.
@@ -34,7 +38,7 @@ const getRowValues = (entries: RouteDTO[] | null | undefined, orderMap: { [key: 
             }
         });
 
-        
+
 /**
  * Creates the user table.
  */
@@ -44,7 +48,7 @@ export const RouteTable = () => {
     const { formatMessage } = useIntl();
     const header = useHeader();
     const orderMap = header.reduce((acc, e, i) => { return { ...acc, [e.key]: i } }, {}) as { [key: string]: number }; // Get the header column order.
-    const { handleChangePage, handleChangePageSize, pagedData, isError, isLoading, tryReload, labelDisplay, remove } = useRouteTableController(); // Use the controller hook.
+    const { handleChangePage, handleChangePageSize, pagedData, isError, isLoading, tryReload, labelDisplay, remove, update } = useRouteTableController(); // Use the controller hook.
     const rowValues = getRowValues(pagedData?.data, orderMap); // Get the row values.
 
     return <DataLoadingContainer isError={isError} isLoading={isLoading} tryReload={tryReload}> {/* Wrap the table into the loading container because data will be fetched from the backend and is not immediately available.*/}
@@ -67,7 +71,8 @@ export const RouteTable = () => {
             <Table>
                 <TableHead>
                     <TableRow>
-                    <TableCell>{formatMessage({ id: "labels.numberOfOrder" })}</TableCell>
+                        <TableCell>Edit</TableCell>
+                        <TableCell>{formatMessage({ id: "labels.numberOfOrder" })}</TableCell>
                         {
                             header.map(e => <TableCell key={`header_${String(e.key)}`}>{e.name}</TableCell>) // Add the table header.
                         }
@@ -77,6 +82,8 @@ export const RouteTable = () => {
                 <TableBody>
                     {
                         rowValues?.map(({ data, entry }, rowIndex) => <TableRow key={`row_${rowIndex + 1}`}>
+                            <TableCell>
+                                {isAdmin && <RouteEditDialog id={entry.id || ''} />} </TableCell>
                             <TableCell>{rowIndex + 1}</TableCell>
                             {data.map((keyValue, index) => <TableCell key={`cell_${rowIndex + 1}_${index + 1}`}>{keyValue.value}</TableCell>)} {/* Add the row values. */}
                             <TableCell> {/* Add other cells like action buttons. */}

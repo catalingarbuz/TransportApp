@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { BookingAddDialog } from "../../Dialogs/BookingAddDialog/BookingAddDialog";
 import { useAppSelector } from "@application/store";
 import { useOwnUserHasRole } from "@infrastructure/hooks/useOwnUser";
+import { BookingEditDialog } from "../../Dialogs/BookingAddDialog/BookingEditDialog";
 
 /**
  * This hook returns a header for the table with translated columns.
@@ -67,6 +68,7 @@ export const BookingTable = () => {
             <Table>
                 <TableHead>
                     <TableRow>
+                        <TableCell>Edit</TableCell>
                         {
                             header.map(e => <TableCell key={`header_${String(e.key)}`}>{e.name}</TableCell>) // Add the table header.
                         }
@@ -76,14 +78,16 @@ export const BookingTable = () => {
                 <TableBody>
                     {
                         rowValues?.map(({ data, entry }, rowIndex) => <TableRow key={`row_${rowIndex + 1}`}>
+                            <TableCell>
+                                {isAdmin && <BookingEditDialog id={entry.id || ''} />} </TableCell>
                             {data.map((keyValue, index) => <TableCell key={`cell_${rowIndex + 1}_${index + 1}`}>{keyValue.key === "bookingDate" || keyValue.key === "departureDate" ? new Date(keyValue.value).toLocaleDateString() : keyValue.value}</TableCell>)} {/* Add the row values. */}
-                             {/* Add the row values. */}
+                            {/* Add the row values. */}
                             {isAdmin &&
-                            <TableCell> {/* Add other cells like action buttons. */}
-                                {<IconButton color="error" onClick={() => remove(entry.id || '')}>
-                                    <DeleteIcon color="error" fontSize='small' />
-                                </IconButton>}
-                            </TableCell>}
+                                <TableCell> {/* Add other cells like action buttons. */}
+                                    {<IconButton color="error" onClick={() => remove(entry.id || '')}>
+                                        <DeleteIcon color="error" fontSize='small' />
+                                    </IconButton>}
+                                </TableCell>}
                         </TableRow>)
                     }
                 </TableBody>

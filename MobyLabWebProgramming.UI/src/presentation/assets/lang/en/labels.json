@@ -9,5 +9,7 @@
     "labels.addUserFile": "Add file",
     "labels.addBooking": "Add booking",
     "labels.numberOfOrder": "Number of route",
-    "labels.addRoute": "Add route"
+    "labels.addRoute": "Add route",
+    "labels.editRoute": "Edit route",
+    "labels.editBooking": "Edit booking"
 }

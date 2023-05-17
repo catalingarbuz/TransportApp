@@ -1,5 +1,5 @@
 import { useAppSelector } from "@application/store";
-import { ApiRouteGetPageGetRequest, RouteAddDTO, RouteApi } from "../client";
+import { ApiRouteGetPageGetRequest, RouteAddDTO, RouteApi, RouteUpdateDTO } from "../client";
 import { getAuthenticationConfiguration } from "@infrastructure/utils/userUtils";
 import { get } from "lodash";
 import { de } from "date-fns/locale";
@@ -11,6 +11,7 @@ const getRoutesQueryKey = "getRoutesQuery";
 const getRouteQueryKey = "getRouteQuery";
 const addRouteMutationKey = "addRouteMutation";
 const deleteRouteMutationKey = "deleteRouteMutation";
+const updateRouteMutationKey = "updateRouteMutation";
 
 /**
  * Returns the an object with the callbacks that can be used for the React Query API, in this case to manage the user API.
@@ -23,6 +24,7 @@ export const useRouteApi = () => {
     const getRoute = (id: string) => new RouteApi(config).apiRouteGetByIdIdGet({ id });
     const addRoute = (route: RouteAddDTO) => new RouteApi(config).apiRouteAddPost({ routeAddDTO: route });
     const deleteRoute = (id: string) => new RouteApi(config).apiRouteDeleteIdDelete({ id });
+    const updateRoute = (route: RouteUpdateDTO) => new RouteApi(config).apiRouteUpdatePut({ routeUpdateDTO: route });
 
     return {
         getRoutes: { // Return the query object.
@@ -40,6 +42,10 @@ export const useRouteApi = () => {
         deleteRoute: {
             key: deleteRouteMutationKey,
             mutation: deleteRoute
+        },
+        updateRute: {
+            key: updateRouteMutationKey,
+            mutation: updateRoute
         }
     }
 }
