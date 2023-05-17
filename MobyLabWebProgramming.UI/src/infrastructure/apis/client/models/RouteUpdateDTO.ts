@@ -67,6 +67,7 @@ export function RouteUpdateDTOFromJSONTyped(json: any, ignoreDiscriminator: bool
         'id': !exists(json, 'id') ? undefined : json['id'],
         'routeName': !exists(json, 'routeName') ? undefined : json['routeName'],
         'description': !exists(json, 'description') ? undefined : json['description'],
+        'routeLength': !exists(json, 'routeLength') ? undefined : json['routeLength']
     };
 }
 
@@ -82,6 +83,7 @@ export function RouteUpdateDTOToJSON(value?: RouteUpdateDTO | null): any {
         'id': value.id,
         'routeName': value.routeName,
         'description': value.description,
+        'routeLength': value.routeLength
     };
 }
 

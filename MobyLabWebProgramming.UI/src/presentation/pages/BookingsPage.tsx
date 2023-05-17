@@ -10,7 +10,6 @@ export const BookingsPage = memo(() => {
     <Seo title="MobyLab Web App | Bookings" />
     <WebsiteLayout>
     <Box sx={{
-          position: "fixed",
           top: 0,
           left: 0,
           right: 0,
@@ -19,6 +18,7 @@ export const BookingsPage = memo(() => {
           justifyItems: "center",
           height: "100vh",
           width: "100%",
+          position: "absolute",
           backgroundImage: "url('src/presentation/assets/img/background2.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center"}}>

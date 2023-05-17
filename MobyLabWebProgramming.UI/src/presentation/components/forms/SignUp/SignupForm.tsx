@@ -21,6 +21,8 @@ import { useState } from "react";
 export const SignupForm = () => {
     const { formatMessage } = useIntl();
     const { state, actions, computed } = useSignupFormController(); // Use the controller.
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [password, setPassword] = useState('');
 
     return <form onSubmit={actions.handleSubmit(actions.submit)}> {/* Wrap your form into a form tag and use the handle submit callback to validate the form and call the data submission. */}
         <Stack spacing={4} style={{ width: "100%" }}>
@@ -97,6 +99,8 @@ export const SignupForm = () => {
                                         }),
                                     })}
                                 autoComplete="current-password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                             <FormHelperText
                                 hidden={isUndefined(state.errors.password)}
@@ -123,6 +127,8 @@ export const SignupForm = () => {
                                         }),
                                     })}
                                 autoComplete="current-password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                             />
                             <FormHelperText
                                 hidden={isUndefined(state.errors.password)}
@@ -162,7 +168,7 @@ export const SignupForm = () => {
             <Grid container item direction="row" xs={12} className="padding-top-sm">
                 <Grid container item direction="column" xs={5} md={5}></Grid>
                 <Grid container item direction="column" xs={2} md={2}>
-                    <Button type="submit" disabled={!isEmpty(state.errors) || computed.isSubmitting} variant="contained"> {/* Add a button with type submit to call the submission callback if the button is a descended of the form element. */}
+                    <Button type="submit" disabled={!isEmpty(state.errors) || computed.isSubmitting || confirmPassword !== password} variant="contained"> {/* Add a button with type submit to call the submission callback if the button is a descended of the form element. */}
                         {!computed.isSubmitting && <FormattedMessage id="globals.submit" />}
                         {computed.isSubmitting && <CircularProgress />}
                     </Button>

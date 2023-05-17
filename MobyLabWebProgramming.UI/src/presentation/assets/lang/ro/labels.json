@@ -9,5 +9,7 @@
     "labels.addUserFile": "Adauga fisier",
     "labels.addBooking": "Adaugă rezervare",
     "labels.numberOfOrder": "Numarul rutei",
-    "labels.addRoute": "Adauga ruta"
+    "labels.addRoute": "Adauga ruta",
+    "labels.editRoute": "Editeaza ruta",
+    "labels.editBooking": "Editeaza rezervare"
 }
