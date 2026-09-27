@@ -15,13 +15,8 @@ export const HomePage = memo(() => {
   const { loggedIn } = useAppSelector(x => x.profileReducer);
 
   return <Fragment>
-      <Seo title="MobyLab Web App | Home" />
-      <Box sx={{
-        height: "100vh",
-        backgroundImage: "url('src/presentation/assets/img/background.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center"
-      }}>
+      <Seo title="Transport Company | Home" />
+      
         <WebsiteLayout>
           <Box sx={{ padding: "150px 50px 0px 50px", justifyItems: "center" }}>
             <ContentCard title={formatMessage({ id: "globals.welcome" })}>
@@ -43,6 +38,6 @@ export const HomePage = memo(() => {
             </Button>}
           </Box>
         </WebsiteLayout>
-      </Box>
+
     </Fragment>
 });
