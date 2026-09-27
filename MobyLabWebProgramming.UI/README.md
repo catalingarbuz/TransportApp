@@ -1,7 +1,3 @@
-# MobyLabWebProgramming
-
-This is a example application to teach students the basics of web programming.
-
 # Prerequisites
 You will need the latest LTS version of NodeJs (https://nodejs.org/en/) and a IDE of you choice, we recommend VSCode (https://code.visualstudio.com/) with plugins for Javascript, Typescript, CSS and SonarLint or WebStorm (https://www.jetbrains.com/webstorm/).
 
@@ -13,6 +9,15 @@ npm install @openapitools/openapi-generator-cli -g
 The project was started using Vite (https://vitejs.dev/guide/) for faster build times. The command for initializing the project was:
 
 npm create vite@latest mobylab-web-app --template react-ts
+
+To install the dependencies and start the UI, run these commands from the project root:
+
+```bash
+npm install
+npm run start
+```
+
+Vite will print the local development URL in the terminal (usually http://localhost:5173). Press Ctrl+C to stop the server.
 
 To generate the REST client for the project each time you modify it run the following command with the backend running:
 

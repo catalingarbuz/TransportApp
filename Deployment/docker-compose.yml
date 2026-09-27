@@ -1,16 +1,16 @@
-version: "3.8"
+version: "4.0"
 
 services:
   mobylab-app-db:
-    image: postgres:13.2-alpine
+    image: postgres:18-alpine
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
-      POSTGRES_USER: mobylab-app
-      POSTGRES_DB: mobylab-app
-      POSTGRES_PASSWORD: mobylab-app
+      POSTGRES_USER: transportadmin
+      POSTGRES_DB: transportdb
+      POSTGRES_PASSWORD: admin
     volumes:
-      - mobylab-app-db-vol:/var/lib/postgresql/data
+      - transport-app-db-vol:/var/lib/postgresql
 
 volumes:
-  mobylab-app-db-vol:
+  transport-app-db-vol:
