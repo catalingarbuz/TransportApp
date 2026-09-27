@@ -18,24 +18,26 @@ export const HomePage = memo(() => {
       <Seo title="Transport Company | Home" />
       
         <WebsiteLayout>
-          <Box sx={{ padding: "150px 50px 0px 50px", justifyItems: "center" }}>
-            <ContentCard title={formatMessage({ id: "globals.welcome" })}>
-              <Typography style={{ fontSize: '20px', color: 'black' }} >
-                { formatMessage({id: "globals.appdescription"}) }
-              </Typography>
-            </ContentCard>
-          </Box>
-          <Box sx={{ padding: "25px 0px 0px 0px", display: "flex", justifyContent: "center" }}>
-            {!loggedIn && <Button variant="contained" sx={{ height: "40px", width: "200px", fontSize: "16px" }}>  {/* If the user is not logged in show a button that redirects to the login page. */}
-              <Link style={{ color: 'white' }} to={AppRoute.Login}>
-                {formatMessage({ id: "globals.bookASeat" })}
-              </Link>
-            </Button>}
-            {loggedIn && <Button variant="contained" sx={{ height: "40px", width: "200px", fontSize: "16px" }}>  {/* If the user is not logged in show a button that redirects to the login page. */}
-              <Link style={{ color: 'white' }} to={AppRoute.Bookings}>
-                {formatMessage({ id: "globals.bookASeat" })}
-              </Link>
-            </Button>}
+          <Box>
+            <Box sx={{ padding: "150px 250px 20px 250px", justifyItems: "center" }}>
+              <ContentCard title={formatMessage({ id: "globals.welcome" })}>
+                <Typography style={{ fontSize: '20px', color: 'black', textAlign: 'center' }} >
+                  { formatMessage({id: "globals.appdescription"}) }
+                </Typography>
+              </ContentCard>
+            </Box>
+            <Box sx={{ padding: "25px 0px 0px 0px", display: "flex", justifyContent: "center" }}>
+              {!loggedIn && <Button variant="contained" sx={{ height: "40px", width: "200px", fontSize: "16px" }}>
+                <Link style={{ color: 'white' }} to={AppRoute.Login}>
+                  {formatMessage({ id: "globals.bookASeat" })}
+                </Link>
+              </Button>}
+              {loggedIn && <Button variant="contained" sx={{ height: "40px", width: "200px", fontSize: "16px" }}>
+                <Link style={{ color: 'white' }} to={AppRoute.Bookings}>
+                  {formatMessage({ id: "globals.bookASeat" })}
+                </Link>
+              </Button>}
+            </Box>
           </Box>
         </WebsiteLayout>
 

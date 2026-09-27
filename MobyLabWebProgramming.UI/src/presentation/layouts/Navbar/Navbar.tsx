@@ -4,11 +4,11 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import HomeIcon from '@mui/icons-material/Home';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { Link } from 'react-router-dom';
 import { AppRoute } from 'routes';
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from '@application/store';
-import { Grid } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { resetProfile } from '@application/state-slices';
 import { useAppRouter } from '@infrastructure/hooks/useAppRouter';
@@ -31,105 +31,49 @@ export const Navbar = () => {
     redirectToHome();
   }, [queryClient, dispatch, redirectToHome]);
 
-  return <Box sx={{ flexGrow: 1 }}>
+  return <Box>
     <AppBar>
-      <Toolbar>
-        <Grid
-          container
-          item
-          direction="row"
-          xs={12}
-          alignItems="center"
-          wrap="nowrap"
-          columnSpacing={1}
-        >
-          <Grid container item direction="column" xs={2}>
-            <Link
-              to={AppRoute.Index}> {/* Add a button to redirect to the home page. */}
-              <HomeIcon style={{ color: 'white' }} fontSize='large' />
-            </Link>
-          </Grid>
-          <Grid container item direction="column" xs={6}>
-            {isAdmin && <Grid // If the user is logged in and it is an admin they can have new menu items shown.
-              container
-              item
-              direction="row"
-              xs={12}
-              alignItems="center"
-              wrap="nowrap"
-              columnSpacing={15}
-            >
-              <Grid container item direction="column" xs={2}>
-                <Button color="inherit">
-                  <Link style={{ color: 'white' }} to={AppRoute.Users}>
-                    {formatMessage({ id: "globals.users" })}
-                  </Link>
-                </Button>
-              </Grid>
-              <Grid container item direction="column" xs={1}>
-                <Button color="inherit">
-                  <Link style={{ color: 'white' }} to={AppRoute.UserFiles}>
-                    {formatMessage({ id: "globals.files" })}
-                  </Link>
-                </Button>
-              </Grid>
-            </Grid>}
-          </Grid>
-          <Grid container item direction="column" xs={7}>
-            {loggedIn && <Grid // If the user is logged in and it is an client they can have new menu items shown.
-              container
-              item
-              direction="row"
-              xs={6}
-              alignItems="space-evenly"
-              wrap="nowrap"
-              columnSpacing={12}
-              justifyContent="flex-start"
-            >
-              <Grid container item direction="column" xs={1}>
-                <Button color="inherit">
-                  <Link style={{ color: 'white' }} to={AppRoute.Bookings}>
-                    {formatMessage({ id: "globals.bookings" })}
-                  </Link>
-                </Button>
-              </Grid>
-              <Grid container item direction="column" xs={1} sx={{ marginLeft: "25px" }}>
-                <Button color="inherit">
-                  <Link style={{ color: 'white' }} to={AppRoute.Routes}>
-                    {formatMessage({ id: "globals.routes" })}
-                  </Link>
-                </Button>
-              </Grid>
-              <Grid container item direction="column" xs={1}>
-                <Button color="inherit">
-                  <Link style={{ color: 'white' }} to={AppRoute.Contact}>
-                    {formatMessage({ id: "globals.contacts" })}
-                  </Link> 
-                </Button>
-              </Grid>
-            </Grid>}
-          </Grid>
-          <Grid container item direction="column" xs={1}>
-            <NavbarLanguageSelector />
-          </Grid>
-          <Grid container item direction="column" xs={1}>
-            {!loggedIn && <Button color="inherit">  {/* If the user is not logged in show a button that redirects to the login page. */}
-              <Link style={{ color: 'white' }} to={AppRoute.Login}>
-                {formatMessage({ id: "globals.login" })}
-              </Link>
-            </Button>}
-            {loggedIn && <Button onClick={logout} color="inherit" > {/* Otherwise show the logout button. */}
-              {formatMessage({ id: "globals.logout" })}
-            </Button>}
-          </Grid>
-          <Grid container item direction="column" xs={1}>
-            {!loggedIn && <Button color="inherit">
-             <Link style={{ color: 'white' }} to={AppRoute.Signup}>
-                {formatMessage({ id: "globals.signup"})}
-             </Link>
-            </Button>}
-          </Grid>
-        </Grid>
+      <Toolbar sx={{ gap: 2, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+          <Link to={AppRoute.Index} aria-label="Home">
+            <HomeIcon sx={{ color: 'white', display: 'block' }} fontSize="large" />
+          </Link>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+            {isAdmin && <>
+              <Button color="inherit" component={Link} to={AppRoute.Users}>
+                {formatMessage({ id: "globals.users" })}
+              </Button>
+              <Button color="inherit" component={Link} to={AppRoute.UserFiles}>
+                {formatMessage({ id: "globals.files" })}
+              </Button>
+            </>}
+            {loggedIn && <>
+              <Button color="inherit" component={Link} to={AppRoute.Bookings}>
+                {formatMessage({ id: "globals.bookings" })}
+              </Button>
+              <Button color="inherit" component={Link} to={AppRoute.Routes}>
+                {formatMessage({ id: "globals.routes" })}
+              </Button>
+              <Button color="inherit" component={Link} to={AppRoute.Contact}>
+                {formatMessage({ id: "globals.contacts" })}
+              </Button>
+            </>}
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginLeft: 'auto'}}>
+          <NavbarLanguageSelector />
+          {!loggedIn && <>
+            <Button color="inherit" component={Link} to={AppRoute.Login}>
+              {formatMessage({ id: "globals.login" })}
+            </Button>
+            <Button color="inherit" component={Link} to={AppRoute.Signup}>
+              {formatMessage({ id: "globals.signup" })}
+            </Button>
+          </>}
+          {loggedIn && <Button onClick={logout} color="inherit">
+            <LogoutOutlinedIcon sx={{ color: 'white', display: 'block' }} fontSize="large" />
+          </Button>}
+        </Box>
       </Toolbar>
     </AppBar>
   </Box>
