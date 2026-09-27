@@ -1,7 +1,5 @@
-import { Grid } from "@mui/material";
-import { Container } from "@mui/system";
 import { FC } from "react";
-import './footer.scss';
+import "./footer.scss";
 
 /**
  * Here we have a simple footer container that will stay on the bottom of the page.
@@ -9,15 +7,15 @@ import './footer.scss';
 export const Footer: FC<{}> = () => {
   const year = new Date().getFullYear();
 
-  return <div className="website__footer">
-    <Grid container item direction="row" xs={12}>
-      <Grid container item direction="column" xs={12}>
-        <Container>
-          <div className="app__copyright">
-            &copy; {year} • All rights reserved
-          </div>
-        </Container>
-      </Grid>
-    </Grid>
-  </div>
+  return (
+    <div className="container">
+      <footer className="py-3 my-4">
+        <p className="nav justify-content-center border-bottom pb-3 mb-3 footer-divider">
+        </p>
+        <p className="text-center text-body-primary">
+          © {year} Transport Company, Inc
+        </p>
+      </footer>
+    </div>
+  );
 };

@@ -4,11 +4,24 @@
     height: 100px;
     overflow: hidden;
     display: flex;
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 44px;
+        right: 44px;
+        border-top: 1px solid;
+    }
 
     .app__copyright {
         text-align: center;
-        border-top: 1px solid;
         padding: 1.5rem 0;
         color: black;
     }
+}
+
+.footer-divider {
+    border-bottom-color: #434950fa !important;
 }
