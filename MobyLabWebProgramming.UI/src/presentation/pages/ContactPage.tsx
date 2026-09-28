@@ -4,6 +4,9 @@ import { Box } from "@mui/system";
 import { Seo } from "@presentation/components/ui/Seo";
 import { useIntl } from "react-intl";
 import { ContentCard } from "@presentation/components/ui/ContentCard";
+import MailIcon from '@mui/icons-material/Mail';
+import PhoneIcon from '@mui/icons-material/Phone';
+import "./ContactPage.css";
 
 
 interface ContactProps {
@@ -14,10 +17,10 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ name, email, phone }) => {
   return (
-    <div>
+    <div className="contact-info">
       <h3>{name}</h3>
-      <p>Email: {email}</p>
-      <p>Phone: {phone}</p>
+         <p><MailIcon /> <a href={`mailto:${email}`}>{email}</a></p>
+         <p><PhoneIcon /> <a href={`tel:${phone.replace(/[^\d+]/g, "")}`}>{phone}</a></p>
     </div>
   );
 };
@@ -25,33 +28,21 @@ const Contact: React.FC<ContactProps> = ({ name, email, phone }) => {
 const ContactsPage: React.FC = () => {
   const { formatMessage } = useIntl();
   const contacts: ContactProps[] = [
-    { name: 'Garbuz Catalin', email: 'garbuzcatalin.su@gmail.com', phone: '123-456-7890' },
-    { name: 'MyTransApp', email: 'transportapp@example.com', phone: '987-654-3210' },
+    { name: 'Garbuz Cătălin', email: 'garbuzcatalin.su@gmail.com', phone: '+373 69 422 837' },
+    { name: 'Transport Company', email: 'transportcompany@example.com', phone: '987-654-3210' },
   ];
 
   return (
     <div>
-      <Box sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          padding: "0px 300px 00px 300px",
-          justifyItems: "center",
-          height: "100vh",
-          width: "100%",
-          backgroundImage: "url('src/presentation/assets/img/background4.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center"}}>
-      <Box sx={{ padding: "100px 160px 00px 320px", justifyItems: "center" }}>
-      <ContentCard>
-      <h2>{formatMessage({ id: "globals.contacts" })}</h2>
-      {contacts.map((contact, index) => (
-        <Contact key={index} {...contact} />
-      ))}
-      </ContentCard>
-      </Box>
+      <Box className="contact-page-background">
+        <Box className="contact-page-content">
+          <ContentCard>
+            <h2 className="contact-card-title">{formatMessage({ id: "globals.contacts" })}</h2>
+            {contacts.map((contact, index) => (
+              <Contact key={index} {...contact} />
+            ))}
+          </ContentCard>
+        </Box>
       </Box>
     </div>
   );
@@ -64,7 +55,7 @@ export default ContactsPage;
 
 export const ContactPage = memo(() => {
   return <Fragment>
-    <Seo title="MobyLab Web App | Contact" />
+    <Seo title="Transport Company | Contact" />
     <WebsiteLayout>
       <ContactsPage />
     </WebsiteLayout>

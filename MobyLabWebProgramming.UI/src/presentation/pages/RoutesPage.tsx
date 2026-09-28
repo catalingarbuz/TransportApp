@@ -4,25 +4,14 @@ import { Box } from "@mui/system";
 import { Seo } from "@presentation/components/ui/Seo";
 import { ContentCard } from "@presentation/components/ui/ContentCard";
 import { RouteTable } from "@presentation/components/ui/Tables/RoutesTable/RouteTable";
+import "./RoutesPage.css";
 
 export const RoutesPage = memo(() => {
   return <Fragment>
-    <Seo title="MobyLab Web App | Routes" />
+    <Seo title="Transport Company | Routes" />
     <WebsiteLayout>
-    <Box sx={{
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          padding: "0px 300px 00px 300px",
-          justifyItems: "center",
-          height: "100vh",
-          width: "100%",
-          position: "absolute",
-          backgroundImage: "url('src/presentation/assets/img/background3.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center"}}>
-      <Box sx={{ padding: "0px 50px 00px 50px", justifyItems: "center" }}>
+    <Box className="routes-page">
+      <Box className="routes-page-content">
         <ContentCard>
           <RouteTable />
         </ContentCard>

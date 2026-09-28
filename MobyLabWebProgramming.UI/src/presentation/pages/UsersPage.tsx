@@ -7,7 +7,7 @@ import { UserTable } from "@presentation/components/ui/Tables/UserTable";
 
 export const UsersPage = memo(() => {
   return <Fragment>
-    <Seo title="MobyLab Web App | Users" />
+    <Seo title="Transport Company | Users" />
     <WebsiteLayout>
       <Box sx={{ padding: "0px 50px 00px 50px", justifyItems: "center" }}>
         <ContentCard>

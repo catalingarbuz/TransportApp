@@ -24,9 +24,9 @@ export function App() {
         <Route path={AppRoute.Login} element={<LoginPage />} />
         <Route path={AppRoute.Signup} element={<SignupPage />} />
         <Route path={AppRoute.Bookings} element={<BookingsPage />} />
-        <Route path={AppRoute.Routes} element={<RoutesPage />} />
         <Route path={AppRoute.Contact} element={<ContactPage/>} />
-        {isAdmin && <Route path={AppRoute.Users} element={<UsersPage />} />} {/* If the user doesn't have the right role this route shouldn't be used. */}
+        {isAdmin && <Route path={AppRoute.Routes} element={<RoutesPage />} />} {/* If the user doesn't have the right role this route shouldn't be used. */}
+        {isAdmin && <Route path={AppRoute.Users} element={<UsersPage />} />} 
         {isAdmin && <Route path={AppRoute.UserFiles} element={<UserFilesPage />} />}
       </Routes>
     </AppIntlProvider>

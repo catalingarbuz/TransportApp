@@ -6,7 +6,7 @@ import { LoginForm } from "@presentation/components/forms/Login/LoginForm";
 
 export const LoginPage = memo(() => {
     return <Fragment>
-        <Seo title="MobyLab Web App | Login" />
+        <Seo title="Transport Company | Login" />
         <WebsiteLayout>
             <Box sx={{ padding: "0px 50px 0px 50px", justifyItems: "center" }}>
                 <LoginForm />
