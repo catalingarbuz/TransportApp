@@ -1,0 +1,13 @@
+.bookings-page {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  padding: 0 300px;
+  justify-items: center;
+}
+
+.bookings-page-content {
+  padding: 0 50px;
+  justify-items: center;
+}

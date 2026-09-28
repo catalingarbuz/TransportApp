@@ -6,7 +6,7 @@ import { SignupForm } from "@presentation/components/forms/SignUp/SignupForm";
 
 export const SignupPage = memo(() => {
     return <Fragment>
-        <Seo title="MyTransport | Sign-up" />
+        <Seo title="Transport Company | Sign-up" />
         <WebsiteLayout>
             <Box sx={{ padding: "0px 50px 0px 50px", justifyItems: "center" }}>
                 <SignupForm />

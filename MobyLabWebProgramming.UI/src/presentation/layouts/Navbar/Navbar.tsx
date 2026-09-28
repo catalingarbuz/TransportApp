@@ -46,13 +46,13 @@ export const Navbar = () => {
               <Button color="inherit" component={Link} to={AppRoute.UserFiles}>
                 {formatMessage({ id: "globals.files" })}
               </Button>
+              <Button color="inherit" component={Link} to={AppRoute.Routes}>
+                {formatMessage({ id: "globals.routes" })}
+              </Button>
             </>}
             {loggedIn && <>
               <Button color="inherit" component={Link} to={AppRoute.Bookings}>
                 {formatMessage({ id: "globals.bookings" })}
-              </Button>
-              <Button color="inherit" component={Link} to={AppRoute.Routes}>
-                {formatMessage({ id: "globals.routes" })}
               </Button>
               <Button color="inherit" component={Link} to={AppRoute.Contact}>
                 {formatMessage({ id: "globals.contacts" })}
