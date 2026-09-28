@@ -1,0 +1,15 @@
+﻿using TransportApp.Core.Entities;
+using Ardalis.Specification;
+
+namespace TransportApp.Core.Specifications;
+
+/// <summary>
+/// This is a simple specification to filter the Route entities from the database via the constructors.
+/// Note that this is a sealed class, meaning it cannot be further derived.
+/// </summary>
+public sealed class RouteSpec : BaseSpec<RouteSpec, Route>
+{
+    public RouteSpec(Guid id) : base(id)
+    {
+    }
+}
