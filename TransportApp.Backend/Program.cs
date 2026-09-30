@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddCorsConfiguration()
     .AddRepository()
-    .AddAuthorizationWithSwagger("MobyLab Web App")
+    .AddAuthorizationWithSwagger("Transport App")
     .AddServices()
     .UseLogger()
     .AddWorkers()

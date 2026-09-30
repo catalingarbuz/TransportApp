@@ -4,6 +4,7 @@ apis/CarApi.ts
 apis/CarRouteApi.ts
 apis/DriverApi.ts
 apis/DriverInfoApi.ts
+apis/LocationApi.ts
 apis/RouteApi.ts
 apis/UserApi.ts
 apis/UserFileApi.ts
@@ -42,6 +43,9 @@ models/DriverUpdateDTO.ts
 models/ErrorCodes.ts
 models/ErrorMessage.ts
 models/HttpStatusCode.ts
+models/Location.ts
+models/LocationDTO.ts
+models/LocationDTOListRequestResponse.ts
 models/LoginDTO.ts
 models/LoginResponseDTO.ts
 models/LoginResponseDTORequestResponse.ts

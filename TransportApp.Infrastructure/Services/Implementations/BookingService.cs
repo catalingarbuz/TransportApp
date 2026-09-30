@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using TransportApp.Core.Constants;
 using TransportApp.Core.DataTransferObjects;
 using TransportApp.Core.Entities;
 using TransportApp.Core.Enums;
@@ -44,7 +43,7 @@ public class BookingService : IBookingService
     public int GetBookingsCountForCarAndRouteAndDepartureDate(Guid carId, Guid routeId, DateTime departureDate, CancellationToken cancellationToken = default)
     {
         var count = _repository.DbContext.Set<Booking>()
-            .Where(b => b.CarId == carId && b.RouteId == routeId && b.DepartureDate == departureDate)
+            .Where(b => b.CarId == carId && b.RouteId == routeId && b.Route.DepartureTime == departureDate)
             .Count();
 
         return count;
@@ -58,7 +57,7 @@ public class BookingService : IBookingService
         }
 
         var route = _repository.DbContext.Set<Route>()
-            .FirstOrDefault(d => d.RouteName == booking.RouteName);
+            .FirstOrDefault(d => d.StartingLocation.City == booking.DeparturePlace);
 
         if (route == null)
         {
@@ -97,10 +96,7 @@ public class BookingService : IBookingService
             DriverId = booking.DriverId,
             CarId = carId,
             RouteId = route.Id,
-            BookingDate = DateTime.Now,
-            DepartureDate = booking.DepartureDate,
-            DeparturePlace = booking.DeparturePlace,
-            ArrivalPlace = booking.ArrivalPlace     
+            BookingDate = DateTime.Now    
         }, cancellationToken);
 
         return ServiceResponse.ForSuccess();
@@ -118,9 +114,6 @@ public class BookingService : IBookingService
         if (entity != null)
         {
             entity.BookingDate = booking.BookingDate ?? entity.BookingDate;
-            entity.DepartureDate = booking.DepartureDate ?? entity.DepartureDate;
-            entity.DeparturePlace = booking.DeparturePlace ?? entity.DeparturePlace;
-            entity.ArrivalPlace = booking.ArrivalPlace ?? entity.ArrivalPlace;
             entity.DriverId = booking.DriverId ?? entity.DriverId;
             entity.CarId = booking.CarId ?? entity.CarId;
             entity.RouteId = booking.RouteId ?? entity.RouteId;

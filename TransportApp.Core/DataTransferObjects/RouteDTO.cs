@@ -8,8 +8,11 @@ namespace TransportApp.Core.DataTransferObjects;
 public class RouteDTO
 {
     public Guid Id { get; set; }
-    public string RouteName { get; set; } = default!;
-    public string Description { get; set; } = default!;
-    public string? RouteLength { get; set; } = default!;
+    public string StartingLocationCity { get; set; } = default!;
+    public string StartingLocationCountry { get; set; } = default!;
+    public string FinalLocationCity { get; set; } = default!;
+    public string FinalLocationCountry { get; set; } = default!;
+    public DateTime DepartureTime { get; set; }
+    public DateTime ArrivalTime { get; set; }
 }
 
