@@ -6,12 +6,14 @@ import {
     DeepRequired,
     UseFormWatch
 } from "react-hook-form";
-import { SelectChangeEvent } from "@mui/material";
+import { Control } from "react-hook-form";
+import { LocationDTO } from "@infrastructure/apis/client";
 
 export type RouteAddFormModel = {
-    routeName: string;
-    description: string;
-    routeLength: string;
+    startingLocationId: string;
+    finalLocationId: string;
+    departureTime: string;
+    arrivalTime: string;
 };
 
 export type RouteAddFormState = {
@@ -21,13 +23,17 @@ export type RouteAddFormState = {
 export type RouteAddFormActions = {
     register: UseFormRegister<RouteAddFormModel>;
     watch: UseFormWatch<RouteAddFormModel>;
+    control: Control<RouteAddFormModel>;
     handleSubmit: UseFormHandleSubmit<RouteAddFormModel>;
     submit: (body: RouteAddFormModel) => void;
 };
 
 export type RouteAddFormComputed = {
     defaultValues: RouteAddFormModel,
-    isSubmitting: boolean
+    isSubmitting: boolean,
+    locations: LocationDTO[],
+    isLoadingLocations: boolean,
+    isErrorLoadingLocations: boolean
 };
 
 export type RouteAddFormController = FormController<RouteAddFormState, RouteAddFormActions, RouteAddFormComputed>;

@@ -13,7 +13,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import { useRouteAddFormController } from "./RouteAddForm.controller";
 import { isEmpty, isUndefined } from "lodash";
-import { UserRoleEnum } from "@infrastructure/apis/client";
+import { Controller } from "react-hook-form";
 
 /**
  * Here we declare the user add form component.
@@ -26,68 +26,71 @@ export const RouteAddForm = (props: { onSubmit?: () => void }) => {
     return <form onSubmit={actions.handleSubmit(actions.submit)}> {/* Wrap your form into a form tag and use the handle submit callback to validate the form and call the data submission. */}
         <Stack spacing={4} style={{ width: "100%" }}>
             <Grid container item direction="row" xs={12} columnSpacing={4}>
-                <Grid container item direction="column" xs={6} md={12}>
-                    <FormControl
-                        fullWidth
-                        error={!isUndefined(state.errors.routeName)}
-                    > {/* Wrap the input into a form control and use the errors to show the input invalid if needed. */}
-                        <FormLabel required>
-                            <FormattedMessage id="globals.routeName" />
-                        </FormLabel> {/* Add a form label to indicate what the input means. */}
-                        <OutlinedInput
-                            {...actions.register("routeName")} // Bind the form variable to the UI input.
-                            // put only departurePlace in placeHolder
-                            placeholder={formatMessage({ id: "globals.routeName" })}
-                            autoComplete="none"
-                        /> {/* Add a input like a textbox shown here. */}
-                        <FormHelperText
-                            hidden={isUndefined(state.errors.routeName)}
-                        >
-                            {state.errors.routeName?.message}
-                        </FormHelperText> {/* Add a helper text that is shown then the input has a invalid value. */}
-                    </FormControl>
-                </Grid>
-                <Grid container item direction="column" xs={8} md={12}>
-                    <FormControl
-                        fullWidth
-                        error={!isUndefined(state.errors.description)}
-                    >
-                        <FormLabel required>
-                            <FormattedMessage id="globals.description" />
-                        </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("description")}
-                            placeholder={formatMessage({ id: "globals.description" })}
-                            autoComplete="none"
-                        />
-                        <FormHelperText
-                            hidden={isUndefined(state.errors.description)}
-                        >
-                            {state.errors.description?.message}
-                        </FormHelperText>
-                    </FormControl>
-                </Grid>
-                <Grid container item direction="column" xs={6} md={12}>
-                    <FormControl
-                        fullWidth
-                        error={!isUndefined(state.errors.routeLength)}
-                    >
-                        <FormLabel required>
-                            <FormattedMessage id="globals.routeLength" />
-                        </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("routeLength")}
-                            placeholder={formatMessage({ id: "globals.routeLength" })}
-                            autoComplete="none"
-                        />
-                        <FormHelperText
-                            hidden={isUndefined(state.errors.routeLength)}
-                        >
-                            {state.errors.routeLength?.message}
-                        </FormHelperText>
-                    </FormControl>
-                </Grid>
             </Grid>
+                <Grid container item direction="column" xs={6} md={12}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.startingLocationId)}>
+                        <FormLabel required id="starting-location-label">
+                            <FormattedMessage id="globals.startingLocation" />
+                        </FormLabel>
+                        <Controller
+                            control={actions.control}
+                            name="startingLocationId"
+                            render={({ field }) => <Select {...field} labelId="starting-location-label" displayEmpty disabled={computed.isLoadingLocations || computed.isErrorLoadingLocations}>
+                                <MenuItem value="" disabled>
+                                    {computed.isLoadingLocations ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.startingLocation" }) })}
+                                </MenuItem>
+                                {computed.locations.map(location => <MenuItem key={location.id} value={location.id ?? ""}>
+                                    {[location.city, location.country].filter(Boolean).join(", ")}
+                                </MenuItem>)}
+                            </Select>}
+                        />
+                        <FormHelperText hidden={isUndefined(state.errors.startingLocationId)}>
+                            {state.errors.startingLocationId?.message}
+                        </FormHelperText>
+                        {computed.isErrorLoadingLocations && <FormHelperText error>{formatMessage({ id: "globals.loadingFailed" })}</FormHelperText>}
+                    </FormControl>
+                </Grid>
+                <Grid container item direction="column" xs={6} md={12}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.finalLocationId)}>
+                        <FormLabel required id="final-location-label">
+                            <FormattedMessage id="globals.finalLocation" />
+                        </FormLabel>
+                        <Controller
+                            control={actions.control}
+                            name="finalLocationId"
+                            render={({ field }) => <Select {...field} labelId="final-location-label" displayEmpty disabled={computed.isLoadingLocations || computed.isErrorLoadingLocations}>
+                                <MenuItem value="" disabled>
+                                    {computed.isLoadingLocations ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.finalLocation" }) })}
+                                </MenuItem>
+                                {computed.locations.map(location => <MenuItem key={location.id} value={location.id ?? ""}>
+                                    {[location.city, location.country].filter(Boolean).join(", ")}
+                                </MenuItem>)}
+                            </Select>}
+                        />
+                        <FormHelperText hidden={isUndefined(state.errors.finalLocationId)}>
+                            {state.errors.finalLocationId?.message}
+                        </FormHelperText>
+                        {computed.isErrorLoadingLocations && <FormHelperText error>{formatMessage({ id: "globals.loadingFailed" })}</FormHelperText>}
+                    </FormControl>
+                </Grid>
+                <Grid container item direction="column" xs={6} md={12}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.departureTime)}>
+                        <FormLabel required><FormattedMessage id="globals.departureTime" /></FormLabel>
+                        <OutlinedInput type="time" inputProps={{ step: 60 }} {...actions.register("departureTime")} />
+                        <FormHelperText hidden={isUndefined(state.errors.departureTime)}>
+                            {state.errors.departureTime?.message}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid container item direction="column" xs={6} md={12}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.arrivalTime)}>
+                        <FormLabel required><FormattedMessage id="globals.arrivalTime" /></FormLabel>
+                        <OutlinedInput type="time" inputProps={{ step: 60 }} {...actions.register("arrivalTime")} />
+                        <FormHelperText hidden={isUndefined(state.errors.arrivalTime)}>
+                            {state.errors.arrivalTime?.message}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
             <Grid container item direction="row" xs={12} className="padding-top-sm">
                 <Grid container item direction="column" xs={12} md={4}></Grid>
                 <Grid container item direction="column" justifyContent={"center"} xs={4}>

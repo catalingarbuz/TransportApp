@@ -5,25 +5,29 @@ using TransportApp.Core.Entities;
 namespace TransportApp.Infrastructure.EntityConfigurations;
 
 /// <summary>
-/// This is the entity configuration for the User entity, generally the Entity Framework will figure out most of the configuration but,
-/// for some specifics such as unique keys, indexes and foreign keys it is better to explicitly specify them.
-/// Note that the EntityTypeBuilder implements a Fluent interface, meaning it is a highly declarative interface using method-chaining.
+/// This class is used to configure the Route entity for Entity Framework Core. It specifies the properties of the Route entity, their data types, and any constraints or relationships with other entities.
 /// </summary>
 public class RouteConfiguration : IEntityTypeConfiguration<Route>
 {
     public void Configure(EntityTypeBuilder<Route> builder)
     {
-        builder.Property(e => e.Id) // This specifies which property is configured.
-            .IsRequired(); // Here it is specified if the property is required, meaning it cannot be null in the database.
-        builder.HasKey(x => x.Id); // Here it is specifies that the property Id is the primary key.
-        builder.Property(e => e.RouteName)
-            .HasMaxLength(255) // This specifies the maximum length for varchar type in the database.
+        builder.Property(e => e.Id) 
             .IsRequired();
-        builder.Property(e => e.RouteLength)
-            .HasMaxLength(100);
-        builder.Property(e => e.Description)
-            .HasMaxLength(2000)
+        builder.HasKey(x => x.Id); 
+        builder.Property(e => e.StartingLocationId)
             .IsRequired();
+        builder.Property(e => e.FinalLocationId)
+            .IsRequired();
+        builder.Property(e => e.DepartureTime)
+            .IsRequired();
+        builder.Property(e => e.ArrivalTime)
+            .IsRequired();
+        builder.HasOne(e => e.StartingLocation)
+            .WithOne()
+            .HasForeignKey<Route>(e => e.StartingLocationId);
+        builder.HasOne(e => e.FinalLocation)
+            .WithOne()
+            .HasForeignKey<Route>(e => e.FinalLocationId);
         builder.Property(e => e.CreatedAt)
             .IsRequired();
         builder.Property(e => e.UpdatedAt)

@@ -13,7 +13,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import { useRouteEditFormController } from "./RouteEditForm.controller";
 import { isEmpty, isUndefined } from "lodash";
-import { UserRoleEnum } from "@infrastructure/apis/client";
+import { Controller } from "react-hook-form";
 
 /**
  * Here we declare the user add form component.
@@ -27,53 +27,73 @@ export const RouteEditForm = (props: { id: string, onSubmit?: () => void }) => {
         <Stack spacing={4} style={{ width: "100%" }}>
             <Grid container item direction="row" xs={12} columnSpacing={4}>
                 <Grid container item direction="column" xs={6} md={12}>
-                    <FormControl
-                        fullWidth
-                    > {/* Wrap the input into a form control and use the errors to show the input invalid if needed. */}
-                        <FormLabel>
-                            <FormattedMessage id="globals.routeName" />
-                        </FormLabel> {/* Add a form label to indicate what the input means. */}
-                        <OutlinedInput
-                            {...actions.register("routeName")} // Bind the form variable to the UI input.
-                            // put only departurePlace in placeHolder
-                            placeholder={formatMessage({ id: "globals.routeName" })}
-                            autoComplete="none"
-                        /> {/* Add a input like a textbox shown here. */}
-                    </FormControl>
-                </Grid>
-                <Grid container item direction="column" xs={8} md={12}>
-                    <FormControl
-                        fullWidth
-                    >
-                        <FormLabel>
-                            <FormattedMessage id="globals.description" />
+                    <FormControl fullWidth error={!isUndefined(state.errors.startingLocationId)}>
+                        <FormLabel required id="edit-starting-location-label">
+                            <FormattedMessage id="globals.startingLocation" />
                         </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("description")}
-                            placeholder={formatMessage({ id: "globals.description" })}
-                            autoComplete="none"
+                        <Controller
+                            control={actions.control}
+                            name="startingLocationId"
+                            render={({ field }) => <Select {...field} labelId="edit-starting-location-label" displayEmpty disabled={computed.isLoadingRoute || computed.isLoadingLocations || computed.isErrorLoadingLocations}>
+                                <MenuItem value="" disabled>
+                                    {computed.isLoadingLocations ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.startingLocation" }) })}
+                                </MenuItem>
+                                {computed.locations.map(location => <MenuItem key={location.id} value={location.id ?? ""}>
+                                    {[location.city, location.country].filter(Boolean).join(", ")}
+                                </MenuItem>)}
+                            </Select>}
                         />
+                        <FormHelperText hidden={isUndefined(state.errors.startingLocationId)}>
+                            {state.errors.startingLocationId?.message}
+                        </FormHelperText>
                     </FormControl>
                 </Grid>
                 <Grid container item direction="column" xs={6} md={12}>
-                    <FormControl
-                        fullWidth
-                    >
-                        <FormLabel>
-                            <FormattedMessage id="globals.routeLength" />
+                    <FormControl fullWidth error={!isUndefined(state.errors.finalLocationId)}>
+                        <FormLabel required id="edit-final-location-label">
+                            <FormattedMessage id="globals.finalLocation" />
                         </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("routeLength")}
-                            placeholder={formatMessage({ id: "globals.routeLength" })}
-                            autoComplete="none"
+                        <Controller
+                            control={actions.control}
+                            name="finalLocationId"
+                            render={({ field }) => <Select {...field} labelId="edit-final-location-label" displayEmpty disabled={computed.isLoadingRoute || computed.isLoadingLocations || computed.isErrorLoadingLocations}>
+                                <MenuItem value="" disabled>
+                                    {computed.isLoadingLocations ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.finalLocation" }) })}
+                                </MenuItem>
+                                {computed.locations.map(location => <MenuItem key={location.id} value={location.id ?? ""}>
+                                    {[location.city, location.country].filter(Boolean).join(", ")}
+                                </MenuItem>)}
+                            </Select>}
                         />
+                        <FormHelperText hidden={isUndefined(state.errors.finalLocationId)}>
+                            {state.errors.finalLocationId?.message}
+                        </FormHelperText>
                     </FormControl>
                 </Grid>
+                <Grid container item direction="column" xs={6} md={12}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.departureTime)}>
+                        <FormLabel required><FormattedMessage id="globals.departureTime" /></FormLabel>
+                        <OutlinedInput type="time" inputProps={{ step: 60 }} disabled={computed.isLoadingRoute} {...actions.register("departureTime")} />
+                        <FormHelperText hidden={isUndefined(state.errors.departureTime)}>
+                            {state.errors.departureTime?.message}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid container item direction="column" xs={6} md={12}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.arrivalTime)}>
+                        <FormLabel required><FormattedMessage id="globals.arrivalTime" /></FormLabel>
+                        <OutlinedInput type="time" inputProps={{ step: 60 }} disabled={computed.isLoadingRoute} {...actions.register("arrivalTime")} />
+                        <FormHelperText hidden={isUndefined(state.errors.arrivalTime)}>
+                            {state.errors.arrivalTime?.message}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+                {(computed.isErrorLoadingRoute || computed.isErrorLoadingLocations) && <FormHelperText error>{formatMessage({ id: "globals.loadingFailed" })}</FormHelperText>}
             </Grid>
             <Grid container item direction="row" xs={12} className="padding-top-sm">
                 <Grid container item direction="column" xs={12} md={4}></Grid>
                 <Grid container item direction="column" justifyContent={"center"} xs={4}>
-                    <Button variant="contained" type="submit" disabled={computed.isSubmitting}> {/* Add a button with type submit to call the submission callback if the button is a descended of the form element. */}
+                    <Button variant="contained" type="submit" disabled={!isEmpty(state.errors) || computed.isSubmitting || computed.isLoadingRoute || computed.isErrorLoadingRoute || computed.isLoadingLocations || computed.isErrorLoadingLocations}> {/* Add a button with type submit to call the submission callback if the button is a descended of the form element. */}
                         {!computed.isSubmitting && <FormattedMessage id="globals.submit" />}
                         {computed.isSubmitting && <CircularProgress />}
                     </Button>

@@ -3,8 +3,8 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TransportApp.Infrastructure.Database;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using TransportApp.Infrastructure.Database;
 
 #nullable disable
 
@@ -29,11 +29,6 @@ namespace TransportApp.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ArrivalPlace")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)");
-
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -45,11 +40,6 @@ namespace TransportApp.Infrastructure.Migrations
 
                     b.Property<DateTime>("DepartureDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("DeparturePlace")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)");
 
                     b.Property<Guid>("DriverId")
                         .HasColumnType("uuid");
@@ -216,33 +206,74 @@ namespace TransportApp.Infrastructure.Migrations
                     b.ToTable("DriverInfo");
                 });
 
+            modelBuilder.Entity("TransportApp.Core.Entities.Location", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Adress")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Location");
+                });
+
             modelBuilder.Entity("TransportApp.Core.Entities.Route", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("RouteLength")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<Guid>("FinalLocationId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("RouteName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                    b.Property<Guid>("StartingLocationId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FinalLocationId")
+                        .IsUnique();
+
+                    b.HasIndex("StartingLocationId")
+                        .IsUnique();
 
                     b.ToTable("Route");
                 });
@@ -392,6 +423,25 @@ namespace TransportApp.Infrastructure.Migrations
                     b.Navigation("Driver");
                 });
 
+            modelBuilder.Entity("TransportApp.Core.Entities.Route", b =>
+                {
+                    b.HasOne("TransportApp.Core.Entities.Location", "FinalLocation")
+                        .WithOne()
+                        .HasForeignKey("TransportApp.Core.Entities.Route", "FinalLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TransportApp.Core.Entities.Location", "StartingLocation")
+                        .WithOne()
+                        .HasForeignKey("TransportApp.Core.Entities.Route", "StartingLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FinalLocation");
+
+                    b.Navigation("StartingLocation");
+                });
+
             modelBuilder.Entity("TransportApp.Core.Entities.UserFile", b =>
                 {
                     b.HasOne("TransportApp.Core.Entities.User", "User")
@@ -435,4 +485,3 @@ namespace TransportApp.Infrastructure.Migrations
         }
     }
 }
-

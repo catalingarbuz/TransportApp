@@ -4,15 +4,16 @@ import {
     UseFormRegister,
     FieldErrorsImpl,
     DeepRequired,
-    UseFormWatch
+    Control
 } from "react-hook-form";
-import { SelectChangeEvent } from "@mui/material";
+import { LocationDTO } from "@infrastructure/apis/client";
 
 export type RouteEditFormModel = {
     id: string;
-    routeName: any;
-    description: any;
-    routeLength: any;
+    startingLocationId: string;
+    finalLocationId: string;
+    departureTime: string;
+    arrivalTime: string;
 };
 
 export type RouteEditFormState = {
@@ -21,14 +22,19 @@ export type RouteEditFormState = {
 
 export type RouteEditFormActions = {
     register: UseFormRegister<RouteEditFormModel>;
-    watch: UseFormWatch<RouteEditFormModel>;
+    control: Control<RouteEditFormModel>;
     handleSubmit: UseFormHandleSubmit<RouteEditFormModel>;
     submit: (body: RouteEditFormModel) => void;
 };
 
 export type RouteEditFormComputed = {
     defaultValues: RouteEditFormModel,
-    isSubmitting: boolean
+    isSubmitting: boolean,
+    isLoadingRoute: boolean,
+    isErrorLoadingRoute: boolean,
+    locations: LocationDTO[],
+    isLoadingLocations: boolean,
+    isErrorLoadingLocations: boolean
 };
 
 export type RouteEditFormController = FormController<RouteEditFormState, RouteEditFormActions, RouteEditFormComputed>;

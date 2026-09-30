@@ -11,8 +11,6 @@ public class Booking : BaseEntity
 
     public DateTime BookingDate { get; set; } = default;
     public DateTime DepartureDate { get; set; } = default;
-    public string DeparturePlace { get; set; } = default!;
-    public string ArrivalPlace { get; set; } = default!;
 
     public User User { get; set; } = default!;
     public Driver Driver { get; set; } = default!;

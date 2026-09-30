@@ -20,11 +20,14 @@ const useHeader = (): { key: keyof RouteDTO, name: string }[] => {
     const { formatMessage } = useIntl();
 
     return [
-        { key: "routeName", name: formatMessage({ id: "globals.routeName" }) },
-        { key: "description", name: formatMessage({ id: "globals.description" }) },
-        { key: "routeLength", name: formatMessage({ id: "globals.routeLength" }) }
+        { key: "startingLocationCity", name: formatMessage({ id: "globals.departurePlace" }) },
+        { key: "finalLocationCity", name: formatMessage({ id: "globals.arrivalPlace" }) },
+        { key: "departureTime", name: formatMessage({ id: "globals.departureTime" }) },
+        { key: "arrivalTime", name: formatMessage({ id: "globals.arrivalTime" }) }
     ]
 };
+
+const getCountryAbbreviation = (country: string) => country.trim().slice(0, 2).toUpperCase();
 
 /**
  * The values in the table are organized as rows so this function takes the entries and creates the row values ordering them according to the order map.
@@ -34,7 +37,14 @@ const getRowValues = (entries: RouteDTO[] | null | undefined, orderMap: { [key: 
         entry => {
             return {
                 entry: entry,
-                data: Object.entries(entry).filter(([e]) => !isUndefined(orderMap[e])).sort(([a], [b]) => orderMap[a] - orderMap[b]).map(([key, value]) => { return { key, value } })
+                data: Object.entries(entry).filter(([e]) => !isUndefined(orderMap[e])).sort(([a], [b]) => orderMap[a] - orderMap[b]).map(([key, value]) => {
+                    const countryKey = key === "startingLocationCity" ? "startingLocationCountry" : key === "finalLocationCity" ? "finalLocationCountry" : undefined;
+                    const country = countryKey ? entry[countryKey] : undefined;
+                    const displayValue = countryKey && !isUndefined(country) && country !== null
+                        ? `${value ?? ""} (${getCountryAbbreviation(country)})`
+                        : value;
+                    return { key, value: displayValue };
+                })
             }
         });
 
@@ -45,7 +55,7 @@ const getRowValues = (entries: RouteDTO[] | null | undefined, orderMap: { [key: 
 export const RouteTable = () => {
     const { userId: ownUserId } = useAppSelector(x => x.profileReducer);
     const isAdmin = useOwnUserHasRole(UserRoleEnum.Admin);
-    const { formatMessage } = useIntl();
+    const { formatMessage, locale } = useIntl();
     const header = useHeader();
     const orderMap = header.reduce((acc, e, i) => { return { ...acc, [e.key]: i } }, {}) as { [key: string]: number }; // Get the header column order.
     const { handleChangePage, handleChangePageSize, pagedData, isError, isLoading, tryReload, labelDisplay, remove, update } = useRouteTableController(); // Use the controller hook.
@@ -85,7 +95,9 @@ export const RouteTable = () => {
                             <TableCell>
                                 {isAdmin && <RouteEditDialog id={entry.id || ''} />} </TableCell>
                             <TableCell>{rowIndex + 1}</TableCell>
-                            {data.map((keyValue, index) => <TableCell key={`cell_${rowIndex + 1}_${index + 1}`}>{keyValue.value}</TableCell>)} {/* Add the row values. */}
+                            {data.map((keyValue, index) => <TableCell key={`cell_${rowIndex + 1}_${index + 1}`}>
+                                {keyValue.value instanceof Date ? keyValue.value.toLocaleString(locale) : keyValue.value}
+                            </TableCell>)} {/* Add the row values. */}
                             <TableCell> {/* Add other cells like action buttons. */}
                                 {isAdmin && <IconButton color="error" onClick={() => remove(entry.id || '')}>
                                     <DeleteIcon color="error" fontSize='small' />

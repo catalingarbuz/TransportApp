@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using TransportApp.Core.Constants;
 using TransportApp.Core.DataTransferObjects;
 using TransportApp.Core.Entities;
 using TransportApp.Core.Enums;
@@ -48,18 +47,38 @@ public class RouteService : IRouteService
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin can add routes !", ErrorCodes.CannotAdd));
         }
 
-        var result = await _repository.GetAsync(new RouteProjectionSpec(route.RouteName), cancellationToken);
-        
-        if (result != null)
+        // Get the starting location
+        var startingLocation = _repository.DbContext.Set<Location>()
+            .FirstOrDefault(l => l.City == route.StartingLocationCity && l.Country == route.StartingLocationCountry);
+
+        if (startingLocation == null)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.NotFound, "Starting location not found", ErrorCodes.EntityNotFound));
+        }
+
+        // Get the final location
+        var finalLocation = _repository.DbContext.Set<Location>()
+            .FirstOrDefault(l => l.City == route.FinalLocationCity && l.Country == route.FinalLocationCountry);
+
+        if (finalLocation == null)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.NotFound, "Final location not found", ErrorCodes.EntityNotFound));
+        }
+
+        // Check if route already exists with these locations
+        RouteDTO? existingRoute = await _repository.GetAsync(new RouteProjectionSpec(startingLocation.Id, finalLocation.Id), cancellationToken);
+
+        if (existingRoute != null)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The route already exists!", ErrorCodes.RouteAlreadyExists));
         }
 
         await _repository.AddAsync(new Route
         {
-            RouteName = route.RouteName,
-            Description = route.Description,
-            RouteLength = route.RouteLength
+            StartingLocationId = startingLocation.Id,
+            FinalLocationId = finalLocation.Id,
+            DepartureTime = route.DepartureTime,
+            ArrivalTime = route.ArrivalTime
         }, cancellationToken);
 
         return ServiceResponse.ForSuccess();
@@ -76,9 +95,10 @@ public class RouteService : IRouteService
 
         if (entity != null)
         {
-            entity.RouteName = route.RouteName ?? entity.RouteName;
-            entity.Description = route.Description ?? entity.Description;
-            entity.RouteLength = route.RouteLength ?? entity.RouteLength;
+            entity.StartingLocationId = route.StartingLocationId ?? entity.StartingLocationId;
+            entity.FinalLocationId = route.FinalLocationId ?? entity.FinalLocationId;
+            entity.DepartureTime = route.DepartureTime ?? entity.DepartureTime;
+            entity.ArrivalTime = route.ArrivalTime ?? entity.ArrivalTime;
 
             await _repository.UpdateAsync(entity, cancellationToken);
         } else

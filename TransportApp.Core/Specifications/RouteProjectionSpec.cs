@@ -14,9 +14,12 @@ public sealed class RouteProjectionSpec : BaseSpec<RouteProjectionSpec, Route, R
     protected override Expression<Func<Route, RouteDTO>> Spec => e => new()
     {
         Id = e.Id,
-        Description = e.Description,
-        RouteName = e.RouteName,
-        RouteLength = e.RouteLength
+        StartingLocationCity = e.StartingLocation.City,
+        StartingLocationCountry = e.StartingLocation.Country,
+        FinalLocationCity = e.FinalLocation.City,
+        FinalLocationCountry = e.FinalLocation.Country,
+        DepartureTime = e.DepartureTime,
+        ArrivalTime = e.ArrivalTime
     };
 
     public RouteProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)
@@ -38,8 +41,12 @@ public sealed class RouteProjectionSpec : BaseSpec<RouteProjectionSpec, Route, R
 
         var searchExpr = $"%{search.Replace(" ", "%")}%";
 
-        Query.Where(e => EF.Functions.ILike(e.RouteName, searchExpr)); // This is an example on who database specific expressions can be used via C# expressions.
-                                                                  // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
+        Query.Where(e => EF.Functions.ILike(e.StartingLocation.City, searchExpr) || EF.Functions.ILike(e.FinalLocation.City, searchExpr));
+    }
+
+    public RouteProjectionSpec(Guid startingLocationId, Guid finalLocationId)
+    {
+        Query.Where(e => e.StartingLocationId == startingLocationId && e.FinalLocationId == finalLocationId);
     }
 }
 

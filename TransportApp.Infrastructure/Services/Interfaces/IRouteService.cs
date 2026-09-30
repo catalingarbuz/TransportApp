@@ -1,11 +1,6 @@
 ﻿using TransportApp.Core.DataTransferObjects;
 using TransportApp.Core.Responses;
 using TransportApp.Core.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TransportApp.Infrastructure.Services.Interfaces
 {

@@ -11,8 +11,6 @@ public class BookingDTO
     public Guid Id { get; set; }
     public DateTime BookingDate { get; set; } = default;
     public DateTime DepartureDate { get; set; } = default;
-    public string DeparturePlace { get; set; } = default!;
-    public string ArrivalPlace { get; set; } = default!;
 
     public Guid UserId { get; set; }
     public Guid DriverId { get; set; }
