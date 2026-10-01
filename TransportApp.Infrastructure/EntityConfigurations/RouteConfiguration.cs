@@ -23,11 +23,9 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
         builder.Property(e => e.ArrivalTime)
             .IsRequired();
         builder.HasOne(e => e.StartingLocation)
-            .WithOne()
-            .HasForeignKey<Route>(e => e.StartingLocationId);
+            .WithMany();
         builder.HasOne(e => e.FinalLocation)
-            .WithOne()
-            .HasForeignKey<Route>(e => e.FinalLocationId);
+            .WithMany();
         builder.Property(e => e.CreatedAt)
             .IsRequired();
         builder.Property(e => e.UpdatedAt)
