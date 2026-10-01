@@ -32,7 +32,7 @@
     "globals.routes": "Rute",
     "globals.contacts": "Contact",
     "globals.departurePlace": "Locul pornirii",
-    "globals.arrivalPlace": "Destinatie",
+    "globals.arrivalPlace": "Destinație finală",
     "globals.departureDate": "Data pornirii",
     "globals.startingLocation": "Destinația de pornire",
     "globals.finalLocation": "Destinația finală",
@@ -41,5 +41,7 @@
     "globals.bookingDate": "Data rezervarii",
     "globals.routeName": "Numele rutei",
     "globals.driverId": "Id sofer",
-    "globals.routeLength": "Lungimea rutei"
+    "globals.routeLength": "Lungimea rutei",
+    "globals.from": "De unde",
+    "globals.to": "Unde"
 }

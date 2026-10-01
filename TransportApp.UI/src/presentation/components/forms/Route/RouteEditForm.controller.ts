@@ -70,7 +70,7 @@ const useInitRouteEditForm = (id: string) => {
 }
 
 const getTimeInputValue = (date?: Date) => date
-    ? `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`
+    ? `${String(date.getUTCHours()).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}`
     : "";
 
 const getLocationId = (locations: LocationDTO[], city?: string | null, country?: string | null) => {
@@ -89,7 +89,7 @@ const getLocationId = (locations: LocationDTO[], city?: string | null, country?:
 const dateAtSelectedTime = (time: string) => {
     const [hours, minutes] = time.split(":").map(Number);
     const date = new Date();
-    date.setHours(hours, minutes, 0, 0);
+    date.setUTCHours(hours, minutes, 0, 0);
     return date;
 };
 
