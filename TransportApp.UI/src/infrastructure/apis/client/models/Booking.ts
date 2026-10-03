@@ -13,18 +13,6 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Car } from './Car';
-import {
-    CarFromJSON,
-    CarFromJSONTyped,
-    CarToJSON,
-} from './Car';
-import type { Driver } from './Driver';
-import {
-    DriverFromJSON,
-    DriverFromJSONTyped,
-    DriverToJSON,
-} from './Driver';
 import type { Route } from './Route';
 import {
     RouteFromJSON,
@@ -73,18 +61,6 @@ export interface Booking {
      * @type {string}
      * @memberof Booking
      */
-    driverId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Booking
-     */
-    carId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Booking
-     */
     routeId?: string;
     /**
      * 
@@ -104,18 +80,6 @@ export interface Booking {
      * @memberof Booking
      */
     user?: User;
-    /**
-     * 
-     * @type {Driver}
-     * @memberof Booking
-     */
-    driver?: Driver;
-    /**
-     * 
-     * @type {Car}
-     * @memberof Booking
-     */
-    car?: Car;
     /**
      * 
      * @type {Route}
@@ -147,14 +111,10 @@ export function BookingFromJSONTyped(json: any, ignoreDiscriminator: boolean): B
         'createdAt': !exists(json, 'createdAt') ? undefined : (new Date(json['createdAt'])),
         'updatedAt': !exists(json, 'updatedAt') ? undefined : (new Date(json['updatedAt'])),
         'userId': !exists(json, 'userId') ? undefined : json['userId'],
-        'driverId': !exists(json, 'driverId') ? undefined : json['driverId'],
-        'carId': !exists(json, 'carId') ? undefined : json['carId'],
         'routeId': !exists(json, 'routeId') ? undefined : json['routeId'],
         'bookingDate': !exists(json, 'bookingDate') ? undefined : (new Date(json['bookingDate'])),
         'departureDate': !exists(json, 'departureDate') ? undefined : (new Date(json['departureDate'])),
         'user': !exists(json, 'user') ? undefined : UserFromJSON(json['user']),
-        'driver': !exists(json, 'driver') ? undefined : DriverFromJSON(json['driver']),
-        'car': !exists(json, 'car') ? undefined : CarFromJSON(json['car']),
         'route': !exists(json, 'route') ? undefined : RouteFromJSON(json['route']),
     };
 }
@@ -172,14 +132,10 @@ export function BookingToJSON(value?: Booking | null): any {
         'createdAt': value.createdAt === undefined ? undefined : (value.createdAt.toISOString()),
         'updatedAt': value.updatedAt === undefined ? undefined : (value.updatedAt.toISOString()),
         'userId': value.userId,
-        'driverId': value.driverId,
-        'carId': value.carId,
         'routeId': value.routeId,
         'bookingDate': value.bookingDate === undefined ? undefined : (value.bookingDate.toISOString()),
         'departureDate': value.departureDate === undefined ? undefined : (value.departureDate.toISOString()),
         'user': UserToJSON(value.user),
-        'driver': DriverToJSON(value.driver),
-        'car': CarToJSON(value.car),
         'route': RouteToJSON(value.route),
     };
 }

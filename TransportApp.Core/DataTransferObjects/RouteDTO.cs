@@ -14,5 +14,6 @@ public class RouteDTO
     public string FinalLocationCountry { get; set; } = default!;
     public DateTime DepartureTime { get; set; }
     public DateTime ArrivalTime { get; set; }
+    public List<CarDTO> AssignedCars { get; set; } = new List<CarDTO>();
 }
 

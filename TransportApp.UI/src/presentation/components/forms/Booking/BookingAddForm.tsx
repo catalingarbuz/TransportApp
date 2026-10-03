@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useBookingAddFormController } from "./BookingAddForm.controller";
-import { isEmpty, isUndefined } from "lodash";
-import { UserRoleEnum } from "@infrastructure/apis/client";
+import { isUndefined } from "lodash";
+import { Controller } from "react-hook-form";
 
 /**
  * Here we declare the user add form component.
@@ -26,28 +26,7 @@ export const BookingAddForm = (props: { onSubmit?: () => void }) => {
     return <form onSubmit={actions.handleSubmit(actions.submit)}> {/* Wrap your form into a form tag and use the handle submit callback to validate the form and call the data submission. */}
         <Stack spacing={4} style={{ width: "100%" }}>
             <Grid container item direction="row" xs={12} columnSpacing={4}>
-                <Grid container item direction="column" xs={6} md={6}>
-                    <FormControl
-                        fullWidth
-                        error={!isUndefined(state.errors.routeName)}
-                    > {/* Wrap the input into a form control and use the errors to show the input invalid if needed. */}
-                        <FormLabel required>
-                            <FormattedMessage id="globals.routeName" />
-                        </FormLabel> {/* Add a form label to indicate what the input means. */}
-                        <OutlinedInput
-                            {...actions.register("routeName")} // Bind the form variable to the UI input.
-                            // put only departurePlace in placeHolder
-                            placeholder={formatMessage({ id: "globals.routeName" })}
-                            autoComplete="none"
-                        /> {/* Add a input like a textbox shown here. */}
-                        <FormHelperText
-                            hidden={isUndefined(state.errors.routeName)}
-                        >
-                            {state.errors.routeName?.message}
-                        </FormHelperText> {/* Add a helper text that is shown then the input has a invalid value. */}
-                    </FormControl>
-                </Grid>
-                <Grid container item direction="column" xs={6} md={6}>
+                <Grid container item direction="column" xs={4}>
                     <FormControl
                         fullWidth
                         error={!isUndefined(state.errors.departurePlace)}
@@ -55,39 +34,58 @@ export const BookingAddForm = (props: { onSubmit?: () => void }) => {
                         <FormLabel required>
                             <FormattedMessage id="globals.departurePlace" />
                         </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("departurePlace")}
-                            placeholder={formatMessage({ id: "globals.departurePlace" })}
-                            autoComplete="none"
+                        <Controller
+                            control={actions.control}
+                            name="departurePlace"
+                            render={({ field }) => <Select {...field} displayEmpty disabled={computed.isLoadingDeparturePlaces || computed.isErrorLoadingDeparturePlaces} onChange={event => {
+                                field.onChange(event);
+                                actions.setValue("routeId", "");
+                                actions.clearErrors("routeId");
+                            }}>
+                                <MenuItem value="" disabled>
+                                    {computed.isLoadingDeparturePlaces ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.departurePlace" }) })}
+                                </MenuItem>
+                                {computed.departurePlaces.map(place => <MenuItem key={place} value={place}>{place}</MenuItem>)}
+                            </Select>}
                         />
                         <FormHelperText
                             hidden={isUndefined(state.errors.departurePlace)}
                         >
                             {state.errors.departurePlace?.message}
                         </FormHelperText>
+                        {computed.isErrorLoadingDeparturePlaces && <FormHelperText error>{formatMessage({ id: "globals.loadingFailed" })}</FormHelperText>}
                     </FormControl>
                 </Grid>
-                <Grid container item direction="column" xs={6} md={6}>
+                <Grid container item direction="column" xs={4}>
                     <FormControl
                         fullWidth
-                        error={!isUndefined(state.errors.arrivalPlace)}
+                        error={!isUndefined(state.errors.routeId)}
                     >
                         <FormLabel required>
                             <FormattedMessage id="globals.arrivalPlace" />
                         </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("arrivalPlace")}
-                            placeholder={formatMessage({ id: "globals.arrivalPlace" })}
-                            autoComplete="none"
+                        <Controller
+                            control={actions.control}
+                            name="routeId"
+                            render={({ field }) => <Select {...field} displayEmpty disabled={!computed.hasDeparturePlaceSelected || computed.isLoadingDeparturePlaces || computed.isErrorLoadingDeparturePlaces}>
+                                <MenuItem value="" disabled>
+                                    {formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: computed.hasDeparturePlaceSelected
+                                        ? formatMessage({ id: "globals.arrivalPlace" })
+                                        : formatMessage({ id: "globals.departurePlace" }) })}
+                                </MenuItem>
+                                {computed.arrivalRoutes.map(route => <MenuItem key={route.id} value={route.id ?? ""}>
+                                    {[route.finalLocationCity, route.finalLocationCountry].filter(Boolean).join(", ")}
+                                </MenuItem>)}
+                            </Select>}
                         />
                         <FormHelperText
-                            hidden={isUndefined(state.errors.arrivalPlace)}
+                            hidden={isUndefined(state.errors.routeId)}
                         >
-                            {state.errors.arrivalPlace?.message}
+                            {state.errors.routeId?.message}
                         </FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid container item direction="column" xs={6} md={6}>
+                <Grid container item direction="column" xs={4}>
                     <FormControl
                         fullWidth
                         error={!isUndefined(state.errors.departureDate)}
@@ -112,36 +110,11 @@ export const BookingAddForm = (props: { onSubmit?: () => void }) => {
                         </FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid container item direction="column" xs={6} md={6}>
-                    <FormControl
-                        fullWidth
-                        error={!isUndefined(state.errors.driverId)}
-                    >
-                        <FormLabel required>
-                            <FormattedMessage id="globals.driverId" />
-                        </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("driverId")}
-                            placeholder={formatMessage({ id: "globals.driverId" })}
-                            autoComplete="none"
-                        />
-                        <FormHelperText
-                            hidden={isUndefined(state.errors.driverId)}
-                        >
-                            {state.errors.driverId?.message}
-                        </FormHelperText>
-                        <FormHelperText
-                            hidden={isUndefined(state.errors.driverId)}
-                        >
-                            {state.errors.driverId?.message}
-                        </FormHelperText>
-                    </FormControl>
-                </Grid>
             </Grid>
             <Grid container item direction="row" xs={12} className="padding-top-sm">
                 <Grid container item direction="column" xs={12} md={4}></Grid>
                 <Grid container item direction="column" justifyContent={"center"} xs={4}>
-                    <Button variant="contained" type="submit" disabled={!isEmpty(state.errors) || computed.isSubmitting}> {/* Add a button with type submit to call the submission callback if the button is a descended of the form element. */}
+                    <Button variant="contained" type="submit" disabled={computed.isSubmitting}> {/* Add a button with type submit to call the submission callback if the button is a descended of the form element. */}
                         {!computed.isSubmitting && <FormattedMessage id="globals.submit" />}
                         {computed.isSubmitting && <CircularProgress />}
                     </Button>

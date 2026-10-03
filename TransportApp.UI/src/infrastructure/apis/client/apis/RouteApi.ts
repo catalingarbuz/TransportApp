@@ -20,6 +20,7 @@ import type {
   RouteDTOPagedResponseRequestResponse,
   RouteDTORequestResponse,
   RouteUpdateDTO,
+  StringRouteDTOListDictionaryRequestResponse,
 } from '../models';
 import {
     RequestResponseFromJSON,
@@ -32,6 +33,8 @@ import {
     RouteDTORequestResponseToJSON,
     RouteUpdateDTOFromJSON,
     RouteUpdateDTOToJSON,
+    StringRouteDTOListDictionaryRequestResponseFromJSON,
+    StringRouteDTOListDictionaryRequestResponseToJSON,
 } from '../models';
 
 export interface ApiRouteAddPostRequest {
@@ -193,6 +196,34 @@ export class RouteApi extends runtime.BaseAPI {
      */
     async apiRouteGetPageGet(requestParameters: ApiRouteGetPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RouteDTOPagedResponseRequestResponse> {
         const response = await this.apiRouteGetPageGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiRouteGetRoutesWithLocationsDictionaryGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringRouteDTOListDictionaryRequestResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
+        }
+
+        const response = await this.request({
+            path: `/api/Route/GetRoutesWithLocationsDictionary`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StringRouteDTOListDictionaryRequestResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiRouteGetRoutesWithLocationsDictionaryGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringRouteDTOListDictionaryRequestResponse> {
+        const response = await this.apiRouteGetRoutesWithLocationsDictionaryGetRaw(initOverrides);
         return await response.value();
     }
 

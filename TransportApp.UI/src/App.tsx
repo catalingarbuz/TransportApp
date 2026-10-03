@@ -10,6 +10,8 @@ import { ContactPage } from "@presentation/pages/ContactPage";
 import { SignupPage } from "@presentation/pages/SignupPage";
 import { UserFilesPage } from "@presentation/pages/UserFilesPage";
 import { UsersPage } from "@presentation/pages/UsersPage";
+import { CarsPage } from "@presentation/pages/CarsPage";
+import { DriversPage } from "@presentation/pages/DriversPage";
 import { Route, Routes } from "react-router-dom";
 import { AppRoute } from "routes";
 
@@ -28,6 +30,8 @@ export function App() {
         {isAdmin && <Route path={AppRoute.Routes} element={<RoutesPage />} />} {/* If the user doesn't have the right role this route shouldn't be used. */}
         {isAdmin && <Route path={AppRoute.Users} element={<UsersPage />} />} 
         {isAdmin && <Route path={AppRoute.UserFiles} element={<UserFilesPage />} />}
+        {isAdmin && <Route path={AppRoute.Cars} element={<CarsPage />} />}
+        {isAdmin && <Route path={AppRoute.Drivers} element={<DriversPage />} />}
       </Routes>
     </AppIntlProvider>
 }

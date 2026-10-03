@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.EntityFrameworkCore;
 using TransportApp.Core.DataTransferObjects;
 using TransportApp.Core.Entities;
 using TransportApp.Core.Enums;
@@ -24,10 +25,57 @@ public class RouteService : IRouteService
         _repository = repository;
     }
 
+    public async Task<ServiceResponse<Dictionary<string, List<RouteDTO>>>> GetRoutesWithLocationsDictionary(CancellationToken cancellationToken = default)
+    {
+        var allRoutes = await _repository.ListAsync(new RouteProjectionSpec(null, false), cancellationToken);
+
+        var dictionary = new Dictionary<string, List<RouteDTO>>();
+
+        foreach (var route in allRoutes)
+        {
+            var key = $"{route.StartingLocationCity}, {route.StartingLocationCountry}";
+
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary[key] = new List<RouteDTO>();
+            }
+
+            dictionary[key].Add(route);
+        }
+
+        return ServiceResponse<Dictionary<string, List<RouteDTO>>>.ForSuccess(dictionary);
+    }
+
     public async Task<ServiceResponse<RouteDTO>> GetRoute(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetAsync(new RouteProjectionSpec(id), cancellationToken);
-        
+        RouteDTO? result = await _repository.GetAsync(new RouteProjectionSpec(id), cancellationToken);
+
+        if (result != null)
+        {
+            var carRoutes = await _repository.DbContext.Set<CarRoute>()
+                .Where(cr => cr.RouteId == result.Id)
+                .ToListAsync(cancellationToken);
+            var carIds = carRoutes.Select(cr => cr.CarId).ToList();
+            var cars = new List<CarDTO>();
+            foreach (var carId in carIds)
+            {
+                var car = await _repository.DbContext.Set<Car>()
+                    .FirstOrDefaultAsync(c => c.Id == carId, cancellationToken);
+                if (car != null)
+                {
+                    cars.Add(new CarDTO
+                    {
+                        Id = car.Id,
+                        RegistrationNumber = car.RegistrationNumber,
+                        Model = car.Model,
+                        Brand = car.Brand,
+                        NumberOfSeats = car.NumberOfSeats
+                    });
+                }
+            }
+            result.AssignedCars = cars;
+        }
+
         return result != null ?
             ServiceResponse<RouteDTO>.ForSuccess(result) :
             ServiceResponse<RouteDTO>.FromError(CommonErrors.RouteNotFound);
@@ -35,7 +83,35 @@ public class RouteService : IRouteService
 
     public async Task<ServiceResponse<PagedResponse<RouteDTO>>> GetRoutes(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.PageAsync(pagination, new RouteProjectionSpec(pagination.Search, false), cancellationToken);  
+        PagedResponse<RouteDTO> result = await _repository.PageAsync(pagination, new RouteProjectionSpec(pagination.Search, false), cancellationToken);
+        List<RouteDTO> routes = result.Data;
+
+        // populate the AssignedCars property for each route
+        foreach (var route in routes)
+        {
+            var carRoutes = await _repository.DbContext.Set<CarRoute>()
+                .Where(cr => cr.RouteId == route.Id)
+                .ToListAsync(cancellationToken);
+            var carIds = carRoutes.Select(cr => cr.CarId).ToList();
+            var cars = new List<CarDTO>();
+            foreach (var carId in carIds)
+            {
+                var car = await _repository.DbContext.Set<Car>()
+                    .FirstOrDefaultAsync(c => c.Id == carId, cancellationToken);
+                if (car != null)
+                {
+                    cars.Add(new CarDTO
+                    {
+                        Id = car.Id,
+                        RegistrationNumber = car.RegistrationNumber,
+                        Model = car.Model,
+                        Brand = car.Brand,
+                        NumberOfSeats = car.NumberOfSeats
+                    });
+                }
+            }
+            route.AssignedCars = cars;
+        }
 
         return ServiceResponse<PagedResponse<RouteDTO>>.ForSuccess(result);     
     }
@@ -73,13 +149,29 @@ public class RouteService : IRouteService
             return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The route already exists!", ErrorCodes.RouteAlreadyExists));
         }
 
-        await _repository.AddAsync(new Route
+        Route result = await _repository.AddAsync(new Route
         {
             StartingLocationId = startingLocation.Id,
             FinalLocationId = finalLocation.Id,
             DepartureTime = route.DepartureTime,
             ArrivalTime = route.ArrivalTime
         }, cancellationToken);
+
+        if (route.CarIds != null && route.CarIds.Count > 0)
+        {
+            foreach (var carId in route.CarIds)
+            {
+                Car? carEntity = await _repository.GetAsync(new CarSpec(carId), cancellationToken);
+                if (carEntity != null)
+                {
+                    await _repository.AddAsync(new CarRoute
+                    {
+                        CarId = carEntity.Id,
+                        RouteId = result.Id
+                    }, cancellationToken);
+                }
+            }
+        }
 
         return ServiceResponse.ForSuccess();
     }
@@ -101,6 +193,27 @@ public class RouteService : IRouteService
             entity.ArrivalTime = route.ArrivalTime ?? entity.ArrivalTime;
 
             await _repository.UpdateAsync(entity, cancellationToken);
+            if (route.CarIds != null)
+            {
+                // Remove existing car routes
+                var existingCarRoutes = _repository.DbContext.Set<CarRoute>().Where(cr => cr.RouteId == entity.Id);
+                _repository.DbContext.Set<CarRoute>().RemoveRange(existingCarRoutes);
+                // Add new car routes
+                foreach (var carId in route.CarIds)
+                {
+                    Car? carEntity = await _repository.GetAsync(new CarSpec(carId.Value), cancellationToken);
+                    if (carEntity != null)
+                    {
+                        await _repository.AddAsync(new CarRoute
+                        {
+                            CarId = carEntity.Id,
+                            RouteId = entity.Id
+                        }, cancellationToken);
+                    }
+                }
+
+                await _repository.DbContext.SaveChangesAsync(cancellationToken);
+            }
         } else
         {
             return ServiceResponse.FromError(new(HttpStatusCode.NotFound, "Route not found", ErrorCodes.EntityNotFound));

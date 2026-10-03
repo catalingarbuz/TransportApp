@@ -21,18 +21,6 @@ import { exists, mapValues } from '../runtime';
 export interface BookingAddDTO {
     /**
      * 
-     * @type {string}
-     * @memberof BookingAddDTO
-     */
-    driverId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BookingAddDTO
-     */
-    routeName?: string | null;
-    /**
-     * 
      * @type {Date}
      * @memberof BookingAddDTO
      */
@@ -48,13 +36,7 @@ export interface BookingAddDTO {
      * @type {string}
      * @memberof BookingAddDTO
      */
-    departurePlace?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof BookingAddDTO
-     */
-    arrivalPlace?: string | null;
+    routeId?: string;
 }
 
 /**
@@ -76,12 +58,9 @@ export function BookingAddDTOFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'driverId': !exists(json, 'driverId') ? undefined : json['driverId'],
-        'routeName': !exists(json, 'routeName') ? undefined : json['routeName'],
         'bookingDate': !exists(json, 'bookingDate') ? undefined : (new Date(json['bookingDate'])),
         'departureDate': !exists(json, 'departureDate') ? undefined : (new Date(json['departureDate'])),
-        'departurePlace': !exists(json, 'departurePlace') ? undefined : json['departurePlace'],
-        'arrivalPlace': !exists(json, 'arrivalPlace') ? undefined : json['arrivalPlace'],
+        'routeId': !exists(json, 'routeId') ? undefined : json['routeId'],
     };
 }
 
@@ -94,12 +73,9 @@ export function BookingAddDTOToJSON(value?: BookingAddDTO | null): any {
     }
     return {
         
-        'driverId': value.driverId,
-        'routeName': value.routeName,
         'bookingDate': value.bookingDate === undefined ? undefined : (value.bookingDate.toISOString()),
         'departureDate': value.departureDate === undefined ? undefined : (value.departureDate.toISOString()),
-        'departurePlace': value.departurePlace,
-        'arrivalPlace': value.arrivalPlace,
+        'routeId': value.routeId,
     };
 }
 

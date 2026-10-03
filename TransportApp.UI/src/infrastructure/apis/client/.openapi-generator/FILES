@@ -57,6 +57,7 @@ models/RouteDTOPagedResponse.ts
 models/RouteDTOPagedResponseRequestResponse.ts
 models/RouteDTORequestResponse.ts
 models/RouteUpdateDTO.ts
+models/StringRouteDTOListDictionaryRequestResponse.ts
 models/User.ts
 models/UserAddDTO.ts
 models/UserDTO.ts

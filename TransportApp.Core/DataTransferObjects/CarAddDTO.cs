@@ -11,5 +11,6 @@ public class CarAddDTO
     public string Model { get; set; } = default!;
     public string RegistrationNumber { get; set; } = default!;
     public int NumberOfSeats { get; set; } = default!;
+    public Guid? DriverId { get; set; } = default!;
 }
 

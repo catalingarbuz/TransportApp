@@ -9,5 +9,7 @@ export enum AppRoute {
     Signup = "/signup",
     Bookings = "/bookings",
     Routes = "/routes",
+    Cars = "/cars",
+    Drivers = "/drivers",
     Contact = "/contact"
 }

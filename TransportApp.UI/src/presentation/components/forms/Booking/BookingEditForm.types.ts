@@ -5,18 +5,22 @@ import {
     FieldErrorsImpl,
     DeepRequired,
     UseFormWatch
+    ,Control,
+    UseFormSetValue,
+    UseFormClearErrors
 } from "react-hook-form";
+import { RouteDTO } from "@infrastructure/apis/client";
 
 
 export type BookingEditFormModel = {
     id: string;
-    bookingDate: Date | null;
-    departureDate: Date | null;
-    departurePlace: string | null;
-    arrivalPlace: string | null;
+    bookingDate: string | null;
+    departureDate: string | null;
+    departurePlace: string;
+    arrivalPlace: string;
     driverId: string | null;
     carId: string | null;
-    routeId: string | null;
+    routeId: string;
 };
 
 export type BookingEditFormState = {
@@ -26,13 +30,23 @@ export type BookingEditFormState = {
 export type BookingEditFormActions = {
     register: UseFormRegister<BookingEditFormModel>;
     watch: UseFormWatch<BookingEditFormModel>;
+    control: Control<BookingEditFormModel>;
+    setValue: UseFormSetValue<BookingEditFormModel>;
+    clearErrors: UseFormClearErrors<BookingEditFormModel>;
     handleSubmit: UseFormHandleSubmit<BookingEditFormModel>;
     submit: (body: BookingEditFormModel) => void;
 };
 
 export type BookingEditFormComputed = {
     defaultValues: BookingEditFormModel,
-    isSubmitting: boolean
+    isSubmitting: boolean,
+    isLoadingBooking: boolean,
+    isErrorLoadingBooking: boolean,
+    departurePlaces: string[],
+    arrivalRoutes: RouteDTO[],
+    hasDeparturePlaceSelected: boolean,
+    isLoadingDeparturePlaces: boolean,
+    isErrorLoadingDeparturePlaces: boolean
 };
 
 export type BookingEditFormController = FormController<BookingEditFormState, BookingEditFormActions, BookingEditFormComputed>;

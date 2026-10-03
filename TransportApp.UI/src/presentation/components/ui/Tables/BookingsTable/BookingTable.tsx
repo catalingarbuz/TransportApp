@@ -9,6 +9,12 @@ import { BookingAddDialog } from "../../Dialogs/BookingAddDialog/BookingAddDialo
 import { useAppSelector } from "@application/store";
 import { useOwnUserHasRole } from "@infrastructure/hooks/useOwnUser";
 import { BookingEditDialog } from "../../Dialogs/BookingAddDialog/BookingEditDialog";
+import countries from "i18n-iso-countries";
+import englishCountryNames from "i18n-iso-countries/langs/en.json";
+import romanianCountryNames from "i18n-iso-countries/langs/ro.json";
+
+countries.registerLocale(englishCountryNames);
+countries.registerLocale(romanianCountryNames);
 
 /**
  * This hook returns a header for the table with translated columns.
@@ -17,11 +23,21 @@ const useHeader = (): { key: keyof BookingDTO, name: string }[] => {
     const { formatMessage } = useIntl();
 
     return [
-        { key: "departurePlace", name: formatMessage({ id: "globals.departurePlace" }) },
-        { key: "arrivalPlace", name: formatMessage({ id: "globals.arrivalPlace" }) },
-        { key: "bookingDate", name: formatMessage({ id: "globals.bookingDate" }) },
+        { key: "startingLocationCity", name: formatMessage({ id: "globals.departurePlace" }) },
+        { key: "finalLocationCity", name: formatMessage({ id: "globals.arrivalPlace" }) },
         { key: "departureDate", name: formatMessage({ id: "globals.departureDate" }) },
     ]
+};
+
+const getCountryAbbreviation = (country: string) => {
+    const name = country.trim();
+    if (/^[a-z]{2}$/i.test(name) && countries.isValid(name)) {
+        return name.toUpperCase();
+    }
+
+    return countries.getAlpha2Code(name, "en")
+        ?? countries.getAlpha2Code(name, "ro")
+        ?? country;
 };
 
 /**
@@ -78,16 +94,33 @@ export const BookingTable = () => {
                 <TableBody>
                     {
                         rowValues?.map(({ data, entry }, rowIndex) => <TableRow key={`row_${rowIndex + 1}`}>
+                            {(() => {
+                                const canManageBooking = isAdmin || entry.userId === ownUserId;
+                                return <>
                             <TableCell>
-                                {isAdmin && <BookingEditDialog id={entry.id || ''} />} </TableCell>
-                            {data.map((keyValue, index) => <TableCell key={`cell_${rowIndex + 1}_${index + 1}`}>{keyValue.key === "bookingDate" || keyValue.key === "departureDate" ? new Date(keyValue.value).toLocaleDateString() : keyValue.value}</TableCell>)} {/* Add the row values. */}
+                                {canManageBooking && <BookingEditDialog id={entry.id || ''} />} </TableCell>
+                            {data.map((keyValue, index) => {
+                                const countryKey = keyValue.key === "startingLocationCity"
+                                    ? "startingLocationCountry"
+                                    : keyValue.key === "finalLocationCity"
+                                        ? "finalLocationCountry"
+                                        : undefined;
+                                const country = countryKey ? entry[countryKey] : undefined;
+                                const value = keyValue.value instanceof Date
+                                    ? keyValue.value.toLocaleDateString()
+                                    : keyValue.value;
+                                return <TableCell key={`cell_${rowIndex + 1}_${index + 1}`}>
+                                    {countryKey && country ? `${value ?? ""} (${getCountryAbbreviation(country)})` : value}
+                                </TableCell>;
+                            })} {/* Add the row values. */}
                             {/* Add the row values. */}
-                            {isAdmin &&
-                                <TableCell> {/* Add other cells like action buttons. */}
-                                    {<IconButton color="error" onClick={() => remove(entry.id || '')}>
-                                        <DeleteIcon color="error" fontSize='small' />
-                                    </IconButton>}
-                                </TableCell>}
+                            <TableCell>
+                                {canManageBooking && <IconButton color="error" onClick={() => remove(entry.id || '')}>
+                                    <DeleteIcon color="error" fontSize='small' />
+                                </IconButton>}
+                            </TableCell>
+                                </>;
+                            })()}
                         </TableRow>)
                     }
                 </TableBody>

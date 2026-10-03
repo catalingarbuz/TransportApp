@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useRouteApi } from "@infrastructure/apis/api-management/route";
+import { useCarApi } from "@infrastructure/apis/api-management/car";
 import { RouteAddFormController } from "./RouteAddForm.types";
 import { useLocationApi } from "@infrastructure/apis/api-management/location";
 import { LocationDTO, RouteAddDTO } from "@infrastructure/apis/client";
@@ -20,7 +21,8 @@ const getDefaultValues = (initialData?: RouteAddFormModel) => {
         startingLocationId: "",
         finalLocationId: "",
         departureTime: "",
-        arrivalTime: ""
+        arrivalTime: "",
+        carIds: [] as string[]
     };
 
     if (!isUndefined(initialData)) {
@@ -67,7 +69,8 @@ const useInitRouteAddForm = () => {
             .required(formatMessage(
                 { id: "globals.validations.requiredField" },
                 { fieldName: formatMessage({ id: "globals.arrivalTime" }) }
-            ))
+            )),
+        carIds: yup.array().of(yup.string().required()).default(defaultValues.carIds)
     });
 
     const resolver = yupResolver(schema);
@@ -82,8 +85,14 @@ export const useRouteAddFormController = (onSubmit?: () => void): RouteAddFormCo
     const { defaultValues, resolver } = useInitRouteAddForm();
     const { addRoute: { mutation, key: mutationKey }, getRoutes: { key: queryKey } } = useRouteApi();
     const { getLocations: { key: locationsQueryKey, query: getLocations } } = useLocationApi();
+    const { getCars: { key: carsQueryKey, query: getCars } } = useCarApi();
     const { mutateAsync: add, status } = useMutation([mutationKey], mutation);
     const queryClient = useQueryClient();
+    const { data: carsResponse, isLoading: isLoadingCars, isError: isErrorLoadingCars } = useQuery(
+        [carsQueryKey, "route-add", 1, 1000],
+        () => getCars({ page: 1, pageSize: 1000 })
+    );
+    const cars = carsResponse?.response?.data ?? [];
     const loadAllLocations = async () => {
         const allLocations: LocationDTO[] = [];
         const pageSize = 100;
@@ -119,7 +128,8 @@ export const useRouteAddFormController = (onSubmit?: () => void): RouteAddFormCo
             finalLocationCity: finalLocation.city,
             finalLocationCountry: finalLocation.country,
             departureTime: dateAtSelectedTime(data.departureTime),
-            arrivalTime: dateAtSelectedTime(data.arrivalTime)
+            arrivalTime: dateAtSelectedTime(data.arrivalTime),
+            carIds: data.carIds.length > 0 ? data.carIds : null
         };
 
         return add(route).then(() => {
@@ -155,7 +165,10 @@ export const useRouteAddFormController = (onSubmit?: () => void): RouteAddFormCo
             isSubmitting: status === "loading", // Return if the form is still submitting or nit.
             locations: availableLocations,
             isLoadingLocations,
-            isErrorLoadingLocations
+            isErrorLoadingLocations,
+            cars,
+            isLoadingCars,
+            isErrorLoadingCars
         },
         state: {
             errors // Return what errors have occurred when validating the form input.

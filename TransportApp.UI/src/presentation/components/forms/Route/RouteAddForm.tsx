@@ -8,12 +8,15 @@ import {
     Stack,
     OutlinedInput,
     Select,
-    MenuItem
+    MenuItem,
+    Chip
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useRouteAddFormController } from "./RouteAddForm.controller";
 import { isEmpty, isUndefined } from "lodash";
 import { Controller } from "react-hook-form";
+import { useState } from "react";
 
 /**
  * Here we declare the user add form component.
@@ -22,6 +25,7 @@ import { Controller } from "react-hook-form";
 export const RouteAddForm = (props: { onSubmit?: () => void }) => {
     const { formatMessage } = useIntl();
     const { state, actions, computed } = useRouteAddFormController(props.onSubmit); // Use the controller.
+    const [carsOpen, setCarsOpen] = useState(false);
 
     return <form onSubmit={actions.handleSubmit(actions.submit)}> {/* Wrap your form into a form tag and use the handle submit callback to validate the form and call the data submission. */}
         <Stack spacing={4} style={{ width: "100%" }}>
@@ -89,6 +93,60 @@ export const RouteAddForm = (props: { onSubmit?: () => void }) => {
                         <FormHelperText hidden={isUndefined(state.errors.arrivalTime)}>
                             {state.errors.arrivalTime?.message}
                         </FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid container item direction="column" xs={12}>
+                    <FormControl fullWidth>
+                        <FormLabel id="route-cars-label"><FormattedMessage id="globals.cars" /></FormLabel>
+                        <Controller
+                            control={actions.control}
+                            name="carIds"
+                            render={({ field }) => <Select
+                                {...field}
+                                multiple
+                                displayEmpty
+                                labelId="route-cars-label"
+                                open={carsOpen}
+                                onOpen={() => setCarsOpen(true)}
+                                onClose={() => setCarsOpen(false)}
+                                onChange={event => {
+                                    field.onChange(event);
+                                    setCarsOpen(false);
+                                }}
+                                disabled={computed.isLoadingCars || computed.isErrorLoadingCars}
+                                renderValue={selected => {
+                                    const selectedIds = selected as string[];
+                                    if (selectedIds.length === 0) {
+                                        return formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.cars" }) });
+                                    }
+
+                                    return <Stack direction="row" spacing={0.5} useFlexGap flexWrap="wrap">
+                                        {selectedIds.map(id => {
+                                            const car = computed.cars.find(candidate => candidate.id === id);
+                                            const label = car ? [car.brand, car.model, car.registrationNumber].filter(Boolean).join(" ") : id;
+                                            return <Chip
+                                                key={id}
+                                                label={label}
+                                                size="small"
+                                                deleteIcon={<CloseIcon fontSize="small" />}
+                                                onMouseDown={event => event.stopPropagation()}
+                                                onDelete={event => {
+                                                    event.stopPropagation();
+                                                    field.onChange((field.value ?? []).filter(selectedId => selectedId !== id));
+                                                }}
+                                            />;
+                                        })}
+                                    </Stack>;
+                                }}
+                            >
+                                {computed.cars.map(car => {
+                                    const carId = car.id ?? "";
+                                    const label = [car.brand, car.model, car.registrationNumber].filter(Boolean).join(" ");
+                                    return <MenuItem key={carId} value={carId}>{label}</MenuItem>;
+                                })}
+                            </Select>}
+                        />
+                        {computed.isErrorLoadingCars && <FormHelperText error>{formatMessage({ id: "globals.loadingFailed" })}</FormHelperText>}
                     </FormControl>
                 </Grid>
             <Grid container item direction="row" xs={12} className="padding-top-sm">

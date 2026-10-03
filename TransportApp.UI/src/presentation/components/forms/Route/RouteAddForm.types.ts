@@ -7,13 +7,14 @@ import {
     UseFormWatch
 } from "react-hook-form";
 import { Control } from "react-hook-form";
-import { LocationDTO } from "@infrastructure/apis/client";
+import { CarDTO, LocationDTO } from "@infrastructure/apis/client";
 
 export type RouteAddFormModel = {
     startingLocationId: string;
     finalLocationId: string;
     departureTime: string;
     arrivalTime: string;
+    carIds: string[];
 };
 
 export type RouteAddFormState = {
@@ -33,7 +34,10 @@ export type RouteAddFormComputed = {
     isSubmitting: boolean,
     locations: LocationDTO[],
     isLoadingLocations: boolean,
-    isErrorLoadingLocations: boolean
+    isErrorLoadingLocations: boolean,
+    cars: CarDTO[],
+    isLoadingCars: boolean,
+    isErrorLoadingCars: boolean
 };
 
 export type RouteAddFormController = FormController<RouteAddFormState, RouteAddFormActions, RouteAddFormComputed>;
