@@ -14,8 +14,6 @@ public sealed class BookingProjectionSpec : BaseSpec<BookingProjectionSpec, Book
         BookingDate = e.BookingDate,
         DepartureDate = e.Route != null ? e.Route.DepartureTime : default,
         UserId = e.UserId,
-        DriverId = e.DriverId,
-        CarId = e.CarId,
         RouteId = e.RouteId
     };
 

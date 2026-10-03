@@ -9,6 +9,7 @@ import { de } from "date-fns/locale";
  */
 const getRoutesQueryKey = "getRoutesQuery";
 const getRouteQueryKey = "getRouteQuery";
+const getRoutesWithLocationsDictionaryQueryKey = "getRoutesWithLocationsDictionaryQuery";
 const addRouteMutationKey = "addRouteMutation";
 const deleteRouteMutationKey = "deleteRouteMutation";
 const updateRouteMutationKey = "updateRouteMutation";
@@ -63,6 +64,7 @@ export const useRouteApi = () => {
             ? { ...result, response: normalizeRouteDates(result.response) }
             : result;
     };
+    const getRoutesWithLocationsDictionary = () => new RouteApi(config).apiRouteGetRoutesWithLocationsDictionaryGet();
     const addRoute = (route: RouteAddDTO) => new RouteApi(config).apiRouteAddPost({ routeAddDTO: route });
     const deleteRoute = (id: string) => new RouteApi(config).apiRouteDeleteIdDelete({ id });
     const updateRoute = (route: RouteUpdateDTO) => new RouteApi(config).apiRouteUpdatePut({ routeUpdateDTO: route });
@@ -75,6 +77,10 @@ export const useRouteApi = () => {
         getRoute: {
             key: getRouteQueryKey,
             query: getRoute
+        },
+        getRoutesWithLocationsDictionary: {
+            key: getRoutesWithLocationsDictionaryQueryKey,
+            query: getRoutesWithLocationsDictionary
         },
         addRoute: { // Return the mutation object.
             key: addRouteMutationKey, // Add the key to identify the mutation.

@@ -47,6 +47,7 @@ export * from './RouteDTOPagedResponse';
 export * from './RouteDTOPagedResponseRequestResponse';
 export * from './RouteDTORequestResponse';
 export * from './RouteUpdateDTO';
+export * from './StringRouteDTOListDictionaryRequestResponse';
 export * from './User';
 export * from './UserAddDTO';
 export * from './UserDTO';

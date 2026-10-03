@@ -42,6 +42,30 @@ export interface BookingDTO {
      * @type {string}
      * @memberof BookingDTO
      */
+    startingLocationCity?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookingDTO
+     */
+    startingLocationCountry?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookingDTO
+     */
+    finalLocationCity?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookingDTO
+     */
+    finalLocationCountry?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BookingDTO
+     */
     userId?: string;
     /**
      * 
@@ -85,6 +109,10 @@ export function BookingDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'id': !exists(json, 'id') ? undefined : json['id'],
         'bookingDate': !exists(json, 'bookingDate') ? undefined : (new Date(json['bookingDate'])),
         'departureDate': !exists(json, 'departureDate') ? undefined : (new Date(json['departureDate'])),
+        'startingLocationCity': !exists(json, 'startingLocationCity') ? undefined : json['startingLocationCity'],
+        'startingLocationCountry': !exists(json, 'startingLocationCountry') ? undefined : json['startingLocationCountry'],
+        'finalLocationCity': !exists(json, 'finalLocationCity') ? undefined : json['finalLocationCity'],
+        'finalLocationCountry': !exists(json, 'finalLocationCountry') ? undefined : json['finalLocationCountry'],
         'userId': !exists(json, 'userId') ? undefined : json['userId'],
         'driverId': !exists(json, 'driverId') ? undefined : json['driverId'],
         'carId': !exists(json, 'carId') ? undefined : json['carId'],
@@ -104,6 +132,10 @@ export function BookingDTOToJSON(value?: BookingDTO | null): any {
         'id': value.id,
         'bookingDate': value.bookingDate === undefined ? undefined : (value.bookingDate.toISOString()),
         'departureDate': value.departureDate === undefined ? undefined : (value.departureDate.toISOString()),
+        'startingLocationCity': value.startingLocationCity,
+        'startingLocationCountry': value.startingLocationCountry,
+        'finalLocationCity': value.finalLocationCity,
+        'finalLocationCountry': value.finalLocationCountry,
         'userId': value.userId,
         'driverId': value.driverId,
         'carId': value.carId,

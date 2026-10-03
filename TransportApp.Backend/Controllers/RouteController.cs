@@ -37,7 +37,7 @@ public class RouteController : AuthorizedController // Here we use the Authorize
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<RequestResponse<PagedResponse<RouteDTO>>>> GetPage([FromQuery] PaginationSearchQueryParams pagination) // The FromQuery attribute will bind the parameters matching the names of
-                                                                                                                                         // the PaginationSearchQueryParams properties to the object in the method parameter.
+                                                                                                                                     // the PaginationSearchQueryParams properties to the object in the method parameter.
     {
         var currentUser = await GetCurrentUser();
 
@@ -47,7 +47,18 @@ public class RouteController : AuthorizedController // Here we use the Authorize
     }
 
     [Authorize]
-    [HttpPost] 
+    [HttpGet]
+    public async Task<ActionResult<RequestResponse<Dictionary<string, List<RouteDTO>>>>> GetRoutesWithLocationsDictionary()
+    {
+        var currentUser = await GetCurrentUser();
+
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _routeService.GetRoutesWithLocationsDictionary()) :
+            this.ErrorMessageResult<Dictionary<string, List<RouteDTO>>>(currentUser.Error);
+    }
+
+    [Authorize]
+    [HttpPost]
     public async Task<ActionResult<RequestResponse>> Add([FromBody] RouteAddDTO route)
     {
         var currentUser = await GetCurrentUser();
@@ -80,4 +91,6 @@ public class RouteController : AuthorizedController // Here we use the Authorize
             this.FromServiceResponse(await _routeService.DeleteRoute(id)) :
             this.ErrorMessageResult(currentUser.Error);
     }
+
+
 }

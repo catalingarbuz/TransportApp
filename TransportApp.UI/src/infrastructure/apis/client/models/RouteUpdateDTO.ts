@@ -49,6 +49,12 @@ export interface RouteUpdateDTO {
      * @memberof RouteUpdateDTO
      */
     arrivalTime?: Date | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof RouteUpdateDTO
+     */
+    carIds?: Array<string> | null;
 }
 
 /**
@@ -75,6 +81,7 @@ export function RouteUpdateDTOFromJSONTyped(json: any, ignoreDiscriminator: bool
         'finalLocationId': !exists(json, 'finalLocationId') ? undefined : json['finalLocationId'],
         'departureTime': !exists(json, 'departureTime') ? undefined : (json['departureTime'] === null ? null : new Date(json['departureTime'])),
         'arrivalTime': !exists(json, 'arrivalTime') ? undefined : (json['arrivalTime'] === null ? null : new Date(json['arrivalTime'])),
+        'carIds': !exists(json, 'carIds') ? undefined : json['carIds'],
     };
 }
 
@@ -92,6 +99,7 @@ export function RouteUpdateDTOToJSON(value?: RouteUpdateDTO | null): any {
         'finalLocationId': value.finalLocationId,
         'departureTime': value.departureTime === undefined ? undefined : (value.departureTime === null ? null : value.departureTime.toISOString()),
         'arrivalTime': value.arrivalTime === undefined ? undefined : (value.arrivalTime === null ? null : value.arrivalTime.toISOString()),
+        'carIds': value.carIds,
     };
 }
 

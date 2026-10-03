@@ -8,7 +8,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { useRouteApi } from "@infrastructure/apis/api-management/route";
 import { useLocationApi } from "@infrastructure/apis/api-management/location";
-import { LocationDTO, RouteUpdateDTO } from "@infrastructure/apis/client";
+import { CarDTO, LocationDTO, RouteUpdateDTO } from "@infrastructure/apis/client";
+import { useCarApi } from "@infrastructure/apis/api-management/car";
 
 /**
  * Use a function to return the default values of the form and the validation schema.
@@ -20,7 +21,8 @@ const getDefaultValues = (id: string, initialData?: RouteEditFormModel) => {
         startingLocationId: "",
         finalLocationId: "",
         departureTime: "",
-        arrivalTime: ""
+        arrivalTime: "",
+        carIds: [] as string[]
     };
 
     if (!isUndefined(initialData)) {
@@ -61,7 +63,8 @@ const useInitRouteEditForm = (id: string) => {
             .required(formatMessage(
                 { id: "globals.validations.requiredField" },
                 { fieldName: formatMessage({ id: "globals.arrivalTime" }) }
-            ))
+            )),
+        carIds: yup.array().of(yup.string().required()).default(defaultValues.carIds)
     });
 
     const resolver = yupResolver(schema);
@@ -100,6 +103,7 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
     const { defaultValues, resolver } = useInitRouteEditForm(id);
     const { updateRute: { mutation, key: mutationKey }, getRoutes: { key: queryKey }, getRoute: { key: routeQueryKey, query: getRoute } } = useRouteApi();
     const { getLocations: { key: locationsQueryKey, query: getLocations } } = useLocationApi();
+    const { getCars: { key: carsQueryKey, query: getCars } } = useCarApi();
     const { mutateAsync: update, status } = useMutation([mutationKey], mutation);
     const { data: routeData, isLoading: isLoadingRoute, isError: isErrorLoadingRoute } = useQuery(
         [routeQueryKey, id],
@@ -127,8 +131,13 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
         loadAllLocations
     );
     const locations = locationsData ?? [];
+    const { data: carsResponse, isLoading: isLoadingCars, isError: isErrorLoadingCars } = useQuery(
+        [carsQueryKey, "route-edit", 1, 1000],
+        () => getCars({ page: 1, pageSize: 1000 })
+    );
+    const cars: CarDTO[] = carsResponse?.response?.data ?? [];
     const queryClient = useQueryClient();
-    const { register, handleSubmit, reset, control, formState: { errors } } = useForm<RouteEditFormModel>({
+    const { register, handleSubmit, reset, control, formState: { errors, dirtyFields } } = useForm<RouteEditFormModel>({
         defaultValues,
         resolver
     });
@@ -141,7 +150,8 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
                 startingLocationId: getLocationId(locations, route.startingLocationCity, route.startingLocationCountry),
                 finalLocationId: getLocationId(locations, route.finalLocationCity, route.finalLocationCountry),
                 departureTime: getTimeInputValue(route.departureTime),
-                arrivalTime: getTimeInputValue(route.arrivalTime)
+                arrivalTime: getTimeInputValue(route.arrivalTime),
+                carIds: route.assignedCars?.map(car => car.id).filter((carId): carId is string => Boolean(carId)) ?? []
             });
         }
     }, [id, locations, locationsData, reset, route]);
@@ -152,7 +162,8 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
             startingLocationId: data.startingLocationId,
             finalLocationId: data.finalLocationId,
             departureTime: dateAtSelectedTime(data.departureTime),
-            arrivalTime: dateAtSelectedTime(data.arrivalTime)
+            arrivalTime: dateAtSelectedTime(data.arrivalTime),
+            carIds: data.carIds
         };
 
         return update(routeUpdate).then(() => {
@@ -178,7 +189,10 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
             isErrorLoadingRoute,
             locations,
             isLoadingLocations,
-            isErrorLoadingLocations
+            isErrorLoadingLocations,
+            cars,
+            isLoadingCars,
+            isErrorLoadingCars
         },
         state: {
             errors // Return what errors have occurred when validating the form input.

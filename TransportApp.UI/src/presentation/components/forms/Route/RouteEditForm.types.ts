@@ -6,7 +6,7 @@ import {
     DeepRequired,
     Control
 } from "react-hook-form";
-import { LocationDTO } from "@infrastructure/apis/client";
+import { CarDTO, LocationDTO } from "@infrastructure/apis/client";
 
 export type RouteEditFormModel = {
     id: string;
@@ -14,6 +14,7 @@ export type RouteEditFormModel = {
     finalLocationId: string;
     departureTime: string;
     arrivalTime: string;
+    carIds: string[];
 };
 
 export type RouteEditFormState = {
@@ -34,7 +35,10 @@ export type RouteEditFormComputed = {
     isErrorLoadingRoute: boolean,
     locations: LocationDTO[],
     isLoadingLocations: boolean,
-    isErrorLoadingLocations: boolean
+    isErrorLoadingLocations: boolean,
+    cars: CarDTO[],
+    isLoadingCars: boolean,
+    isErrorLoadingCars: boolean
 };
 
 export type RouteEditFormController = FormController<RouteEditFormState, RouteEditFormActions, RouteEditFormComputed>;

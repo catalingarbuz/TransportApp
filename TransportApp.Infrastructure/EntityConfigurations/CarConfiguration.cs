@@ -13,11 +13,11 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
 {
     public void Configure(EntityTypeBuilder<Car> builder)
     {
-        builder.Property(e => e.Id) // This specifies which property is configured.
-            .IsRequired(); // Here it is specified if the property is required, meaning it cannot be null in the database.
-        builder.HasKey(x => x.Id); // Here it is specifies that the property Id is the primary key.
+        builder.Property(e => e.Id) 
+            .IsRequired(); 
+        builder.HasKey(x => x.Id); 
         builder.Property(e => e.Brand)
-            .HasMaxLength(255) // This specifies the maximum length for varchar type in the database.
+            .HasMaxLength(255)
             .IsRequired();
         builder.Property(e => e.Model)
             .HasMaxLength(255)
@@ -25,13 +25,20 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.Property(e => e.RegistrationNumber)
             .HasMaxLength(255)
             .IsRequired();
-        builder.HasAlternateKey(e => e.RegistrationNumber); // Here it is specifies that the property RegistratioNumber is a unique key.
+        builder.HasAlternateKey(e => e.RegistrationNumber);
         builder.Property(e => e.NumberOfSeats)
             .IsRequired();
         builder.Property(e => e.CreatedAt)
             .IsRequired();
         builder.Property(e => e.UpdatedAt)
             .IsRequired();
+        builder.Property(e => e.DriverId)
+            .IsRequired(false);
+
+        builder.HasOne(e => e.Driver)
+            .WithMany()
+            .HasForeignKey(e => e.DriverId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
 

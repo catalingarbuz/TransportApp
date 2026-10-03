@@ -25,6 +25,12 @@ import {
     CarRouteFromJSONTyped,
     CarRouteToJSON,
 } from './CarRoute';
+import type { Driver } from './Driver';
+import {
+    DriverFromJSON,
+    DriverFromJSONTyped,
+    DriverToJSON,
+} from './Driver';
 
 /**
  * 
@@ -76,6 +82,18 @@ export interface Car {
     numberOfSeats?: number;
     /**
      * 
+     * @type {string}
+     * @memberof Car
+     */
+    driverId?: string | null;
+    /**
+     * 
+     * @type {Driver}
+     * @memberof Car
+     */
+    driver?: Driver;
+    /**
+     * 
      * @type {Array<Booking>}
      * @memberof Car
      */
@@ -114,6 +132,8 @@ export function CarFromJSONTyped(json: any, ignoreDiscriminator: boolean): Car {
         'model': !exists(json, 'model') ? undefined : json['model'],
         'registrationNumber': !exists(json, 'registrationNumber') ? undefined : json['registrationNumber'],
         'numberOfSeats': !exists(json, 'numberOfSeats') ? undefined : json['numberOfSeats'],
+        'driverId': !exists(json, 'driverId') ? undefined : json['driverId'],
+        'driver': !exists(json, 'driver') ? undefined : DriverFromJSON(json['driver']),
         'bookings': !exists(json, 'bookings') ? undefined : (json['bookings'] === null ? null : (json['bookings'] as Array<any>).map(BookingFromJSON)),
         'carRoutes': !exists(json, 'carRoutes') ? undefined : (json['carRoutes'] === null ? null : (json['carRoutes'] as Array<any>).map(CarRouteFromJSON)),
     };
@@ -135,6 +155,8 @@ export function CarToJSON(value?: Car | null): any {
         'model': value.model,
         'registrationNumber': value.registrationNumber,
         'numberOfSeats': value.numberOfSeats,
+        'driverId': value.driverId,
+        'driver': DriverToJSON(value.driver),
         'bookings': value.bookings === undefined ? undefined : (value.bookings === null ? null : (value.bookings as Array<any>).map(BookingToJSON)),
         'carRoutes': value.carRoutes === undefined ? undefined : (value.carRoutes === null ? null : (value.carRoutes as Array<any>).map(CarRouteToJSON)),
     };

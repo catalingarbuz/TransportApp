@@ -9,5 +9,6 @@ namespace TransportApp.Core.DataTransferObjects;
 /// <param name="RouteName"></param>
 /// <param name="Description"></param>
 /// <param name="RouteLength"></param>
-public record RouteUpdateDTO(Guid Id, Guid? StartingLocationId, Guid? FinalLocationId, DateTime? DepartureTime, DateTime? ArrivalTime);
+/// <param name="CarIds"></param>
+public record RouteUpdateDTO(Guid Id, Guid? StartingLocationId, Guid? FinalLocationId, DateTime? DepartureTime, DateTime? ArrivalTime, List<Guid?> CarIds);
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TransportApp.Infrastructure.Database;
@@ -11,9 +12,10 @@ using TransportApp.Infrastructure.Database;
 namespace TransportApp.Infrastructure.Migrations
 {
     [DbContext(typeof(WebAppDatabaseContext))]
-    partial class WebAppDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20261002141903_Refactor_BookingSchema")]
+    partial class Refactor_BookingSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,6 +83,7 @@ namespace TransportApp.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DriverId")
+                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Model")

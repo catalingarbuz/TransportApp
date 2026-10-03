@@ -21,8 +21,6 @@ public class BookingsConfiguration : IEntityTypeConfiguration<Booking>
             .IsRequired();
         builder.Property(e => e.UserId)
             .IsRequired();
-        builder.Property(e => e.CarId)
-            .IsRequired();
         builder.Property(e => e.RouteId)
             .IsRequired();
         builder.Property(e => e.BookingDate)
@@ -34,16 +32,6 @@ public class BookingsConfiguration : IEntityTypeConfiguration<Booking>
             .WithMany(e => e.Bookings)
             .HasForeignKey(e => e.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasOne(e => e.Driver)
-            .WithMany(e => e.Bookings)
-            .HasForeignKey(e => e.DriverId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasOne(e => e.Car)
-           .WithMany(e => e.Bookings)
-           .HasForeignKey(e => e.CarId)
-           .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Route)
            .WithMany(e => e.Bookings)

@@ -49,6 +49,12 @@ export const Navbar = () => {
               <Button color="inherit" component={Link} to={AppRoute.Routes}>
                 {formatMessage({ id: "globals.routes" })}
               </Button>
+              <Button color="inherit" component={Link} to={AppRoute.Cars}>
+                {formatMessage({ id: "globals.cars" })}
+              </Button>
+              <Button color="inherit" component={Link} to={AppRoute.Drivers}>
+                {formatMessage({ id: "globals.drivers" })}
+              </Button>
             </>}
             {loggedIn && <>
               <Button color="inherit" component={Link} to={AppRoute.Bookings}>

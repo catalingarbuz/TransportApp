@@ -11,6 +11,10 @@ public class BookingDTO
     public Guid Id { get; set; }
     public DateTime BookingDate { get; set; } = default;
     public DateTime DepartureDate { get; set; } = default;
+    public string StartingLocationCity { get; set; } = default!;
+    public string StartingLocationCountry { get; set; } = default!;
+    public string FinalLocationCity { get; set; } = default!;
+    public string FinalLocationCountry { get; set; } = default!;
 
     public Guid UserId { get; set; }
     public Guid DriverId { get; set; }

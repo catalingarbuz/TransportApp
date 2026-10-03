@@ -13,5 +13,6 @@ public class RouteAddDTO
     public string FinalLocationCountry { get; set; } = default!;
     public DateTime DepartureTime { get; set; }
     public DateTime ArrivalTime { get; set; }
+    public List<Guid> CarIds { get; set; } = new List<Guid>();
 }
 

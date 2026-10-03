@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Net;
 using TransportApp.Core.DataTransferObjects;
 using TransportApp.Core.Entities;
 using TransportApp.Core.Enums;
@@ -15,19 +16,30 @@ namespace TransportApp.Infrastructure.Services.Implementations;
 public class BookingService : IBookingService
 {
     private readonly IRepository<WebAppDatabaseContext> _repository;
+    private readonly IRouteService _routeService;
 
     /// <summary>
     /// Inject the required services through the constructor.
     /// </summary>
-    public BookingService(IRepository<WebAppDatabaseContext> repository)
+    public BookingService(IRouteService routeService, IRepository<WebAppDatabaseContext> repository)
     {
         _repository = repository;
+        _routeService = routeService;
     }
 
     public async Task<ServiceResponse<BookingDTO>> GetBooking(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetAsync(new BookingProjectionSpec(id), cancellationToken);
-        
+        BookingDTO? result = await _repository.GetAsync(new BookingProjectionSpec(id), cancellationToken);
+
+        if (result != null)
+        {
+            var route = await _routeService.GetRoute(result.RouteId, cancellationToken);
+            result.StartingLocationCity = route.Result?.StartingLocationCity ?? string.Empty;
+            result.StartingLocationCountry = route.Result?.StartingLocationCountry ?? string.Empty;
+            result.FinalLocationCity = route.Result?.FinalLocationCity ?? string.Empty;
+            result.FinalLocationCountry = route.Result?.FinalLocationCountry ?? string.Empty;
+        }
+
         return result != null ?
             ServiceResponse<BookingDTO>.ForSuccess(result) :
             ServiceResponse<BookingDTO>.FromError(CommonErrors.BookingNotFound);
@@ -35,15 +47,26 @@ public class BookingService : IBookingService
 
     public async Task<ServiceResponse<PagedResponse<BookingDTO>>> GetBookings(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.PageAsync(pagination, new BookingProjectionSpec(pagination.Search, false), cancellationToken);  
+        var result = await _repository.PageAsync(pagination, new BookingProjectionSpec(pagination.Search, false), cancellationToken);
+
+        // Populate the route information for each booking
+        foreach (var booking in result.Data)
+        {
+            var route = await _routeService.GetRoute(booking.RouteId, cancellationToken);
+            booking.StartingLocationCity = route.Result?.StartingLocationCity ?? string.Empty;
+            booking.StartingLocationCountry = route.Result?.StartingLocationCountry ?? string.Empty;
+            booking.FinalLocationCity = route.Result?.FinalLocationCity ?? string.Empty;
+            booking.FinalLocationCountry = route.Result?.FinalLocationCountry ?? string.Empty;
+        }
 
         return ServiceResponse<PagedResponse<BookingDTO>>.ForSuccess(result);     
     }
 
     public int GetBookingsCountForCarAndRouteAndDepartureDate(Guid carId, Guid routeId, DateTime departureDate, CancellationToken cancellationToken = default)
     {
-        var count = _repository.DbContext.Set<Booking>()
-            .Where(b => b.CarId == carId && b.RouteId == routeId && b.Route.DepartureTime == departureDate)
+        var count = _repository.DbContext.Set<Route>()
+            .Include(r => r.CarRoutes)
+            .Where(b => b.CarRoutes.Any(c => c.CarId == carId) && b.Id == routeId && b.DepartureTime == departureDate)
             .Count();
 
         return count;
@@ -57,7 +80,7 @@ public class BookingService : IBookingService
         }
 
         var route = _repository.DbContext.Set<Route>()
-            .FirstOrDefault(d => d.StartingLocation.City == booking.DeparturePlace);
+            .FirstOrDefault(r => r.Id == booking.RouteId);
 
         if (route == null)
         {
@@ -93,8 +116,6 @@ public class BookingService : IBookingService
         await _repository.AddAsync(new Booking
         {
             UserId = requestingUser.Id,
-            DriverId = booking.DriverId,
-            CarId = carId,
             RouteId = route.Id,
             BookingDate = DateTime.Now    
         }, cancellationToken);
@@ -114,8 +135,6 @@ public class BookingService : IBookingService
         if (entity != null)
         {
             entity.BookingDate = booking.BookingDate ?? entity.BookingDate;
-            entity.DriverId = booking.DriverId ?? entity.DriverId;
-            entity.CarId = booking.CarId ?? entity.CarId;
             entity.RouteId = booking.RouteId ?? entity.RouteId;
 
             await _repository.UpdateAsync(entity, cancellationToken);

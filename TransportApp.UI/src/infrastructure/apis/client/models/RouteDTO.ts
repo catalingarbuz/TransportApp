@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { CarDTO } from './CarDTO';
+import {
+    CarDTOFromJSON,
+    CarDTOFromJSONTyped,
+    CarDTOToJSON,
+} from './CarDTO';
+
 /**
  * 
  * @export
@@ -61,6 +68,12 @@ export interface RouteDTO {
      * @memberof RouteDTO
      */
     arrivalTime?: Date;
+    /**
+     * 
+     * @type {Array<CarDTO>}
+     * @memberof RouteDTO
+     */
+    assignedCars?: Array<CarDTO> | null;
 }
 
 /**
@@ -89,6 +102,7 @@ export function RouteDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'finalLocationCountry': !exists(json, 'finalLocationCountry') ? undefined : json['finalLocationCountry'],
         'departureTime': !exists(json, 'departureTime') ? undefined : (new Date(json['departureTime'])),
         'arrivalTime': !exists(json, 'arrivalTime') ? undefined : (new Date(json['arrivalTime'])),
+        'assignedCars': !exists(json, 'assignedCars') ? undefined : (json['assignedCars'] === null ? null : (json['assignedCars'] as Array<any>).map(CarDTOFromJSON)),
     };
 }
 
@@ -108,6 +122,7 @@ export function RouteDTOToJSON(value?: RouteDTO | null): any {
         'finalLocationCountry': value.finalLocationCountry,
         'departureTime': value.departureTime === undefined ? undefined : (value.departureTime.toISOString()),
         'arrivalTime': value.arrivalTime === undefined ? undefined : (value.arrivalTime.toISOString()),
+        'assignedCars': value.assignedCars === undefined ? undefined : (value.assignedCars === null ? null : (value.assignedCars as Array<any>).map(CarDTOToJSON)),
     };
 }
 

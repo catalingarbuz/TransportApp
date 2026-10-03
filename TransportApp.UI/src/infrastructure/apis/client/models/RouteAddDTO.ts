@@ -55,6 +55,12 @@ export interface RouteAddDTO {
      * @memberof RouteAddDTO
      */
     arrivalTime?: Date;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof RouteAddDTO
+     */
+    carIds?: Array<string> | null;
 }
 
 /**
@@ -82,6 +88,7 @@ export function RouteAddDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'finalLocationCountry': !exists(json, 'finalLocationCountry') ? undefined : json['finalLocationCountry'],
         'departureTime': !exists(json, 'departureTime') ? undefined : (new Date(json['departureTime'])),
         'arrivalTime': !exists(json, 'arrivalTime') ? undefined : (new Date(json['arrivalTime'])),
+        'carIds': !exists(json, 'carIds') ? undefined : json['carIds'],
     };
 }
 
@@ -100,6 +107,7 @@ export function RouteAddDTOToJSON(value?: RouteAddDTO | null): any {
         'finalLocationCountry': value.finalLocationCountry,
         'departureTime': value.departureTime === undefined ? undefined : (value.departureTime.toISOString()),
         'arrivalTime': value.arrivalTime === undefined ? undefined : (value.arrivalTime.toISOString()),
+        'carIds': value.carIds,
     };
 }
 

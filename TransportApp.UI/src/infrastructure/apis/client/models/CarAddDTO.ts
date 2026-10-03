@@ -43,6 +43,12 @@ export interface CarAddDTO {
      * @memberof CarAddDTO
      */
     numberOfSeats?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CarAddDTO
+     */
+    driverId?: string | null;
 }
 
 /**
@@ -68,6 +74,7 @@ export function CarAddDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'model': !exists(json, 'model') ? undefined : json['model'],
         'registrationNumber': !exists(json, 'registrationNumber') ? undefined : json['registrationNumber'],
         'numberOfSeats': !exists(json, 'numberOfSeats') ? undefined : json['numberOfSeats'],
+        'driverId': !exists(json, 'driverId') ? undefined : json['driverId'],
     };
 }
 
@@ -84,6 +91,7 @@ export function CarAddDTOToJSON(value?: CarAddDTO | null): any {
         'model': value.model,
         'registrationNumber': value.registrationNumber,
         'numberOfSeats': value.numberOfSeats,
+        'driverId': value.driverId,
     };
 }
 

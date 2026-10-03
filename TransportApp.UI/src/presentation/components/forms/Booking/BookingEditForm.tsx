@@ -13,8 +13,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import { useBookingEditFormController } from "./BookingEditForm.controller";
 import { isEmpty, isUndefined } from "lodash";
-import { UserRoleEnum } from "@infrastructure/apis/client";
-import { date } from "yup";
+import { Controller } from "react-hook-form";
 
 /**
  * Here we declare the user add form component.
@@ -24,76 +23,74 @@ export const BookingEditForm = (props: { id: string, onSubmit?: () => void }) =>
     const { formatMessage } = useIntl();
     const { state, actions, computed } = useBookingEditFormController(props.id, props.onSubmit); // Use the controller.
 
-    return <form onSubmit={actions.handleSubmit(actions.submit)}> {/* Wrap your form into a form tag and use the handle submit callback to validate the form and call the data submission. */}
-        <Stack spacing={4} style={{ width: "100%" }}>
-            <Grid container item direction="row" xs={12} columnSpacing={4}>
-                <Grid container item direction="column" xs={6} md={6}>
-                    <FormControl
-                        fullWidth
-                    > {/* Wrap the input into a form control and use the errors to show the input invalid if needed. */}
-                        <FormLabel>
-                            <FormattedMessage id="globals.bookingDate" />
-                        </FormLabel> {/* Add a form label to indicate what the input means. */}
-                        <OutlinedInput
-                            type="Date"
-                            {...actions.register("bookingDate")} // Bind the form variable to the UI input.
-                            autoComplete="none"
-                        /> {/* Add a input like a textbox shown here. */}
+    return <form onSubmit={actions.handleSubmit(actions.submit)}>
+        <Stack spacing={4} sx={{ width: "100%" }}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                        <FormLabel><FormattedMessage id="globals.bookingDate" /></FormLabel>
+                        <OutlinedInput type="date" {...actions.register("bookingDate")} />
                     </FormControl>
                 </Grid>
-                <Grid container item direction="column" xs={6} md={6}>
-                    <FormControl
-                        fullWidth
-                    >
-                        <FormLabel>
-                            <FormattedMessage id="globals.departurePlace" />
-                        </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("departurePlace")}
-                            placeholder={formatMessage({ id: "globals.departurePlace" })}
-                            autoComplete="none"
+                <Grid item xs={12} md={6}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.departurePlace)}>
+                        <FormLabel required><FormattedMessage id="globals.departurePlace" /></FormLabel>
+                        <Controller
+                            control={actions.control}
+                            name="departurePlace"
+                            render={({ field }) => <Select {...field} displayEmpty disabled={computed.isLoadingDeparturePlaces || computed.isErrorLoadingDeparturePlaces} onChange={event => {
+                                field.onChange(event);
+                                actions.setValue("routeId", "");
+                                actions.setValue("arrivalPlace", "");
+                                actions.clearErrors("routeId");
+                                actions.clearErrors("arrivalPlace");
+                            }}>
+                                <MenuItem value="" disabled>
+                                    {computed.isLoadingDeparturePlaces ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.departurePlace" }) })}
+                                </MenuItem>
+                                {computed.departurePlaces.map(place => <MenuItem key={place} value={place}>{place}</MenuItem>)}
+                            </Select>}
                         />
+                        <FormHelperText hidden={isUndefined(state.errors.departurePlace)}>{state.errors.departurePlace?.message}</FormHelperText>
+                        {computed.isErrorLoadingDeparturePlaces && <FormHelperText error>{formatMessage({ id: "globals.loadingFailed" })}</FormHelperText>}
                     </FormControl>
                 </Grid>
-                <Grid container item direction="column" xs={6} md={6}>
-                    <FormControl
-                        fullWidth
-                    >
-                        <FormLabel>
-                            <FormattedMessage id="globals.arrivalPlace" />
-                        </FormLabel>
-                        <OutlinedInput
-                            {...actions.register("arrivalPlace")}
-                            placeholder={formatMessage({ id: "globals.arrivalPlace" })}
-                            autoComplete="none"
+                <Grid item xs={12} md={6}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.routeId)}>
+                        <FormLabel required><FormattedMessage id="globals.arrivalPlace" /></FormLabel>
+                        <Controller
+                            control={actions.control}
+                            name="routeId"
+                            render={({ field }) => <Select {...field} displayEmpty disabled={!computed.hasDeparturePlaceSelected || computed.isLoadingDeparturePlaces || computed.isErrorLoadingDeparturePlaces} onChange={event => {
+                                field.onChange(event);
+                                const route = computed.arrivalRoutes.find(candidate => candidate.id === event.target.value);
+                                actions.setValue("arrivalPlace", route ? [route.finalLocationCity, route.finalLocationCountry].filter(Boolean).join(", ") : "");
+                            }}>
+                                <MenuItem value="" disabled>
+                                    {formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: computed.hasDeparturePlaceSelected
+                                        ? formatMessage({ id: "globals.arrivalPlace" })
+                                        : formatMessage({ id: "globals.departurePlace" }) })}
+                                </MenuItem>
+                                {computed.arrivalRoutes.map(route => <MenuItem key={route.id} value={route.id ?? ""}>
+                                    {[route.finalLocationCity, route.finalLocationCountry].filter(Boolean).join(", ")}
+                                </MenuItem>)}
+                            </Select>}
                         />
+                        <FormHelperText hidden={isUndefined(state.errors.routeId)}>{state.errors.routeId?.message}</FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid container item direction="column" xs={6} md={6}>
-                    <FormControl
-                        fullWidth
-                        error={!isUndefined(state.errors.departureDate)}
-                    >
-                        <FormLabel>
-                            <FormattedMessage id="globals.departureDate" />
-                        </FormLabel>
-                        <OutlinedInput
-                            type="Date"
-                            {...actions.register("departureDate")}
-                            autoComplete="none"
-                        />
+                <Grid item xs={12} md={6}>
+                    <FormControl fullWidth error={!isUndefined(state.errors.departureDate)}>
+                        <FormLabel><FormattedMessage id="globals.departureDate" /></FormLabel>
+                        <OutlinedInput type="date" {...actions.register("departureDate")} />
+                        <FormHelperText hidden={isUndefined(state.errors.departureDate)}>{state.errors.departureDate?.message}</FormHelperText>
                     </FormControl>
                 </Grid>
             </Grid>
-            <Grid container item direction="row" xs={12} className="padding-top-sm">
-                <Grid container item direction="column" xs={12} md={4}></Grid>
-                <Grid container item direction="column" justifyContent={"center"} xs={4}>
-                    <Button variant="contained" type="submit" disabled={computed.isSubmitting}> {/* Add a button with type submit to call the submission callback if the button is a descended of the form element. */}
-                        {!computed.isSubmitting && <FormattedMessage id="globals.submit" />}
-                        {computed.isSubmitting && <CircularProgress />}
-                    </Button>
-                </Grid>
-            </Grid>
+            {computed.isErrorLoadingBooking && <FormHelperText error>{formatMessage({ id: "globals.loadingFailed" })}</FormHelperText>}
+            <Button variant="contained" type="submit" disabled={computed.isSubmitting || computed.isLoadingBooking || computed.isErrorLoadingBooking || computed.isLoadingDeparturePlaces || computed.isErrorLoadingDeparturePlaces}>
+                {computed.isSubmitting ? <CircularProgress size={24} /> : <FormattedMessage id="globals.submit" />}
+            </Button>
         </Stack>
     </form>
 };

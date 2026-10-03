@@ -29,7 +29,14 @@ countries.registerLocale(romanianCountryNames);
 /**
  * This hook returns a header for the table with translated columns.
  */
-const useHeader = (): { key: keyof RouteDTO; name: string }[] => {
+type RouteTableColumn =
+  | "startingLocationCity"
+  | "finalLocationCity"
+  | "departureTime"
+  | "arrivalTime"
+  | "assignedCars";
+
+const useHeader = (): { key: RouteTableColumn; name: string }[] => {
   const { formatMessage } = useIntl();
 
   return [
@@ -46,6 +53,7 @@ const useHeader = (): { key: keyof RouteDTO; name: string }[] => {
       name: formatMessage({ id: "globals.departureTime" }),
     },
     { key: "arrivalTime", name: formatMessage({ id: "globals.arrivalTime" }) },
+    { key: "assignedCars", name: formatMessage({ id: "globals.assignedCars" }) },
   ];
 };
 
@@ -55,11 +63,9 @@ const getCountryAbbreviation = (country: string) => {
     return name.toUpperCase();
   }
 
-  return (
-    countries.getAlpha2Code(name, "en") ??
-    countries.getAlpha2Code(name, "ro") ??
-    country
-  );
+  return countries.getAlpha2Code(name, "en")
+    ?? countries.getAlpha2Code(name, "ro")
+    ?? country;
 };
 
 const formatTime = (date: Date) => {
@@ -76,15 +82,24 @@ const formatTime = (date: Date) => {
  */
 const getRowValues = (
   entries: RouteDTO[] | null | undefined,
-  orderMap: { [key: string]: number },
+  orderMap: Record<RouteTableColumn, number>,
 ) =>
   entries?.map((entry) => {
     return {
       entry: entry,
-      data: Object.entries(entry)
-        .filter(([e]) => !isUndefined(orderMap[e]))
-        .sort(([a], [b]) => orderMap[a] - orderMap[b])
-        .map(([key, value]) => {
+      data: Object.entries(orderMap)
+        .sort(([, firstOrder], [, secondOrder]) => firstOrder - secondOrder)
+        .map(([rawKey]) => {
+          const key = rawKey as RouteTableColumn;
+          if (key === "assignedCars") {
+            const value = (entry.assignedCars ?? [])
+              .map(car => [car.brand, car.registrationNumber].filter(Boolean).join(" - "))
+              .filter(Boolean)
+              .join(", ");
+            return { key, value };
+          }
+
+          const value = entry[key];
           const countryKey =
             key === "startingLocationCity"
               ? "startingLocationCountry"
@@ -92,10 +107,9 @@ const getRowValues = (
                 ? "finalLocationCountry"
                 : undefined;
           const country = countryKey ? entry[countryKey] : undefined;
-          const displayValue =
-            countryKey && !isUndefined(country) && country !== null
-              ? `${value ?? ""} (${getCountryAbbreviation(country)})`
-              : value;
+          const displayValue = countryKey && !isUndefined(country) && country !== null
+            ? `${value ?? ""} (${getCountryAbbreviation(country)})`
+            : value;
           return { key, value: displayValue };
         }),
     };
@@ -111,7 +125,7 @@ export const RouteTable = () => {
   const header = useHeader();
   const orderMap = header.reduce((acc, e, i) => {
     return { ...acc, [e.key]: i };
-  }, {}) as { [key: string]: number }; // Get the header column order.
+  }, {}) as Record<RouteTableColumn, number>; // Get the header column order.
   const {
     handleChangePage,
     handleChangePageSize,
