@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using TransportApp.Core.DataTransferObjects;
 using TransportApp.Core.Entities;
-using TransportApp.Core.Enums;
-using TransportApp.Core.Requests;
 using TransportApp.Core.Responses;
 using TransportApp.Infrastructure.Authorization;
 using TransportApp.Infrastructure.Extensions;
-using TransportApp.Infrastructure.Services.Implementations;
 using TransportApp.Infrastructure.Services.Interfaces;
 
 namespace TransportApp.Backend.Controllers;

@@ -29,7 +29,7 @@ public class LoginService : ILoginService
             {
                 { ClaimTypes.Name, user.Name },
                 { ClaimTypes.Email, user.Email },
-                { ClaimTypes.Role, user.Role }
+                { ClaimTypes.Role, user.Role.Value }
             },
             IssuedAt = issuedAt, // This sets the "iat" claim to indicate then the JWT was emitted.
             Expires = issuedAt.Add(expiresIn), // This sets the "exp" claim to indicate when the JWT expires and cannot be used.

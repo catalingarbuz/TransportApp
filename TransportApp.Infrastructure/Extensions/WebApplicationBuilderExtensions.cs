@@ -1,25 +1,25 @@
-﻿using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TransportApp.Infrastructure.Configurations;
-using TransportApp.Infrastructure.Database;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
+using Serilog;
+using Serilog.Events;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using TransportApp.Infrastructure.Configurations;
 using TransportApp.Infrastructure.Converters;
+using TransportApp.Infrastructure.Database;
+using TransportApp.Infrastructure.Repositories.Implementation;
+using TransportApp.Infrastructure.Repositories.Interfaces;
 using TransportApp.Infrastructure.Services.Implementations;
 using TransportApp.Infrastructure.Services.Interfaces;
 using TransportApp.Infrastructure.Workers;
-using Serilog;
-using Serilog.Events;
-using TransportApp.Infrastructure.Repositories.Interfaces;
-using TransportApp.Infrastructure.Repositories.Implementation;
 
 namespace TransportApp.Infrastructure.Extensions;
 
@@ -132,28 +132,19 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddSwaggerGen(c =>
         {
             c.SchemaFilter<SmartEnumSchemaFilter>();
-            c.SwaggerDoc("v1", new() { Title = application, Version = "v1" }); // Adds the application name and version, there can be more than one version for the API.
-            c.AddSecurityDefinition("Bearer", new() // This is to configure the authorization in the Swagger client so that you may test authorized routes.
+            c.SwaggerDoc("v1", new() { Title = application, Version = "v1" });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",             
+                BearerFormat = "JWT"
             });
-            c.AddSecurityRequirement(new()
+
+            c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
             {
-                {
-                    new()
-                    {
-                        Reference = new()
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
+                [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
             });
         });
 

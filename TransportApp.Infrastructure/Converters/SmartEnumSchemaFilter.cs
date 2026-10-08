@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using Ardalis.SmartEnum;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+﻿using Ardalis.SmartEnum;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
+using System.Text.Json.Nodes;
 
 namespace TransportApp.Infrastructure.Converters;
 
@@ -11,23 +11,34 @@ namespace TransportApp.Infrastructure.Converters;
 /// </summary>
 public sealed class SmartEnumSchemaFilter : ISchemaFilter
 {
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public void Apply(IOpenApiSchema schema, SchemaFilterContext context)
     {
-        var type = context.Type;
-
-        if (!IsTypeDerivedFromGenericType(type, typeof(SmartEnum<>)) && !IsTypeDerivedFromGenericType(type, typeof(SmartEnum<,>)))
+        if (schema is not OpenApiSchema openApiSchema)
         {
             return;
         }
 
-        var enumValues = type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy).Select(d => d.Name);
-        var openApiValues = new OpenApiArray();
-        openApiValues.AddRange(enumValues.Select(d => new OpenApiString(d)));
+        var type = context.Type;
 
-        schema.Type = "string";
-        schema.Enum = openApiValues;
-        schema.Properties = null;
-        schema.AdditionalPropertiesAllowed = true;
+        if (!IsTypeDerivedFromGenericType(type, typeof(SmartEnum<>)) &&
+            !IsTypeDerivedFromGenericType(type, typeof(SmartEnum<,>)))
+        {
+            return;
+        }
+
+        var enumValues = type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                             .Select(d => d.Name);
+
+        List<JsonNode> jsonEnumValues = new List<JsonNode>();
+        foreach (var name in enumValues)
+        {
+            jsonEnumValues.Add(JsonValue.Create(name));
+        }
+
+        openApiSchema.Type = JsonSchemaType.String;
+        openApiSchema.Enum = jsonEnumValues;
+        openApiSchema.Properties = null;
+        openApiSchema.AdditionalPropertiesAllowed = false;
     }
 
     private static bool IsTypeDerivedFromGenericType(Type typeToCheck, Type genericType)
