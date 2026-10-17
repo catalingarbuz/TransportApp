@@ -38,7 +38,7 @@ public sealed class SmartEnumSchemaFilter : ISchemaFilter
         openApiSchema.Type = JsonSchemaType.String;
         openApiSchema.Enum = jsonEnumValues;
         openApiSchema.Properties = null;
-        openApiSchema.AdditionalPropertiesAllowed = false;
+        openApiSchema.AdditionalPropertiesAllowed = true;
     }
 
     private static bool IsTypeDerivedFromGenericType(Type typeToCheck, Type genericType)

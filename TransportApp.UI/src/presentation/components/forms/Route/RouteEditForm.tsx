@@ -26,6 +26,8 @@ export const RouteEditForm = (props: { id: string, onSubmit?: () => void }) => {
     const { formatMessage } = useIntl();
     const { state, actions, computed } = useRouteEditFormController(props.id, props.onSubmit); // Use the controller.
     const [carsOpen, setCarsOpen] = useState(false);
+    const startingLocationId = actions.watch("startingLocationId");
+    const finalLocationId = actions.watch("finalLocationId");
 
     return <form onSubmit={actions.handleSubmit(actions.submit)}> {/* Wrap your form into a form tag and use the handle submit callback to validate the form and call the data submission. */}
         <Stack spacing={4} style={{ width: "100%" }}>
@@ -38,7 +40,12 @@ export const RouteEditForm = (props: { id: string, onSubmit?: () => void }) => {
                         <Controller
                             control={actions.control}
                             name="startingLocationId"
-                            render={({ field }) => <Select {...field} labelId="edit-starting-location-label" displayEmpty disabled={computed.isLoadingRoute || computed.isLoadingLocations || computed.isErrorLoadingLocations}>
+                            render={({ field }) => <Select {...field} onChange={event => {
+                                field.onChange(event);
+                                if (event.target.value === finalLocationId) {
+                                    actions.setValue("finalLocationId", "");
+                                }
+                            }} labelId="edit-starting-location-label" displayEmpty disabled={computed.isLoadingRoute || computed.isLoadingLocations || computed.isErrorLoadingLocations}>
                                 <MenuItem value="" disabled>
                                     {computed.isLoadingLocations ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.startingLocation" }) })}
                                 </MenuItem>
@@ -64,7 +71,7 @@ export const RouteEditForm = (props: { id: string, onSubmit?: () => void }) => {
                                 <MenuItem value="" disabled>
                                     {computed.isLoadingLocations ? formatMessage({ id: "globals.loading" }) : formatMessage({ id: "globals.placeholders.selectInput" }, { fieldName: formatMessage({ id: "globals.finalLocation" }) })}
                                 </MenuItem>
-                                {computed.locations.map(location => <MenuItem key={location.id} value={location.id ?? ""}>
+                                {computed.locations.filter(location => location.id !== startingLocationId).map(location => <MenuItem key={location.id} value={location.id ?? ""}>
                                     {[location.city, location.country].filter(Boolean).join(", ")}
                                 </MenuItem>)}
                             </Select>}

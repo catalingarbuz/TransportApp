@@ -34,8 +34,6 @@ export * from './ErrorCodes';
 export * from './ErrorMessage';
 export * from './HttpStatusCode';
 export * from './Location';
-export * from './LocationDTO';
-export * from './LocationDTOListRequestResponse';
 export * from './LoginDTO';
 export * from './LoginResponseDTO';
 export * from './LoginResponseDTORequestResponse';

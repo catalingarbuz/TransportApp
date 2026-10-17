@@ -23,6 +23,7 @@
     "globals.placeholders.textInput": "Va rugam sa introduceti {fieldName}",
     "globals.placeholders.selectInput": "Va rugam sa selectati {fieldName}",
     "globals.validations.requiredField": "{fieldName} este camp obligatoriu!",
+    "globals.validations.locationsMustDiffer": "Destinațiile de pornire și finale trebuie să fie diferite.",
     "globals.signup": "Înregistrare",
     "globals.number": "Număr de telefon",
     "globals.confirmPassword": "Confirmare parolă",

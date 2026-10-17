@@ -5,12 +5,12 @@ import * as yup from "yup";
 import { isUndefined } from "lodash";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouteApi } from "@infrastructure/apis/api-management/route";
 import { useCarApi } from "@infrastructure/apis/api-management/car";
 import { RouteAddFormController } from "./RouteAddForm.types";
 import { useLocationApi } from "@infrastructure/apis/api-management/location";
-import { LocationDTO, RouteAddDTO } from "@infrastructure/apis/client";
+import { RouteAddDTO } from "@infrastructure/apis/client";
 
 /**
  * Use a function to return the default values of the form and the validation schema.
@@ -59,7 +59,14 @@ const useInitRouteAddForm = () => {
             .required(formatMessage(
                 { id: "globals.validations.requiredField" },
                 { fieldName: formatMessage({ id: "globals.finalLocation" }) }
-            )),
+            ))
+            .test(
+                "different-locations",
+                formatMessage({ id: "globals.validations.locationsMustDiffer" }),
+                function (finalLocationId) {
+                    return !finalLocationId || !this.parent.startingLocationId || finalLocationId !== this.parent.startingLocationId;
+                }
+            ),
         departureTime: yup.string()
             .required(formatMessage(
                 { id: "globals.validations.requiredField" },
@@ -93,27 +100,32 @@ export const useRouteAddFormController = (onSubmit?: () => void): RouteAddFormCo
         () => getCars({ page: 1, pageSize: 1000 })
     );
     const cars = carsResponse?.response?.data ?? [];
-    const loadAllLocations = async () => {
-        const allLocations: LocationDTO[] = [];
-        const pageSize = 100;
-        let page = 1;
-        let hasMoreLocations = true;
-
-        while (hasMoreLocations) {
-            const response = await getLocations({ page, pageSize });
-            const pageLocations = response.response ?? [];
-            allLocations.push(...pageLocations);
-            hasMoreLocations = pageLocations.length === pageSize;
-            page += 1;
-        }
-
-        return allLocations;
-    };
+    const loadAllLocations = () => getLocations();
     const { data: locations, isLoading: isLoadingLocations, isError: isErrorLoadingLocations } = useQuery(
         [locationsQueryKey],
         loadAllLocations
     );
     const availableLocations = locations ?? [];
+    const {
+        register,
+        handleSubmit,
+        watch,
+        control,
+        setValue,
+        formState: { errors }
+    } = useForm<RouteAddFormModel>({
+        defaultValues,
+        resolver
+    });
+    const startingLocationId = watch("startingLocationId");
+
+    useEffect(() => {
+        const firstLocationId = availableLocations.find(location => location.id)?.id;
+        if (!startingLocationId && firstLocationId) {
+            setValue("startingLocationId", firstLocationId);
+        }
+    }, [availableLocations, setValue, startingLocationId]);
+
     const submit = useCallback((data: RouteAddFormModel) => {
         const startingLocation = availableLocations.find(location => location.id === data.startingLocationId);
         const finalLocation = availableLocations.find(location => location.id === data.finalLocationId);
@@ -141,24 +153,14 @@ export const useRouteAddFormController = (onSubmit?: () => void): RouteAddFormCo
         });
     }, [add, availableLocations, onSubmit, queryClient, queryKey]);
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        control,
-        formState: { errors }
-    } = useForm<RouteAddFormModel>({ // Use the useForm hook to get callbacks and variables to work with the form.
-        defaultValues, // Initialize the form with the default values.
-        resolver // Add the validation resolver.
-    });
-
     return {
         actions: { // Return any callbacks needed to interact with the form.
             handleSubmit, // Add the form submit handle.
             submit, // Add the submit handle that needs to be passed to the submit handle.
             register, // Add the variable register to bind the form fields in the UI with the form variables.
             watch, // Add a watch on the variables, this function can be used to watch changes on variables if it is needed in some locations.
-            control
+            control,
+            setValue
         },
         computed: {
             defaultValues,
