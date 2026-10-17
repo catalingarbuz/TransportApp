@@ -23,6 +23,7 @@
     "globals.placeholders.textInput": "Please enter {fieldName}",
     "globals.placeholders.selectInput": "Please select the {fieldName}",
     "globals.validations.requiredField": "{fieldName} is a required field!",
+    "globals.validations.locationsMustDiffer": "Starting and final destinations must be different.",
     "globals.signup": "Sign up",
     "globals.number": "Phone Number",
     "globals.confirmPassword": "Confirm password",

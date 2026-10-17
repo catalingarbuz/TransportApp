@@ -8,7 +8,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { useRouteApi } from "@infrastructure/apis/api-management/route";
 import { useLocationApi } from "@infrastructure/apis/api-management/location";
-import { CarDTO, LocationDTO, RouteUpdateDTO } from "@infrastructure/apis/client";
+import { CarDTO, RouteUpdateDTO } from "@infrastructure/apis/client";
+import { LocationDTO } from "@infrastructure/apis/client/models/LocationDTO";
 import { useCarApi } from "@infrastructure/apis/api-management/car";
 
 /**
@@ -53,7 +54,14 @@ const useInitRouteEditForm = (id: string) => {
             .required(formatMessage(
                 { id: "globals.validations.requiredField" },
                 { fieldName: formatMessage({ id: "globals.finalLocation" }) }
-            )),
+            ))
+            .test(
+                "different-locations",
+                formatMessage({ id: "globals.validations.locationsMustDiffer" }),
+                function (finalLocationId) {
+                    return !finalLocationId || !this.parent.startingLocationId || finalLocationId !== this.parent.startingLocationId;
+                }
+            ),
         departureTime: yup.string()
             .required(formatMessage(
                 { id: "globals.validations.requiredField" },
@@ -110,22 +118,7 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
         () => getRoute(id),
         { enabled: Boolean(id) }
     );
-    const loadAllLocations = async () => {
-        const allLocations: LocationDTO[] = [];
-        const pageSize = 100;
-        let page = 1;
-        let hasMoreLocations = true;
-
-        while (hasMoreLocations) {
-            const response = await getLocations({ page, pageSize });
-            const pageLocations = response.response ?? [];
-            allLocations.push(...pageLocations);
-            hasMoreLocations = pageLocations.length === pageSize;
-            page += 1;
-        }
-
-        return allLocations;
-    };
+    const loadAllLocations = () => getLocations();
     const { data: locationsData, isLoading: isLoadingLocations, isError: isErrorLoadingLocations } = useQuery(
         [locationsQueryKey, "all"],
         loadAllLocations
@@ -137,7 +130,7 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
     );
     const cars: CarDTO[] = carsResponse?.response?.data ?? [];
     const queryClient = useQueryClient();
-    const { register, handleSubmit, reset, control, formState: { errors, dirtyFields } } = useForm<RouteEditFormModel>({
+    const { register, handleSubmit, reset, control, watch, setValue, formState: { errors, dirtyFields } } = useForm<RouteEditFormModel>({
         defaultValues,
         resolver
     });
@@ -180,7 +173,9 @@ export const useRouteEditFormController = (id: string, onSubmit?: () => void): R
             handleSubmit, // Add the form submit handle.
             submit, // Add the submit handle that needs to be passed to the submit handle.
             register, // Add the variable register to bind the form fields in the UI with the form variables.
-            control
+            control,
+            watch,
+            setValue
         },
         computed: {
             defaultValues,

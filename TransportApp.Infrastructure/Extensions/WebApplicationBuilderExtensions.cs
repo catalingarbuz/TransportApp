@@ -12,6 +12,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using TransportApp.Backend.Infrastructure;
+using TransportApp.Infrastructure.Authorization;
 using TransportApp.Infrastructure.Configurations;
 using TransportApp.Infrastructure.Converters;
 using TransportApp.Infrastructure.Database;
@@ -172,6 +174,9 @@ public static class WebApplicationBuilderExtensions
             .AddTransient<IBookingService, BookingService>()
             .AddTransient<ICarRouteService, CarRouteService>()
             .AddTransient<ILocationService, LocationService>();
+
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<IUserContext, UserContext>();
 
         return builder;
     }

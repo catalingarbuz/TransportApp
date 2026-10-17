@@ -5,6 +5,8 @@ using TransportApp.Core.Specifications;
 using TransportApp.Infrastructure.Database;
 using TransportApp.Infrastructure.Repositories.Interfaces;
 using TransportApp.Infrastructure.Services.Interfaces;
+using TransportApp.Core.Entities;
+using TransportApp.Core.Mapper;
 
 namespace TransportApp.Infrastructure.Services.Implementations
 {
@@ -20,11 +22,14 @@ namespace TransportApp.Infrastructure.Services.Implementations
             _repository = repository;
         }
 
-        public async Task<ServiceResponse<List<LocationDTO>>> GetLocations(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)
+        public async Task<ServiceResponse<List<LocationDTO>>> GetLocations(CancellationToken cancellationToken = default)
         {
-            List<LocationDTO> result = await _repository.ListAsync(new LocationProjectionSpec(pagination.Search, false), cancellationToken);
+            List<Location> result = await _repository.ListNoTrackingAsync(new LocationProjectionSpec(), cancellationToken);
 
-            return ServiceResponse<List<LocationDTO>>.ForSuccess(result);
+            LocationMapper mapper = new LocationMapper();
+            List<LocationDTO> dtoList = result.Select(mapper.ToDto).ToList();
+
+            return ServiceResponse<List<LocationDTO>>.ForSuccess(dtoList);
         }
     }
 }

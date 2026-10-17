@@ -4,9 +4,12 @@ import {
     UseFormRegister,
     FieldErrorsImpl,
     DeepRequired,
-    Control
+    Control,
+    UseFormWatch,
+    UseFormSetValue
 } from "react-hook-form";
-import { CarDTO, LocationDTO } from "@infrastructure/apis/client";
+import { CarDTO } from "@infrastructure/apis/client";
+import { LocationDTO } from "@infrastructure/apis/client/models/LocationDTO";
 
 export type RouteEditFormModel = {
     id: string;
@@ -25,6 +28,8 @@ export type RouteEditFormActions = {
     register: UseFormRegister<RouteEditFormModel>;
     control: Control<RouteEditFormModel>;
     handleSubmit: UseFormHandleSubmit<RouteEditFormModel>;
+    watch: UseFormWatch<RouteEditFormModel>;
+    setValue: UseFormSetValue<RouteEditFormModel>;
     submit: (body: RouteEditFormModel) => void;
 };
 

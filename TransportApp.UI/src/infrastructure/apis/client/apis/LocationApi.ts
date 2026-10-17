@@ -14,19 +14,6 @@
 
 
 import * as runtime from '../runtime';
-import type {
-  LocationDTOListRequestResponse,
-} from '../models';
-import {
-    LocationDTOListRequestResponseFromJSON,
-    LocationDTOListRequestResponseToJSON,
-} from '../models';
-
-export interface ApiLocationGetGetRequest {
-    search?: string;
-    page?: number;
-    pageSize?: number;
-}
 
 /**
  * 
@@ -35,27 +22,19 @@ export class LocationApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiLocationGetGetRaw(requestParameters: ApiLocationGetGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LocationDTOListRequestResponse>> {
+    async getLocationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
-
-        if (requestParameters.search !== undefined) {
-            queryParameters['Search'] = requestParameters.search;
-        }
-
-        if (requestParameters.page !== undefined) {
-            queryParameters['Page'] = requestParameters.page;
-        }
-
-        if (requestParameters.pageSize !== undefined) {
-            queryParameters['PageSize'] = requestParameters.pageSize;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Bearer authentication
-        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
 
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/Location/Get`,
             method: 'GET',
@@ -63,14 +42,13 @@ export class LocationApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LocationDTOListRequestResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      */
-    async apiLocationGetGet(requestParameters: ApiLocationGetGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LocationDTOListRequestResponse> {
-        const response = await this.apiLocationGetGetRaw(requestParameters, initOverrides);
-        return await response.value();
+    async getLocations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getLocationsRaw(initOverrides);
     }
 
 }

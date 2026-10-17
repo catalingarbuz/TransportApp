@@ -23,6 +23,8 @@ To generate the REST client for the project each time you modify it run the foll
 
 openapi-generator-cli generate -i http://localhost:5000/swagger/v1/swagger.json -g typescript-fetch -o ./src/infrastructure/apis/client --additional-properties=supportsES6=true
 
+Authenticated requests pass the raw JWT through the generated client's `accessToken` configuration; the generated client adds the `Bearer` prefix.
+
 To change environment variables change them in the .env file.
 
 The default user/password to login with the backend is "admin@default.com" after the first migration is created and applied.

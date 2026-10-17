@@ -1,4 +1,5 @@
 using TransportApp.Infrastructure.Extensions;
+using TransportApp.Backend.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,4 +14,8 @@ builder.AddCorsConfiguration()
 var app = builder.Build();
 
 app.ConfigureApplication();
+
+// Minimal Apis
+app.MapLocationEndpoints();
+
 app.Run();
