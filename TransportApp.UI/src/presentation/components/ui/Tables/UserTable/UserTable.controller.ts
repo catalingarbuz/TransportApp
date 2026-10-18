@@ -14,7 +14,7 @@ export const useUserTableController = () => {
     const { data, isError, isLoading } = useQuery([queryKey, page, pageSize], () => query({ page, pageSize })); // Retrieve the table page from the backend via the query hook.
     const { mutateAsync: deleteMutation } = useMutation([deleteUserKey], deleteUser); // Use a mutation to remove an entry.
     const remove = useCallback(
-        (id: string) => deleteMutation(id).then(() => queryClient.invalidateQueries([queryKey])),
+        (id: string) => deleteMutation({id}).then(() => queryClient.invalidateQueries([queryKey])),
         [queryClient, deleteMutation, queryKey]); // Create the callback to remove an entry.
 
     const tryReload = useCallback(

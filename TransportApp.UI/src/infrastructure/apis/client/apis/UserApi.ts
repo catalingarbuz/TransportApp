@@ -34,26 +34,26 @@ import {
     UserUpdateDTOToJSON,
 } from '../models';
 
-export interface ApiUserAddPostRequest {
-    userAddDTO?: UserAddDTO;
+export interface AddUserRequest {
+    userAddDTO: UserAddDTO;
 }
 
-export interface ApiUserDeleteIdDeleteRequest {
+export interface DeleteUserRequest {
     id: string;
 }
 
-export interface ApiUserGetByIdIdGetRequest {
+export interface GetUserByIdRequest {
     id: string;
 }
 
-export interface ApiUserGetPageGetRequest {
+export interface GetUsersPageRequest {
+    page: number;
+    pageSize: number;
     search?: string;
-    page?: number;
-    pageSize?: number;
 }
 
-export interface ApiUserUpdatePutRequest {
-    userUpdateDTO?: UserUpdateDTO;
+export interface UpdateUserRequest {
+    userUpdateDTO: UserUpdateDTO;
 }
 
 /**
@@ -63,7 +63,11 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserAddPostRaw(requestParameters: ApiUserAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+    async addUserRaw(requestParameters: AddUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+        if (requestParameters.userAddDTO === null || requestParameters.userAddDTO === undefined) {
+            throw new runtime.RequiredError('userAddDTO','Required parameter requestParameters.userAddDTO was null or undefined when calling addUser.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -91,16 +95,16 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserAddPost(requestParameters: ApiUserAddPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
-        const response = await this.apiUserAddPostRaw(requestParameters, initOverrides);
+    async addUser(requestParameters: AddUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
+        const response = await this.addUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserDeleteIdDeleteRaw(requestParameters: ApiUserDeleteIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+    async deleteUserRaw(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiUserDeleteIdDelete.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteUser.');
         }
 
         const queryParameters: any = {};
@@ -127,16 +131,16 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserDeleteIdDelete(requestParameters: ApiUserDeleteIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
-        const response = await this.apiUserDeleteIdDeleteRaw(requestParameters, initOverrides);
+    async deleteUser(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
+        const response = await this.deleteUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserGetByIdIdGetRaw(requestParameters: ApiUserGetByIdIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserDTORequestResponse>> {
+    async getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserDTORequestResponse>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiUserGetByIdIdGet.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserById.');
         }
 
         const queryParameters: any = {};
@@ -163,14 +167,22 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserGetByIdIdGet(requestParameters: ApiUserGetByIdIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserDTORequestResponse> {
-        const response = await this.apiUserGetByIdIdGetRaw(requestParameters, initOverrides);
+    async getUserById(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserDTORequestResponse> {
+        const response = await this.getUserByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserGetPageGetRaw(requestParameters: ApiUserGetPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserDTOPagedResponseRequestResponse>> {
+    async getUsersPageRaw(requestParameters: GetUsersPageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserDTOPagedResponseRequestResponse>> {
+        if (requestParameters.page === null || requestParameters.page === undefined) {
+            throw new runtime.RequiredError('page','Required parameter requestParameters.page was null or undefined when calling getUsersPage.');
+        }
+
+        if (requestParameters.pageSize === null || requestParameters.pageSize === undefined) {
+            throw new runtime.RequiredError('pageSize','Required parameter requestParameters.pageSize was null or undefined when calling getUsersPage.');
+        }
+
         const queryParameters: any = {};
 
         if (requestParameters.search !== undefined) {
@@ -207,14 +219,18 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserGetPageGet(requestParameters: ApiUserGetPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserDTOPagedResponseRequestResponse> {
-        const response = await this.apiUserGetPageGetRaw(requestParameters, initOverrides);
+    async getUsersPage(requestParameters: GetUsersPageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserDTOPagedResponseRequestResponse> {
+        const response = await this.getUsersPageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserUpdatePutRaw(requestParameters: ApiUserUpdatePutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+    async updateUserRaw(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+        if (requestParameters.userUpdateDTO === null || requestParameters.userUpdateDTO === undefined) {
+            throw new runtime.RequiredError('userUpdateDTO','Required parameter requestParameters.userUpdateDTO was null or undefined when calling updateUser.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -242,8 +258,8 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserUpdatePut(requestParameters: ApiUserUpdatePutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
-        const response = await this.apiUserUpdatePutRaw(requestParameters, initOverrides);
+    async updateUser(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
+        const response = await this.updateUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

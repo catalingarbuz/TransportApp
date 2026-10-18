@@ -16,7 +16,7 @@ export const useOwnUser = () => {
             return null;
         }
 
-        return query(userId);
+        return query({ id: userId });
     }, {
         refetchInterval: Infinity, // User information may not be frequently updated so refetching the data periodically is not necessary.
         refetchOnWindowFocus: false // This disables fetching the user information from the backend when focusing on the current window.

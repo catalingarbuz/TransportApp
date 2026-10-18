@@ -108,6 +108,33 @@ export const UserAddForm = (props: { onSubmit?: () => void }) => {
                 <Grid container item direction="column" xs={6} md={6}>
                     <FormControl
                         fullWidth
+                        error={!isUndefined(state.errors.phoneNumber)}
+                    >
+                        <FormLabel required>
+                            <FormattedMessage id="globals.number" />
+                        </FormLabel>
+                        <OutlinedInput
+                            type="tel"
+                            {...actions.register("phoneNumber")}
+                            placeholder={formatMessage(
+                                { id: "globals.placeholders.textInput" },
+                                {
+                                    fieldName: formatMessage({
+                                        id: "globals.number",
+                                    }),
+                                })}
+                            autoComplete="tel"
+                        />
+                        <FormHelperText
+                            hidden={isUndefined(state.errors.phoneNumber)}
+                        >
+                            {state.errors.phoneNumber?.message}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid container item direction="column" xs={6} md={6}>
+                    <FormControl
+                        fullWidth
                         error={!isUndefined(state.errors.role)}
                     >
                         <FormLabel required>

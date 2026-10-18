@@ -12,6 +12,7 @@ import { SelectChangeEvent } from "@mui/material";
 export type UserAddFormModel = {
     name: string;
     email: string;
+    phoneNumber: string;
     password: string;
     role: UserRoleEnum;
 };

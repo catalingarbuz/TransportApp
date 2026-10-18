@@ -37,26 +37,26 @@ import {
     StringRouteDTOListDictionaryRequestResponseToJSON,
 } from '../models';
 
-export interface ApiRouteAddPostRequest {
-    routeAddDTO?: RouteAddDTO;
+export interface AddRouteRequest {
+    routeAddDTO: RouteAddDTO;
 }
 
-export interface ApiRouteDeleteIdDeleteRequest {
+export interface DeleteRouteRequest {
     id: string;
 }
 
-export interface ApiRouteGetByIdIdGetRequest {
+export interface GetRouteByIdRequest {
     id: string;
 }
 
-export interface ApiRouteGetPageGetRequest {
+export interface GetRoutesPageRequest {
+    page: number;
+    pageSize: number;
     search?: string;
-    page?: number;
-    pageSize?: number;
 }
 
-export interface ApiRouteUpdatePutRequest {
-    routeUpdateDTO?: RouteUpdateDTO;
+export interface UpdateRouteRequest {
+    routeUpdateDTO: RouteUpdateDTO;
 }
 
 /**
@@ -66,7 +66,11 @@ export class RouteApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRouteAddPostRaw(requestParameters: ApiRouteAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+    async addRouteRaw(requestParameters: AddRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+        if (requestParameters.routeAddDTO === null || requestParameters.routeAddDTO === undefined) {
+            throw new runtime.RequiredError('routeAddDTO','Required parameter requestParameters.routeAddDTO was null or undefined when calling addRoute.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -94,16 +98,16 @@ export class RouteApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRouteAddPost(requestParameters: ApiRouteAddPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
-        const response = await this.apiRouteAddPostRaw(requestParameters, initOverrides);
+    async addRoute(requestParameters: AddRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
+        const response = await this.addRouteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRouteDeleteIdDeleteRaw(requestParameters: ApiRouteDeleteIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+    async deleteRouteRaw(requestParameters: DeleteRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiRouteDeleteIdDelete.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteRoute.');
         }
 
         const queryParameters: any = {};
@@ -130,16 +134,16 @@ export class RouteApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRouteDeleteIdDelete(requestParameters: ApiRouteDeleteIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
-        const response = await this.apiRouteDeleteIdDeleteRaw(requestParameters, initOverrides);
+    async deleteRoute(requestParameters: DeleteRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
+        const response = await this.deleteRouteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRouteGetByIdIdGetRaw(requestParameters: ApiRouteGetByIdIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RouteDTORequestResponse>> {
+    async getRouteByIdRaw(requestParameters: GetRouteByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RouteDTORequestResponse>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiRouteGetByIdIdGet.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getRouteById.');
         }
 
         const queryParameters: any = {};
@@ -166,14 +170,22 @@ export class RouteApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRouteGetByIdIdGet(requestParameters: ApiRouteGetByIdIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RouteDTORequestResponse> {
-        const response = await this.apiRouteGetByIdIdGetRaw(requestParameters, initOverrides);
+    async getRouteById(requestParameters: GetRouteByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RouteDTORequestResponse> {
+        const response = await this.getRouteByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRouteGetPageGetRaw(requestParameters: ApiRouteGetPageGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RouteDTOPagedResponseRequestResponse>> {
+    async getRoutesPageRaw(requestParameters: GetRoutesPageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RouteDTOPagedResponseRequestResponse>> {
+        if (requestParameters.page === null || requestParameters.page === undefined) {
+            throw new runtime.RequiredError('page','Required parameter requestParameters.page was null or undefined when calling getRoutesPage.');
+        }
+
+        if (requestParameters.pageSize === null || requestParameters.pageSize === undefined) {
+            throw new runtime.RequiredError('pageSize','Required parameter requestParameters.pageSize was null or undefined when calling getRoutesPage.');
+        }
+
         const queryParameters: any = {};
 
         if (requestParameters.search !== undefined) {
@@ -210,14 +222,14 @@ export class RouteApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRouteGetPageGet(requestParameters: ApiRouteGetPageGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RouteDTOPagedResponseRequestResponse> {
-        const response = await this.apiRouteGetPageGetRaw(requestParameters, initOverrides);
+    async getRoutesPage(requestParameters: GetRoutesPageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RouteDTOPagedResponseRequestResponse> {
+        const response = await this.getRoutesPageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRouteGetRoutesWithLocationsDictionaryGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringRouteDTOListDictionaryRequestResponse>> {
+    async getRoutesWithLocationsDictionaryRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringRouteDTOListDictionaryRequestResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -242,14 +254,18 @@ export class RouteApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRouteGetRoutesWithLocationsDictionaryGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringRouteDTOListDictionaryRequestResponse> {
-        const response = await this.apiRouteGetRoutesWithLocationsDictionaryGetRaw(initOverrides);
+    async getRoutesWithLocationsDictionary(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringRouteDTOListDictionaryRequestResponse> {
+        const response = await this.getRoutesWithLocationsDictionaryRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRouteUpdatePutRaw(requestParameters: ApiRouteUpdatePutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+    async updateRouteRaw(requestParameters: UpdateRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RequestResponse>> {
+        if (requestParameters.routeUpdateDTO === null || requestParameters.routeUpdateDTO === undefined) {
+            throw new runtime.RequiredError('routeUpdateDTO','Required parameter requestParameters.routeUpdateDTO was null or undefined when calling updateRoute.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -277,8 +293,8 @@ export class RouteApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRouteUpdatePut(requestParameters: ApiRouteUpdatePutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
-        const response = await this.apiRouteUpdatePutRaw(requestParameters, initOverrides);
+    async updateRoute(requestParameters: UpdateRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RequestResponse> {
+        const response = await this.updateRouteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
