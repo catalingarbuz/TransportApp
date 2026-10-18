@@ -18,6 +18,7 @@ const getDefaultValues = (initialData?: UserAddFormModel) => {
     const defaultValues = {
         email: "",
         name: "",
+        phoneNumber: "",
         password: "",
         role: "" as UserRoleEnum
     };
@@ -59,6 +60,15 @@ const useInitUserAddForm = () => {
                 }))
             .email()
             .default(defaultValues.email),
+        phoneNumber: yup.string()
+            .required(formatMessage(
+                { id: "globals.validations.requiredField" },
+                {
+                    fieldName: formatMessage({
+                        id: "globals.number",
+                    }),
+                }))
+            .default(defaultValues.phoneNumber),
         password: yup.string()
             .required(formatMessage(
                 { id: "globals.validations.requiredField" },
@@ -97,7 +107,7 @@ export const useUserAddFormController = (onSubmit?: () => void): UserAddFormCont
     const { mutateAsync: add, status } = useMutation([mutationKey], mutation);
     const queryClient = useQueryClient();
     const submit = useCallback((data: UserAddFormModel) => // Create a submit callback to send the form data to the backend.
-        add(data).then(() => {
+        add({ userAddDTO: data }).then(() => {
             queryClient.invalidateQueries([queryKey]); // If the form submission succeeds then some other queries need to be refresh so invalidate them to do a refresh.
 
             if (onSubmit) {

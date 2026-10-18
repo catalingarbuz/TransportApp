@@ -1,5 +1,5 @@
 import { useAppSelector } from "@application/store";
-import { ApiUserGetPageGetRequest, UserAddDTO, UserApi } from "../client";
+import { AddUserRequest, DeleteUserRequest, GetUserByIdRequest, GetUsersPageRequest, UserApi } from "../client";
 import { getAuthenticationConfiguration } from "@infrastructure/utils/userUtils";
 
 /**
@@ -17,10 +17,10 @@ export const useUserApi = () => {
     const { token } = useAppSelector(x => x.profileReducer); // You can use the data form the Redux storage. 
     const config = getAuthenticationConfiguration(token); // Use the token to configure the authentication header.
 
-    const getUsers = (page: ApiUserGetPageGetRequest) => new UserApi(config).apiUserGetPageGet(page); // Use the generated client code and adapt it.
-    const getUser = (id: string) => new UserApi(config).apiUserGetByIdIdGet({ id });
-    const addUser = (user: UserAddDTO) => new UserApi(config).apiUserAddPost({ userAddDTO: user });
-    const deleteUser = (id: string) => new UserApi(config).apiUserDeleteIdDelete({ id });
+    const getUsers = (page: GetUsersPageRequest) => new UserApi(config).getUsersPage(page); // Use the generated client code and adapt it.
+    const getUser = (id: GetUserByIdRequest) => new UserApi(config).getUserById(id);
+    const addUser = (user: AddUserRequest) => new UserApi(config).addUser(user);
+    const deleteUser = (id: DeleteUserRequest) => new UserApi(config).deleteUser(id);
 
     return {
         getUsers: { // Return the query object.

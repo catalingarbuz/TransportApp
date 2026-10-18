@@ -17,5 +17,7 @@ app.ConfigureApplication();
 
 // Minimal Apis
 app.MapLocationEndpoints();
+app.MapUserEndpoints();
+app.MapRouteEndpoints();
 
 app.Run();

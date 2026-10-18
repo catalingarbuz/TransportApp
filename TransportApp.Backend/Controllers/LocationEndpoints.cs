@@ -2,11 +2,12 @@
 using TransportApp.Core.Responses;
 using TransportApp.Infrastructure.Authorization;
 using TransportApp.Infrastructure.Services.Interfaces;
+using TransportApp.Infrastructure.Extensions;
+
 namespace TransportApp.Backend.Controllers;
 
 public static class LocationEndpoints
 {
-    // The 'this' keyword makes this an extension method on IEndpointRouteBuilder
     public static IEndpointRouteBuilder MapLocationEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/Location")
@@ -14,7 +15,9 @@ public static class LocationEndpoints
                        .WithTags("Location");
 
         group.MapGet("Get", GetLocationsAsync)
-             .WithName("GetLocations");
+             .WithName("GetLocations")
+             .Produces<RequestResponse<List<LocationDTO>>>(StatusCodes.Status200OK)
+             .Produces<RequestResponse<List<LocationDTO>>>(StatusCodes.Status400BadRequest);
 
         return app;
     }
@@ -35,8 +38,6 @@ public static class LocationEndpoints
 
         ServiceResponse<List<LocationDTO>> serviceResponse = await locationService.GetLocations(cancellationToken);
 
-        return serviceResponse.IsOk
-            ? Results.Ok(serviceResponse.Result)
-            : Results.BadRequest(serviceResponse);
+        return ControllerExtensions.FromServiceResponse(serviceResponse);
     }
 }

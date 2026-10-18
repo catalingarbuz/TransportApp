@@ -44,6 +44,8 @@ models/ErrorCodes.ts
 models/ErrorMessage.ts
 models/HttpStatusCode.ts
 models/Location.ts
+models/LocationDTO.ts
+models/LocationDTOListRequestResponse.ts
 models/LoginDTO.ts
 models/LoginResponseDTO.ts
 models/LoginResponseDTORequestResponse.ts

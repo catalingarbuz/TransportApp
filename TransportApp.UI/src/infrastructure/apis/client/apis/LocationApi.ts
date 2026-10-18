@@ -14,6 +14,13 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  LocationDTOListRequestResponse,
+} from '../models';
+import {
+    LocationDTOListRequestResponseFromJSON,
+    LocationDTOListRequestResponseToJSON,
+} from '../models';
 
 /**
  * 
@@ -22,7 +29,7 @@ export class LocationApi extends runtime.BaseAPI {
 
     /**
      */
-    async getLocationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getLocationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LocationDTOListRequestResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -42,13 +49,14 @@ export class LocationApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => LocationDTOListRequestResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async getLocations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getLocationsRaw(initOverrides);
+    async getLocations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LocationDTOListRequestResponse> {
+        const response = await this.getLocationsRaw(initOverrides);
+        return await response.value();
     }
 
 }

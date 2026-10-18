@@ -1,5 +1,5 @@
 import { useAppSelector } from "@application/store";
-import { ApiRouteGetPageGetRequest, RouteAddDTO, RouteApi, RouteDTO, RouteUpdateDTO } from "../client";
+import { GetRoutesPageRequest, RouteAddDTO, RouteApi, RouteDTO, RouteUpdateDTO } from "../client";
 import { getAuthenticationConfiguration } from "@infrastructure/utils/userUtils";
 import { get } from "lodash";
 import { de } from "date-fns/locale";
@@ -44,8 +44,8 @@ export const useRouteApi = () => {
     const { token } = useAppSelector(x => x.profileReducer); // You can use the data form the Redux storage. 
     const config = getAuthenticationConfiguration(token); // Use the token to configure the authentication header.
 
-    const getRoutes = async (page: ApiRouteGetPageGetRequest) => {
-        const result = await new RouteApi(config).apiRouteGetPageGet(page);
+    const getRoutes = async (page: GetRoutesPageRequest) => {
+        const result = await new RouteApi(config).getRoutesPage(page);
         if (!result.response?.data) {
             return result;
         }
@@ -59,15 +59,15 @@ export const useRouteApi = () => {
         };
     };
     const getRoute = async (id: string) => {
-        const result = await new RouteApi(config).apiRouteGetByIdIdGet({ id });
+        const result = await new RouteApi(config).getRouteById({ id });
         return result.response
             ? { ...result, response: normalizeRouteDates(result.response) }
             : result;
     };
-    const getRoutesWithLocationsDictionary = () => new RouteApi(config).apiRouteGetRoutesWithLocationsDictionaryGet();
-    const addRoute = (route: RouteAddDTO) => new RouteApi(config).apiRouteAddPost({ routeAddDTO: route });
-    const deleteRoute = (id: string) => new RouteApi(config).apiRouteDeleteIdDelete({ id });
-    const updateRoute = (route: RouteUpdateDTO) => new RouteApi(config).apiRouteUpdatePut({ routeUpdateDTO: route });
+    const getRoutesWithLocationsDictionary = () => new RouteApi(config).getRoutesWithLocationsDictionary();
+    const addRoute = (route: RouteAddDTO) => new RouteApi(config).addRoute({ routeAddDTO: route });
+    const deleteRoute = (id: string) => new RouteApi(config).deleteRoute({ id });
+    const updateRoute = (route: RouteUpdateDTO) => new RouteApi(config).updateRoute({ routeUpdateDTO: route });
 
     return {
         getRoutes: { // Return the query object.
