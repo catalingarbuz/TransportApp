@@ -6,7 +6,7 @@ using TransportApp.Infrastructure.Authorization;
 using TransportApp.Infrastructure.Extensions;
 using TransportApp.Infrastructure.Services.Interfaces;
 
-namespace TransportApp.Backend.Controllers
+namespace TransportApp.Backend.Endpoints
 {
     public static class UserEndpoints
     {

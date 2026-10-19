@@ -19,6 +19,7 @@ using TransportApp.Infrastructure.Converters;
 using TransportApp.Infrastructure.Database;
 using TransportApp.Infrastructure.Repositories.Implementation;
 using TransportApp.Infrastructure.Repositories.Interfaces;
+using TransportApp.Infrastructure.Services.Caching;
 using TransportApp.Infrastructure.Services.Implementations;
 using TransportApp.Infrastructure.Services.Interfaces;
 using TransportApp.Infrastructure.Workers;
@@ -40,6 +41,20 @@ public static class WebApplicationBuilderExtensions
                     .CommandTimeout((int)TimeSpan.FromMinutes(15).TotalSeconds)));
         builder.Services.AddTransient<IRepository<WebAppDatabaseContext>, Repository<WebAppDatabaseContext>>();
 
+        return builder;
+    }
+
+    ///<summary>
+    /// This extension method adds the redis cache configuration to the application builder.
+    ///</summary>
+    public static WebApplicationBuilder AddRedisCache(this WebApplicationBuilder builder)
+    {
+        var redisConfiguration = builder.Configuration.GetSection(nameof(RedisConfiguration)).Get<RedisConfiguration>();
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = redisConfiguration?.ConnectionString; // This gets the connection string from RedisConfiguration.ConnectionString in appsettings.json.
+            options.InstanceName = redisConfiguration?.InstanceName; // This gets the instance name from RedisConfiguration.InstanceName in appsettings.json.
+        });
         return builder;
     }
 
@@ -177,6 +192,7 @@ public static class WebApplicationBuilderExtensions
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IUserContext, UserContext>();
+        builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 
         return builder;
     }
