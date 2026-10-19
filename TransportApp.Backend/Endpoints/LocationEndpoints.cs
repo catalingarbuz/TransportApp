@@ -4,7 +4,7 @@ using TransportApp.Infrastructure.Authorization;
 using TransportApp.Infrastructure.Services.Interfaces;
 using TransportApp.Infrastructure.Extensions;
 
-namespace TransportApp.Backend.Controllers;
+namespace TransportApp.Backend.Endpoints;
 
 public static class LocationEndpoints
 {
@@ -33,7 +33,7 @@ public static class LocationEndpoints
 
         if (currentUser.Result == null)
         {
-            return Results.BadRequest(RequestResponse<List<LocationDTO>>.FromError(currentUser.Error));
+            return ControllerExtensions.ErrorMessageResult(currentUser.Error);
         }
 
         ServiceResponse<List<LocationDTO>> serviceResponse = await locationService.GetLocations(cancellationToken);
